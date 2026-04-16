@@ -58,7 +58,7 @@ const Header = () => {
         borderBottom: headerBorder,
         backdropFilter: headerBackdrop, 
         WebkitBackdropFilter: headerBackdrop, 
-        transition: 'background-color 0.4s ease, border 0.4s ease, padding 0.4s ease, backdrop-filter 0.4s ease',
+        transition: 'all 0.4s ease',
         transform: 'translateZ(0)',
         willChange: 'padding, background-color'
       }}>
