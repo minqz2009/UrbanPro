@@ -146,5 +146,7 @@ h1, h2, h3, h4, h5, h6 {
 .page-enter-active {
   opacity: 1;
   transform: translateY(0);
-  transition: opacity var(--transition-slow), transform var(--transition-slow);
+  /* Removed transition to prevent clashing with Framer Motion */
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
