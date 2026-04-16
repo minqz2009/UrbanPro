@@ -156,7 +156,10 @@ const Electrical = () => {
                   gap: '1.5rem',
                   boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.5)',
                   cursor: 'pointer',
-                  transition: 'all 0.3s ease'
+                  transition: 'background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease',
+                  transform: 'translateZ(0)',
+                  backfaceVisibility: 'hidden',
+                  WebkitBackfaceVisibility: 'hidden'
                 }}
               >
                 <div style={{ color: '#eab308', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--color-bg)', padding: '1rem' }}>
