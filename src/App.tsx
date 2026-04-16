@@ -56,9 +56,11 @@ const Header = () => {
         padding: headerPadding, 
         backgroundColor: headerBg,
         borderBottom: headerBorder,
-        backdropFilter: headerBackdrop, // Use backdrop-filter
+        backdropFilter: headerBackdrop, 
         WebkitBackdropFilter: headerBackdrop, 
-        transition: 'all 0.4s ease'
+        transition: 'background-color 0.4s ease, border 0.4s ease, padding 0.4s ease, backdrop-filter 0.4s ease',
+        transform: 'translateZ(0)',
+        willChange: 'padding, background-color'
       }}>
         <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none', zIndex: 101 }}>

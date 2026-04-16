@@ -70,12 +70,11 @@ const Home = () => {
 
   return (
     <motion.div 
-      className="page-enter-active"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
       exit="exit"
-      style={{ overflowX: 'hidden' }}
+      style={{ overflowX: 'hidden', willChange: 'opacity, transform' }}
     >
       {/* Hero wrapper — extra height gives scroll room for the sticky hero to live in */}
       <div ref={heroRef} style={{ height: '120vh', position: 'relative' }}>
@@ -86,7 +85,8 @@ const Home = () => {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          overflow: 'hidden'
+          overflow: 'hidden',
+          backgroundColor: '#0f172a'
         }}>
           {/* Background image with parallax + zoom */}
           <motion.div
@@ -98,7 +98,9 @@ const Home = () => {
               backgroundImage: 'url(https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?q=100&w=3000&auto=format&fit=crop)',
               backgroundSize: 'cover',
               backgroundPosition: 'center',
-              zIndex: 0
+              zIndex: 0,
+              transform: 'translateZ(0)',
+              willChange: 'transform'
             }}
           />
           {/* Static gradient overlay */}
