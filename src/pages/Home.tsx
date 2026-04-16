@@ -70,11 +70,12 @@ const Home = () => {
 
   return (
     <motion.div 
+      className="page-enter-active"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
       exit="exit"
-      style={{ overflowX: 'hidden', willChange: 'opacity, transform' }}
+      style={{ overflowX: 'hidden' }}
     >
       {/* Hero wrapper — extra height gives scroll room for the sticky hero to live in */}
       <div ref={heroRef} style={{ height: '120vh', position: 'relative' }}>

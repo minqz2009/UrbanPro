@@ -138,4 +138,13 @@ h1, h2, h3, h4, h5, h6 {
   .grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
 }
 
-/* Shared page transitions - Unused as we use Framer Motion */
+/* Shared page transitions */
+.page-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+.page-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity var(--transition-slow), transform var(--transition-slow);
+}
