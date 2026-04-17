@@ -86,72 +86,91 @@ const Plumbing = () => {
         </motion.div>
       </section>
 
-      {/* Emergency Section */}
-      <section style={{ backgroundColor: 'var(--color-surface)', borderTop: '4px solid var(--color-accent)' }}>
-        <div className="container" style={{ display: 'flex', flexWrap: 'wrap' }}>
+      {/* Emergency System & Direct Access Strip */}
+      <section style={{ backgroundColor: 'var(--color-bg)' }}>
+        <div className="container" style={{ 
+          display: 'grid', 
+          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
+          backgroundColor: 'var(--color-surface)',
+          borderTop: '4px solid var(--color-accent)'
+        }}>
           {emergencyInfo.map((info, idx) => (
-            <div key={idx} style={{ flex: '1 1 300px', padding: '2.5rem 2rem', display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-              <div style={{ backgroundColor: 'rgba(245,158,11,0.1)', padding: '1.25rem' }}>
+            <div key={idx} style={{ 
+              padding: '3rem 2rem', 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '1.5rem',
+              borderRight: idx === 0 ? '1px solid rgba(255,255,255,0.05)' : 'none'
+            }}>
+              <div style={{ backgroundColor: 'rgba(245,158,11,0.08)', padding: '1.25rem' }}>
                 {info.icon}
               </div>
               <div>
-                <h3 style={{ color: 'var(--color-text)', fontWeight: 800, fontSize: '1.5rem', margin: '0 0 0.25rem 0' }}>{info.text}</h3>
-                <p style={{ color: 'var(--color-text-muted)', margin: 0, fontWeight: 500 }}>{info.subtext}</p>
+                <h3 style={{ color: 'var(--color-text)', fontWeight: 800, fontSize: '1.25rem', margin: '0 0 0.25rem 0', letterSpacing: '-0.01em' }}>{info.text}</h3>
+                <p style={{ color: 'var(--color-text-muted)', margin: 0, fontWeight: 500, fontSize: '0.95rem' }}>{info.subtext}</p>
               </div>
             </div>
           ))}
-          <div style={{ flex: '1 1 400px', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '2rem 2.5rem', backgroundColor: '#020617', borderLeft: '1px solid rgba(255,255,255,0.08)', position: 'relative', overflow: 'hidden' }}>
-             <style>{`
-               .contact-card-plumb {
-                 display: flex; align-items: center; gap: 1.25rem;
-                 color: var(--color-text); text-decoration: none;
-                 padding: 0.85rem 1.25rem;
-                 background-color: var(--color-surface);
-                 border: 1px solid rgba(255,255,255,0.05);
-                 transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-               }
-               .contact-card-plumb:hover {
-                 transform: translateY(-4px);
-                 border-color: var(--color-accent);
-                 background-color: rgba(255,255,255,0.02);
-                 box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
-               }
-               .contact-card-plumb .icon-wrapped {
-                 padding: 0.75rem; 
-                 background-color: rgba(255,255,255,0.03); 
-                 color: var(--color-accent);
-                 transition: all 0.4s ease;
-               }
-               .contact-card-plumb:hover .icon-wrapped {
-                 background-color: var(--color-accent);
-                 color: var(--color-bg);
-               }
-             `}</style>
-             
-             {/* Subtle accent glow */}
-             <div style={{ position: 'absolute', top: '-50px', right: '-50px', width: '200px', height: '200px', background: 'radial-gradient(circle, var(--color-accent) 0%, transparent 70%)', opacity: 0.08, filter: 'blur(40px)', pointerEvents: 'none' }} />
-             
-             <h3 style={{ color: 'white', fontSize: '1.1rem', marginBottom: '1.5rem', fontWeight: 800, letterSpacing: '0.15em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-               <span style={{ width: '8px', height: '8px', backgroundColor: 'var(--color-accent)' }} />
-               Direct Contact
-             </h3>
-             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', position: 'relative', zIndex: 1 }}>
-               {[
-                 { href: 'tel:+61412242997', label: '+61 412 242 997', sub: 'John', icon: <PhoneCall size={22} /> },
-                 { href: 'tel:+61426051275', label: '+61 426 051 275', sub: 'Leo', icon: <PhoneCall size={22} /> },
-                 { href: 'mailto:service@urbanproplumbing.com.au', label: 'Email Us', sub: 'service@urbanproplumbing.com.au', icon: <span style={{ fontSize: '1.2rem', fontWeight: 800 }}>@</span> }
-               ].map((item) => (
-                 <a key={item.href} href={item.href} className="contact-card-plumb">
-                   <div className="icon-wrapped">
-                     {item.icon}
-                   </div>
-                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.15rem', overflow: 'hidden' }}>
-                     <span style={{ fontSize: '1.1rem', fontWeight: 800, letterSpacing: '0.02em' }}>{item.label}</span>
-                     {item.sub && <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.sub}</span>}
-                   </div>
-                 </a>
-               ))}
-             </div>
+        </div>
+
+        {/* The New Horizontal Command Strip */}
+        <div style={{ 
+          backgroundColor: '#020617', 
+          borderTop: '1px solid rgba(255,255,255,0.03)', 
+          padding: '1.5rem 0',
+          position: 'relative',
+          overflow: 'hidden'
+        }}>
+          <style>{`
+            .access-link {
+              display: flex; align-items: center; gap: 0.75rem;
+              color: rgba(255,255,255,0.6); text-decoration: none;
+              font-weight: 700; font-size: 0.9rem; letter-spacing: 0.05em;
+              transition: all 0.3s ease;
+              padding: 0.5rem 1rem;
+              border: 1px solid transparent;
+            }
+            .access-link:hover {
+              color: white;
+              background-color: rgba(255,255,255,0.03);
+              border-color: rgba(255,255,255,0.08);
+            }
+            .access-link .link-icon { color: var(--color-accent); opacity: 0.7; transition: all 0.3s ease; }
+            .access-link:hover .link-icon { transform: scale(1.1); opacity: 1; }
+            
+            @keyframes pulse-glow {
+              0% { opacity: 0.4; transform: scale(1); }
+              50% { opacity: 1; transform: scale(1.2); }
+              100% { opacity: 0.4; transform: scale(1); }
+            }
+          `}</style>
+          
+          <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '2rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+              <div style={{ 
+                width: '8px', height: '8px', borderRadius: '50%', 
+                backgroundColor: 'var(--color-accent)', 
+                boxShadow: '0 0 12px var(--color-accent)',
+                animation: 'pulse-glow 2s infinite'
+              }} />
+              <span style={{ fontSize: '0.75rem', fontWeight: 900, letterSpacing: '0.25em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)' }}>
+                Direct Dispatch Available
+              </span>
+            </div>
+            
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
+              {[
+                { href: 'tel:+61412242997', label: '+61 412 242 997', sub: 'John', icon: <PhoneCall size={16} className="link-icon" /> },
+                { href: 'tel:+61426051275', label: '+61 426 051 275', sub: 'Leo', icon: <PhoneCall size={16} className="link-icon" /> },
+                { href: 'mailto:service@urbanproplumbing.com.au', label: 'Email Request', sub: '', icon: <span className="link-icon" style={{ fontWeight: 800 }}>@</span> }
+              ].map((item) => (
+                <a key={item.href} href={item.href} className="access-link">
+                  {item.icon}
+                  <span>{item.label}</span>
+                  {item.sub && <span style={{ opacity: 0.4, fontSize: '0.75rem', fontWeight: 500 }}>({item.sub})</span>}
+                </a>
+              ))}
+            </div>
           </div>
         </div>
       </section>
