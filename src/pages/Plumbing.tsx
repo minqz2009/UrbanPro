@@ -60,18 +60,27 @@ const Plumbing = () => {
               justifyContent: 'center', 
               flexWrap: 'wrap', 
               gap: '2rem',
-              backgroundColor: 'var(--color-plumbing)',
-              padding: '2.5rem',
-              color: 'var(--color-bg)',
-              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.8)'
+              backgroundColor: 'var(--color-surface)',
+              border: '1px solid rgba(255,255,255,0.05)',
+              padding: '3rem 2.5rem',
+              color: 'white',
+              boxShadow: '0 30px 60px -12px rgba(0, 0, 0, 0.9)',
+              position: 'relative',
+              overflow: 'hidden'
             }}
           >
+            {/* Subtle blue accent glow inside the box */}
+            <div style={{ position: 'absolute', bottom: '-40px', right: '-40px', width: '200px', height: '200px', background: 'radial-gradient(circle, var(--color-plumbing) 0%, transparent 70%)', opacity: 0.15, filter: 'blur(30px)', pointerEvents: 'none' }} />
+            
             {guarantees.map((item, idx) => (
-              <div key={idx} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', flex: '1 1 200px' }}>
-                <div style={{ backgroundColor: 'rgba(0,0,0,0.1)', padding: '1rem' }}>
+              <div key={idx} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.25rem', flex: '1 1 200px', position: 'relative', zIndex: 1 }}>
+                <div style={{ color: 'var(--color-plumbing)', backgroundColor: 'rgba(59,130,246,0.1)', padding: '1.25rem', borderRadius: '4px' }}>
                   {item.icon}
                 </div>
-                <span style={{ fontWeight: 800, fontSize: '1.25rem', textAlign: 'center', lineHeight: 1.2 }}>{item.text}</span>
+                <div style={{ textAlign: 'center' }}>
+                   <span style={{ fontWeight: 800, fontSize: '1.15rem', display: 'block', marginBottom: '0.25rem', letterSpacing: '0.05em' }}>{item.text}</span>
+                   <div style={{ width: '20px', height: '2px', backgroundColor: 'var(--color-plumbing)', margin: '0 auto', opacity: 0.5 }} />
+                </div>
               </div>
             ))}
           </motion.div>
