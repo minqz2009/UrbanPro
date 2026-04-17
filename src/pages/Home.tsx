@@ -61,9 +61,9 @@ const Home = () => {
     {
       title: "Electrical Services",
       description: "Safe, efficient electrical work for residential and commercial properties. Licensed Master Electricians.",
-      icon: <Zap size={40} style={{ color: '#eab308' }} />,
+      icon: <Zap size={40} style={{ color: 'var(--color-electrical)' }} />,
       link: "/electrical",
-      color: "#eab308",
+      color: "var(--color-electrical)",
       image: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=100&w=1200"
     }
   ];
@@ -124,8 +124,8 @@ const Home = () => {
           <motion.div style={{ y: textY, opacity: textOpacity, position: 'relative', zIndex: 3, textAlign: 'center', padding: '0 1rem' }}>
             <motion.div variants={itemVariants}>
               <h1 style={{ fontSize: 'clamp(3.25rem, 8vw, 6.5rem)', marginBottom: '1.5rem', letterSpacing: '-0.04em', color: 'white', fontWeight: 800, lineHeight: 1.05 }}>
-                Build. Plumb.<br/>
-                <span style={{ color: 'var(--color-accent)' }}>Power.</span>
+                Build. <span style={{ color: 'var(--color-plumbing)' }}>Plumb.</span><br/>
+                <span style={{ color: 'var(--color-electrical)' }}>Power.</span>
               </h1>
             </motion.div>
             <motion.div variants={itemVariants}>

@@ -70,7 +70,7 @@ const Electrical = () => {
               justifyContent: 'center', 
               flexWrap: 'wrap', 
               gap: '2rem',
-              backgroundColor: '#eab308', /* Distinct electrical accent color */
+              backgroundColor: 'var(--color-electrical)', /* Distinct electrical accent color */
               padding: '2.5rem',
               color: 'var(--color-bg)',
               boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.8)'
@@ -102,7 +102,7 @@ const Electrical = () => {
           display: 'grid', 
           gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
           backgroundColor: 'var(--color-surface)',
-          borderTop: '4px solid #eab308'
+          borderTop: '4px solid var(--color-electrical)'
         }}>
           {emergencyInfo.map((info, idx) => (
             <div key={idx} style={{ 
@@ -126,7 +126,7 @@ const Electrical = () => {
         {/* The New Horizontal Command Strip */}
         <div style={{ 
           background: 'linear-gradient(to right, #020617, #080d1a, #020617)', 
-          borderTop: '2px solid #eab308', 
+          borderTop: '2px solid var(--color-electrical)', 
           borderBottom: '1px solid rgba(234,179,8,0.15)',
           padding: '3.5rem 0',
           position: 'relative',
@@ -145,13 +145,13 @@ const Electrical = () => {
               box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             }
             .access-link-elec:hover {
-              background-color: #eab308;
+              background-color: var(--color-electrical);
               color: var(--color-bg);
-              border-color: #eab308;
+              border-color: var(--color-electrical);
               transform: translateY(-4px);
-              box-shadow: 0 12px 30px -10px #eab308;
+              box-shadow: 0 12px 30px -10px var(--color-electrical);
             }
-            .access-link-elec .link-icon-elec { color: #eab308; transition: all 0.3s ease; }
+            .access-link-elec .link-icon-elec { color: var(--color-electrical); transition: all 0.3s ease; }
             .access-link-elec:hover .link-icon-elec { color: var(--color-bg); transform: scale(1.1); }
             
             @keyframes pulse-glow-elec {
@@ -170,16 +170,16 @@ const Electrical = () => {
                   boxShadow: '0 0 20px white',
                   animation: 'pulse-glow-elec 2s infinite'
                 }} />
-                <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '28px', height: '28px', borderRadius: '50%', border: '2px solid #eab308', animation: 'pulse-glow-elec 2s infinite linear reverse' }} />
+                <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '28px', height: '28px', borderRadius: '50%', border: '2px solid var(--color-electrical)', animation: 'pulse-glow-elec 2s infinite linear reverse' }} />
               </div>
               <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.25rem' }}>
-                   <span style={{ backgroundColor: '#eab308', color: 'var(--color-bg)', padding: '0.25rem 0.6rem', fontSize: '0.65rem', fontWeight: 900, borderRadius: '2px' }}>LIVE</span>
+                   <span style={{ backgroundColor: 'var(--color-electrical)', color: 'var(--color-bg)', padding: '0.25rem 0.6rem', fontSize: '0.65rem', fontWeight: 900, borderRadius: '2px' }}>LIVE</span>
                    <span style={{ fontSize: '1rem', fontWeight: 900, letterSpacing: '0.35em', textTransform: 'uppercase', color: 'white' }}>
                      Command Center
                    </span>
                 </div>
-                <span style={{ fontSize: '0.8rem', fontWeight: 600, textTransform: 'uppercase', color: '#eab308', letterSpacing: '0.15em' }}>
+                <span style={{ fontSize: '0.8rem', fontWeight: 600, textTransform: 'uppercase', color: 'var(--color-electrical)', letterSpacing: '0.15em' }}>
                   Sydney Region Techs Online
                 </span>
               </div>
@@ -214,7 +214,7 @@ const Electrical = () => {
             >
               Our Services
             </motion.h2>
-            <div style={{ width: '80px', height: '4px', backgroundColor: '#eab308', margin: '1.5rem auto' }} />
+            <div style={{ width: '80px', height: '4px', backgroundColor: 'var(--color-electrical)', margin: '1.5rem auto' }} />
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '2rem' }}>
@@ -225,7 +225,7 @@ const Electrical = () => {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: idx * 0.05 }}
-                whileHover={{ y: -5, borderColor: '#eab308' }}
+                whileHover={{ y: -5, borderColor: 'var(--color-electrical)' }}
                 style={{ 
                   backgroundColor: 'var(--color-surface)', 
                   padding: '2.5rem 2rem', 
@@ -240,7 +240,7 @@ const Electrical = () => {
                   WebkitBackfaceVisibility: 'hidden'
                 }}
               >
-                <div style={{ color: '#eab308', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--color-bg)', padding: '1rem' }}>
+                <div style={{ color: 'var(--color-electrical)', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--color-bg)', padding: '1rem' }}>
                   {service.icon}
                 </div>
                 <h4 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 800, color: 'var(--color-text)' }}>
@@ -265,7 +265,7 @@ const Electrical = () => {
                 transition={{ delay: i * 0.1 }}
                 style={{ display: 'flex', gap: '1rem', alignItems: 'center', padding: '1.5rem', backgroundColor: 'var(--color-bg)' }}
               >
-                <CheckCircle color="#eab308" size={32} style={{ flexShrink: 0 }} />
+                <CheckCircle color="var(--color-electrical)" size={32} style={{ flexShrink: 0 }} />
                 <span style={{ fontWeight: 700, fontSize: '1.125rem', color: 'var(--color-text)' }}>{benefit}</span>
               </motion.div>
             ))}
@@ -287,10 +287,10 @@ const Electrical = () => {
               Call us now for fast, upfront service — or send us an email anytime.
             </p>
             <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '1.5rem', marginBottom: '3rem' }}>
-              <a href="tel:+61412242997" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', padding: '1.25rem 2.5rem', backgroundColor: '#eab308', color: 'var(--color-bg)', textDecoration: 'none', fontSize: '1.125rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+              <a href="tel:+61412242997" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', padding: '1.25rem 2.5rem', backgroundColor: 'var(--color-electrical)', color: 'var(--color-bg)', textDecoration: 'none', fontSize: '1.125rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
                 <PhoneCall size={22} /> Call John
               </a>
-              <a href="tel:+61426051275" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', padding: '1.25rem 2.5rem', backgroundColor: '#eab308', color: 'var(--color-bg)', textDecoration: 'none', fontSize: '1.125rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+              <a href="tel:+61426051275" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', padding: '1.25rem 2.5rem', backgroundColor: 'var(--color-electrical)', color: 'var(--color-bg)', textDecoration: 'none', fontSize: '1.125rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
                 <PhoneCall size={22} /> Call Leo
               </a>
               <a href="mailto:service@urbanproplumbing.com.au" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', padding: '1.25rem 2.5rem', backgroundColor: 'transparent', color: 'var(--color-text)', textDecoration: 'none', fontSize: '1.125rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', border: '2px solid var(--color-text-muted)' }}>
