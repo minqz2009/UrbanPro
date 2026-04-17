@@ -3,9 +3,9 @@ import { Zap, Lightbulb, Activity, Shield, AlertTriangle, Clock, PhoneCall, Chec
 
 const Electrical = () => {
   const guarantees = [
-    { text: "LIFETIME WORKMANSHIP", icon: <Shield size={32} /> },
-    { text: "FIXED UPFRONT PRICING", icon: <BadgeIcon /> },
-    { text: "MASTER ELECTRICIANS", icon: <Zap size={32} /> }
+    { text: "LIFETIME WORKMANSHIP", subtext: "On all electrical services", icon: <Shield size={32} /> },
+    { text: "FIXED UPFRONT PRICING", subtext: "No hidden costs promised", icon: <BadgeIcon /> },
+    { text: "MASTER ELECTRICIANS", subtext: "Sydney's finest technicians", icon: <Zap size={32} /> }
   ];
 
   function BadgeIcon() {
@@ -70,18 +70,28 @@ const Electrical = () => {
               justifyContent: 'center', 
               flexWrap: 'wrap', 
               gap: '2rem',
-              backgroundColor: 'var(--color-electrical)', /* Distinct electrical accent color */
-              padding: '2.5rem',
-              color: 'var(--color-bg)',
-              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.8)'
+              backgroundColor: 'var(--color-surface)',
+              border: '1px solid rgba(255,255,255,0.05)',
+              padding: '3rem 2.5rem',
+              color: 'white',
+              boxShadow: '0 30px 60px -12px rgba(0, 0, 0, 0.9)',
+              position: 'relative',
+              overflow: 'hidden'
             }}
           >
+            {/* Subtle electrical accent glow inside the box */}
+            <div style={{ position: 'absolute', bottom: '-40px', right: '-40px', width: '200px', height: '200px', background: 'radial-gradient(circle, var(--color-electrical) 0%, transparent 70%)', opacity: 0.1, filter: 'blur(30px)', pointerEvents: 'none' }} />
+            
             {guarantees.map((item, idx) => (
-              <div key={idx} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', flex: '1 1 200px' }}>
-                <div style={{ backgroundColor: 'rgba(0,0,0,0.1)', padding: '1rem' }}>
+              <div key={idx} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.25rem', flex: '1 1 200px', position: 'relative', zIndex: 1 }}>
+                <div style={{ color: 'var(--color-electrical)', backgroundColor: 'rgba(234,179,8,0.08)', padding: '1.25rem', borderRadius: '4px' }}>
                   {item.icon}
                 </div>
-                <span style={{ fontWeight: 800, fontSize: '1.25rem', textAlign: 'center', lineHeight: 1.2 }}>{item.text}</span>
+                <div style={{ textAlign: 'center' }}>
+                   <span style={{ fontWeight: 800, fontSize: '1.25rem', display: 'block', marginBottom: '0.4rem', letterSpacing: '0.02em', color: 'white' }}>{item.text}</span>
+                   <span style={{ fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', color: 'var(--color-text-muted)', letterSpacing: '0.1em', display: 'block', marginBottom: '1rem' }}>{item.subtext}</span>
+                   <div style={{ width: '30px', height: '2px', backgroundColor: 'var(--color-electrical)', margin: '0 auto' }} />
+                </div>
               </div>
             ))}
           </motion.div>

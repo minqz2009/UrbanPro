@@ -3,14 +3,14 @@ import { ShieldCheck, Clock, BadgeDollarSign, Wrench, AlertTriangle, CheckCircle
 
 const Plumbing = () => {
   const guarantees = [
-    { text: "NO CALL OUT FEE", icon: <BadgeDollarSign size={32} /> },
-    { text: "FIXED $250 RATE (Drain Cleaning)", icon: <Wrench size={32} /> },
-    { text: "NO FIX NO PAY", icon: <ShieldCheck size={32} /> }
+    { text: "NO CALL OUT FEE", subtext: "Transparent honest pricing", icon: <BadgeDollarSign size={32} /> },
+    { text: "$250 FIXED RATE", subtext: "Drain cleaning special", icon: <Wrench size={32} /> },
+    { text: "NO FIX NO PAY", subtext: "Our ultimate guarantee", icon: <ShieldCheck size={32} /> }
   ];
 
   const emergencyInfo = [
-    { text: "EMERGENCY CALL 24/7", subtext: "Covering all Sydney area", icon: <AlertTriangle size={24} className="text-accent" /> },
-    { text: "EMERGENCY 7 DAYS", subtext: "Ready when you need us most", icon: <Clock size={24} className="text-accent" /> }
+    { text: "EMERGENCY CALL 24/7", subtext: "Covering all Sydney area", icon: <AlertTriangle size={24} style={{ color: 'var(--color-plumbing)' }} /> },
+    { text: "EMERGENCY 7 DAYS", subtext: "Ready when you need us most", icon: <Clock size={24} style={{ color: 'var(--color-plumbing)' }} /> }
   ];
 
   const servicesBreakdown = [
@@ -78,8 +78,9 @@ const Plumbing = () => {
                   {item.icon}
                 </div>
                 <div style={{ textAlign: 'center' }}>
-                   <span style={{ fontWeight: 800, fontSize: '1.15rem', display: 'block', marginBottom: '0.25rem', letterSpacing: '0.05em' }}>{item.text}</span>
-                   <div style={{ width: '20px', height: '2px', backgroundColor: 'var(--color-plumbing)', margin: '0 auto', opacity: 0.5 }} />
+                   <span style={{ fontWeight: 800, fontSize: '1.25rem', display: 'block', marginBottom: '0.4rem', letterSpacing: '0.02em', color: 'white' }}>{item.text}</span>
+                   <span style={{ fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', color: 'var(--color-text-muted)', letterSpacing: '0.1em', display: 'block', marginBottom: '1rem' }}>{item.subtext}</span>
+                   <div style={{ width: '30px', height: '2px', backgroundColor: 'var(--color-plumbing)', margin: '0 auto' }} />
                 </div>
               </div>
             ))}
@@ -273,7 +274,7 @@ const Plumbing = () => {
                 transition={{ delay: i * 0.1 }}
                 style={{ display: 'flex', gap: '1rem', alignItems: 'center', padding: '1.5rem', backgroundColor: 'var(--color-bg)' }}
               >
-                <CheckCircle className="text-accent" size={32} style={{ flexShrink: 0 }} />
+                <CheckCircle style={{ color: 'var(--color-plumbing)', flexShrink: 0 }} size={32} />
                 <span style={{ fontWeight: 700, fontSize: '1.125rem', color: 'var(--color-text)' }}>{benefit}</span>
               </motion.div>
             ))}

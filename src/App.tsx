@@ -36,8 +36,8 @@ const Header = () => {
   } else if (path === '/electrical') {
     proColor = '#eab308';
   } else if (path === '/plumbing') {
-    urbanColor = 'var(--color-primary)';
-    proColor = 'var(--color-accent)';
+    urbanColor = 'var(--color-plumbing)';
+    proColor = 'var(--color-plumbing)';
   }
 
   const headerBg = isScrolled ? 'rgba(15, 23, 42, 0.95)' : 'transparent';
@@ -132,13 +132,28 @@ const Header = () => {
 };
 
 const Footer = () => {
+  const location = useLocation();
+  const path = location.pathname;
+  
+  let urbanColor = 'var(--color-text)';
+  let proColor = 'var(--color-accent)';
+
+  if (path === '/building-reno') {
+    proColor = 'var(--color-text-muted)';
+  } else if (path === '/electrical') {
+    proColor = 'var(--color-electrical)';
+  } else if (path === '/plumbing') {
+    urbanColor = 'var(--color-plumbing)';
+    proColor = 'var(--color-plumbing)';
+  }
+
   return (
     <footer style={{ backgroundColor: 'var(--color-bg)', color: 'white', padding: '6rem 0 3rem', marginTop: 'auto', borderTop: '1px solid var(--color-border)' }}>
       <div className="container" style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '4rem' }}>
         <div style={{ flex: '1 1 300px' }}>
           <div style={{ fontSize: '2rem', fontWeight: 800, marginBottom: '1rem' }}>
-            <span style={{ color: 'var(--color-primary)' }}>URBAN</span>
-            <span style={{ color: 'var(--color-accent)' }}>PRO</span>
+            <span style={{ color: urbanColor }}>URBAN</span>
+            <span style={{ color: proColor }}>PRO</span>
           </div>
           <p style={{ color: 'var(--color-text-muted)', maxWidth: '300px', lineHeight: 1.8, fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>
             Your trusted architectural, plumbing, and electrical master craftsmen across Greater Sydney.
@@ -160,15 +175,15 @@ const Footer = () => {
           <h4 style={{ color: 'white', marginBottom: '1.5rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}>Contact</h4>
           <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '1rem', color: 'var(--color-text-muted)', padding: 0 }}>
             <li style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <Phone size={16} style={{ flexShrink: 0, color: 'var(--color-accent)' }} />
+              <Phone size={16} style={{ flexShrink: 0, color: path === '/plumbing' ? 'var(--color-plumbing)' : 'var(--color-accent)' }} />
               <a href="tel:+61412242997" style={{ color: 'inherit', textDecoration: 'none' }}>+61 412 242 997 (John)</a>
             </li>
             <li style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <Phone size={16} style={{ flexShrink: 0, color: 'var(--color-accent)' }} />
+              <Phone size={16} style={{ flexShrink: 0, color: path === '/plumbing' ? 'var(--color-plumbing)' : 'var(--color-accent)' }} />
               <a href="tel:+61426051275" style={{ color: 'inherit', textDecoration: 'none' }}>+61 426 051 275 (Leo)</a>
             </li>
             <li style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <Mail size={16} style={{ flexShrink: 0, color: 'var(--color-accent)' }} />
+              <Mail size={16} style={{ flexShrink: 0, color: path === '/plumbing' ? 'var(--color-plumbing)' : 'var(--color-accent)' }} />
               <a href="mailto:service@urbanproplumbing.com.au" style={{ color: 'inherit', textDecoration: 'none' }}>service@urbanproplumbing.com.au</a>
             </li>
           </ul>
@@ -204,8 +219,8 @@ const FloatingContact = () => {
   const getTheme = () => {
     if (path === '/building-reno') return { accent: '#ffffff', text: '#0f172a', headerBg: '#151e2d' };
     if (path === '/electrical') return { accent: '#eab308', text: 'var(--color-bg)', headerBg: '#7a4a0a' };
-    if (path === '/plumbing') return { accent: 'var(--color-accent)', text: 'var(--color-bg)', headerBg: 'var(--color-primary-dark)' };
-    return { accent: 'var(--color-accent)', text: 'var(--color-bg)', headerBg: 'var(--color-primary-dark)' };
+    if (path === '/plumbing') return { accent: 'var(--color-plumbing)', text: 'white', headerBg: '#1e3a8a' };
+    return { accent: 'var(--color-accent)', text: 'var(--color-bg)', headerBg: '#7a4a0a' };
   };
   const theme = getTheme();
 
