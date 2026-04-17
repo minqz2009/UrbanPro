@@ -217,11 +217,11 @@ const FloatingContact = () => {
 
   // Page-aware theming
   const getTheme = () => {
-    if (path === '/building-reno') return { accent: '#ffffff', text: '#0f172a', headerBg: '#151e2d' };
-    if (path === '/electrical') return { accent: 'var(--color-electrical)', text: 'var(--color-bg)', headerBg: '#422006' };
-    if (path === '/plumbing') return { accent: 'var(--color-plumbing)', text: 'white', headerBg: '#1e3a8a' };
-    // Home Page: Multi-service gradient
-    return { accent: 'white', text: 'var(--color-bg)', headerBg: 'linear-gradient(to right, #3b82f6, #eab308)' };
+    if (path === '/building-reno') return { accent: '#ffffff', text: '#0f172a', headerBg: '#151e2d', btnBg: '#ffffff', btnText: '#0f172a' };
+    if (path === '/electrical') return { accent: 'var(--color-electrical)', text: 'var(--color-bg)', headerBg: '#422006', btnBg: 'var(--color-electrical)', btnText: 'var(--color-bg)' };
+    if (path === '/plumbing') return { accent: 'var(--color-plumbing)', text: 'white', headerBg: '#1e3a8a', btnBg: 'var(--color-plumbing)', btnText: 'white' };
+    // Home Page: Blue Top, Yellow Button
+    return { accent: 'white', text: 'var(--color-bg)', headerBg: 'var(--color-plumbing)', btnBg: 'var(--color-electrical)', btnText: 'var(--color-bg)' };
   };
   const theme = getTheme();
 
@@ -357,8 +357,8 @@ const FloatingContact = () => {
                   whileTap={{ scale: 0.98 }}
                   style={{
                     padding: '0.85rem',
-                    backgroundColor: theme.accent,
-                    color: theme.text,
+                    backgroundColor: theme.btnBg,
+                    color: theme.btnText,
                     border: 'none',
                     fontWeight: 700,
                     fontSize: '1rem',
