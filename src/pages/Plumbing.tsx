@@ -34,8 +34,7 @@ const Plumbing = () => {
         padding: '10rem 0 8rem',
         backgroundImage: 'linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.95)), url(https://images.unsplash.com/photo-1585704032915-c3400ca199e7?q=100&w=3000&auto=format&fit=crop)',
         backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundAttachment: 'fixed'
+        backgroundPosition: 'center'
       }}>
         <div className="container" style={{ textAlign: 'center', position: 'relative', zIndex: 2 }}>
           <motion.div
@@ -101,17 +100,58 @@ const Plumbing = () => {
               </div>
             </div>
           ))}
-          <div style={{ flex: '1 1 350px', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '2.5rem 3rem', backgroundColor: 'var(--color-primary)', borderLeft: '1px solid rgba(255,255,255,0.1)' }}>
-             <h3 style={{ color: 'white', fontSize: '1.5rem', marginBottom: '1.5rem', fontWeight: 800, letterSpacing: '0.05em', textTransform: 'uppercase' }}>Direct Contact</h3>
-             <a href="tel:+61412242997" style={{ color: 'white', display: 'flex', alignItems: 'center', gap: '1rem', fontSize: '1.2rem', fontWeight: 700, textDecoration: 'none', marginBottom: '1rem', transition: 'opacity 0.3s ease' }}>
-                <PhoneCall size={20} /> +61 412 242 997 (John)
-             </a>
-             <a href="tel:+61426051275" style={{ color: 'white', display: 'flex', alignItems: 'center', gap: '1rem', fontSize: '1.2rem', fontWeight: 700, textDecoration: 'none', marginBottom: '1rem', transition: 'opacity 0.3s ease' }}>
-                <PhoneCall size={20} /> +61 426 051 275 (Leo)
-             </a>
-             <a href="mailto:service@urbanproplumbing.com.au" style={{ color: 'var(--color-accent)', display: 'flex', alignItems: 'center', gap: '1rem', fontSize: '1.05rem', fontWeight: 600, textDecoration: 'none', transition: 'opacity 0.3s ease' }}>
-                ✉ service@urbanproplumbing.com.au
-             </a>
+          <div style={{ flex: '1 1 400px', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '3.5rem 4rem', backgroundColor: 'var(--color-bg)', borderLeft: '1px solid rgba(255,255,255,0.05)', position: 'relative', overflow: 'hidden' }}>
+             <style>{`
+               .contact-card-plumb {
+                 display: flex; align-items: center; gap: 1.25rem;
+                 color: var(--color-text); text-decoration: none;
+                 padding: 1.25rem 1.5rem;
+                 background-color: var(--color-surface);
+                 border: 1px solid rgba(255,255,255,0.05);
+                 transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+               }
+               .contact-card-plumb:hover {
+                 transform: translateY(-4px);
+                 border-color: var(--color-accent);
+                 background-color: rgba(255,255,255,0.02);
+                 box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+               }
+               .contact-card-plumb .icon-wrapped {
+                 padding: 0.75rem; 
+                 background-color: rgba(255,255,255,0.03); 
+                 color: var(--color-accent);
+                 transition: all 0.4s ease;
+               }
+               .contact-card-plumb:hover .icon-wrapped {
+                 background-color: var(--color-accent);
+                 color: var(--color-bg);
+               }
+             `}</style>
+             
+             {/* Subtle accent glow */}
+             <div style={{ position: 'absolute', top: '-50px', right: '-50px', width: '200px', height: '200px', background: 'radial-gradient(circle, var(--color-accent) 0%, transparent 70%)', opacity: 0.08, filter: 'blur(40px)', pointerEvents: 'none' }} />
+             
+             <h3 style={{ color: 'white', fontSize: '1.25rem', marginBottom: '2rem', fontWeight: 800, letterSpacing: '0.15em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+               <span style={{ width: '8px', height: '8px', backgroundColor: 'var(--color-accent)' }} />
+               Direct Contact
+             </h3>
+             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', position: 'relative', zIndex: 1 }}>
+               {[
+                 { href: 'tel:+61412242997', label: '+61 412 242 997', sub: 'John', icon: <PhoneCall size={22} /> },
+                 { href: 'tel:+61426051275', label: '+61 426 051 275', sub: 'Leo', icon: <PhoneCall size={22} /> },
+                 { href: 'mailto:service@urbanproplumbing.com.au', label: 'Email Us', sub: 'service@urbanproplumbing.com.au', icon: <span style={{ fontSize: '1.2rem', fontWeight: 800 }}>@</span> }
+               ].map((item) => (
+                 <a key={item.href} href={item.href} className="contact-card-plumb">
+                   <div className="icon-wrapped">
+                     {item.icon}
+                   </div>
+                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
+                     <span style={{ fontSize: '1.15rem', fontWeight: 800, letterSpacing: '0.02em' }}>{item.label}</span>
+                     {item.sub && <span style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 600 }}>{item.sub}</span>}
+                   </div>
+                 </a>
+               ))}
+             </div>
           </div>
         </div>
       </section>

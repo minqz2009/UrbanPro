@@ -135,7 +135,7 @@ const Home = () => {
             </motion.div>
 
             <motion.div variants={itemVariants} style={{ display: 'flex', gap: '1.5rem', justifyContent: 'center', flexWrap: 'wrap', marginBottom: 'clamp(2rem, 4vh, 4rem)' }}>
-              <a href="#services" style={{ padding: '1.1rem 3rem', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.15em', fontWeight: 700, backgroundColor: 'white', color: '#0f172a', textDecoration: 'none', transition: 'all 0.3s ease' }}>
+              <a href="#services" onClick={(e) => { e.preventDefault(); const el = document.getElementById('services'); if (el) { const top = el.getBoundingClientRect().top + window.scrollY - 80; window.scrollTo({ top, behavior: 'smooth' }); } }} style={{ padding: '1.1rem 3rem', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.15em', fontWeight: 700, backgroundColor: 'white', color: '#0f172a', textDecoration: 'none', transition: 'all 0.3s ease', cursor: 'pointer' }}>
                 Explore Services
               </a>
               <a href="mailto:service@urbanproplumbing.com.au" style={{ padding: '1.1rem 3rem', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.15em', fontWeight: 700, backgroundColor: 'transparent', color: 'white', textDecoration: 'none', border: '1px solid rgba(255,255,255,0.3)', transition: 'all 0.3s ease' }}>

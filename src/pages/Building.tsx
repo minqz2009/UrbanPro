@@ -343,21 +343,6 @@ const Building = () => {
             }}>
               Get in Touch
             </a>
-            <a href="tel:1300872276" style={{
-              display: 'inline-block',
-              padding: '1.25rem 3.5rem',
-              backgroundColor: 'transparent',
-              color: 'white',
-              textDecoration: 'none',
-              fontSize: '1rem',
-              fontWeight: 700,
-              textTransform: 'uppercase',
-              letterSpacing: '0.15em',
-              border: '1px solid rgba(255,255,255,0.3)',
-              transition: 'all 0.3s'
-            }}>
-              1300 URBAN PRO
-            </a>
           </motion.div>
         </div>
       </section>

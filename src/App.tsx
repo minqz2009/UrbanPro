@@ -65,8 +65,8 @@ const Header = () => {
         <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none', zIndex: 101 }}>
             <div style={{ fontSize: '1.5rem', fontWeight: 800, transition: 'color 0.8s cubic-bezier(0.16, 1, 0.3, 1)', zIndex: 101 }}>
-              <span style={{ color: urbanColor, transition: 'color 0.8s ease' }}>Urban</span>
-              <span style={{ color: proColor, transition: 'color 0.8s ease' }}>Pro</span>
+              <span style={{ color: urbanColor, transition: 'color 0.8s ease' }}>URBAN</span>
+              <span style={{ color: proColor, transition: 'color 0.8s ease' }}>PRO</span>
             </div>
           </Link>
           
@@ -137,8 +137,8 @@ const Footer = () => {
       <div className="container" style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '4rem' }}>
         <div style={{ flex: '1 1 300px' }}>
           <div style={{ fontSize: '2rem', fontWeight: 800, marginBottom: '1rem' }}>
-            <span style={{ color: 'var(--color-primary)' }}>Urban</span>
-            <span style={{ color: 'var(--color-accent)' }}>Pro</span>
+            <span style={{ color: 'var(--color-primary)' }}>URBAN</span>
+            <span style={{ color: 'var(--color-accent)' }}>PRO</span>
           </div>
           <p style={{ color: 'var(--color-text-muted)', maxWidth: '300px', lineHeight: 1.8, fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>
             Your trusted architectural, plumbing, and electrical master craftsmen across Greater Sydney.
