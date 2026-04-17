@@ -110,7 +110,7 @@ const Electrical = () => {
               </div>
             </div>
           ))}
-          <div style={{ flex: '1 1 400px', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '2rem 2.5rem', backgroundColor: 'var(--color-bg)', borderLeft: '1px solid rgba(255,255,255,0.05)', position: 'relative', overflow: 'hidden' }}>
+          <div style={{ flex: '1 1 400px', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '2rem 2.5rem', backgroundColor: '#020617', borderLeft: '1px solid rgba(255,255,255,0.08)', position: 'relative', overflow: 'hidden' }}>
              <style>{`
                .contact-card-elec {
                  display: flex; align-items: center; gap: 1.25rem;
