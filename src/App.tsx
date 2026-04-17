@@ -217,11 +217,11 @@ const FloatingContact = () => {
 
   // Page-aware theming
   const getTheme = () => {
-    if (path === '/building-reno') return { accent: '#ffffff', text: '#0f172a', headerBg: '#151e2d', btnBg: '#ffffff', btnText: '#0f172a' };
-    if (path === '/electrical') return { accent: 'var(--color-electrical)', text: 'var(--color-bg)', headerBg: '#d97706', btnBg: 'var(--color-electrical)', btnText: 'var(--color-bg)' };
-    if (path === '/plumbing') return { accent: 'var(--color-plumbing)', text: 'white', headerBg: '#1e3a8a', btnBg: 'var(--color-plumbing)', btnText: 'white' };
+    if (path === '/building-reno') return { accent: '#ffffff', text: '#0f172a', headerBg: '#151e2d', headerText: 'white', headerSub: 'rgba(255,255,255,0.8)', btnBg: '#ffffff', btnText: '#0f172a' };
+    if (path === '/electrical') return { accent: 'var(--color-electrical)', text: 'var(--color-bg)', headerBg: '#facc15', headerText: 'var(--color-bg)', headerSub: 'rgba(15,23,42,0.7)', btnBg: 'var(--color-electrical)', btnText: 'var(--color-bg)' };
+    if (path === '/plumbing') return { accent: 'var(--color-plumbing)', text: 'white', headerBg: '#1e3a8a', headerText: 'white', headerSub: 'rgba(255,255,255,0.8)', btnBg: 'var(--color-plumbing)', btnText: 'white' };
     // Home Page: Blue Top, Yellow Button
-    return { accent: 'white', text: 'var(--color-bg)', headerBg: 'var(--color-plumbing)', btnBg: 'var(--color-electrical)', btnText: 'var(--color-bg)' };
+    return { accent: 'white', text: 'var(--color-bg)', headerBg: 'var(--color-plumbing)', headerText: 'white', headerSub: 'rgba(255,255,255,0.8)', btnBg: 'var(--color-electrical)', btnText: 'var(--color-bg)' };
   };
   const theme = getTheme();
 
@@ -288,8 +288,8 @@ const FloatingContact = () => {
           >
             {/* Header */}
             <div style={{ padding: '1.5rem 1.5rem 1rem', backgroundColor: theme.headerBg, transition: 'background-color 0.5s ease' }}>
-              <h3 style={{ color: 'white', fontSize: '1.25rem', fontWeight: 700, margin: 0 }}>Send us a message</h3>
-              <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '0.85rem', margin: '0.5rem 0 0' }}>We'll get back to you promptly</p>
+              <h3 style={{ color: theme.headerText, fontSize: '1.25rem', fontWeight: 700, margin: 0 }}>Send us a message</h3>
+              <p style={{ color: theme.headerSub, fontSize: '0.85rem', margin: '0.5rem 0 0' }}>We'll get back to you promptly</p>
             </div>
 
             {sent ? (
