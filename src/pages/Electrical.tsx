@@ -125,30 +125,34 @@ const Electrical = () => {
 
         {/* The New Horizontal Command Strip */}
         <div style={{ 
-          backgroundColor: '#020617', 
-          borderTop: '1px solid rgba(255,255,255,0.05)', 
-          padding: '2.5rem 0',
+          background: 'linear-gradient(to right, #020617, #080d1a, #020617)', 
+          borderTop: '2px solid #eab308', 
+          borderBottom: '1px solid rgba(234,179,8,0.15)',
+          padding: '3.5rem 0',
           position: 'relative',
-          overflow: 'hidden'
+          overflow: 'hidden',
+          boxShadow: '0 20px 50px rgba(0,0,0,0.5)'
         }}>
           <style>{`
             .access-link-elec {
-              display: flex; align-items: center; gap: 1rem;
-              color: rgba(255,255,255,0.7); text-decoration: none;
-              font-weight: 800; font-size: 1.1rem; letter-spacing: 0.02em;
-              transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-              padding: 0.8rem 1.5rem;
-              background-color: rgba(255,255,255,0.03);
-              border: 1px solid rgba(255,255,255,0.05);
+              display: flex; align-items: center; gap: 1.25rem;
+              color: white; text-decoration: none;
+              font-weight: 900; font-size: 1.25rem; letter-spacing: 0.02em;
+              transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+              padding: 1.25rem 2.5rem;
+              background-color: rgba(255,255,255,0.05);
+              border: 1px solid rgba(255,255,255,0.1);
+              box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             }
             .access-link-elec:hover {
-              color: white;
-              background-color: rgba(255,255,255,0.07);
+              background-color: #eab308;
+              color: var(--color-bg);
               border-color: #eab308;
-              transform: translateY(-2px);
+              transform: translateY(-4px);
+              box-shadow: 0 12px 30px -10px #eab308;
             }
             .access-link-elec .link-icon-elec { color: #eab308; transition: all 0.3s ease; }
-            .access-link-elec:hover .link-icon-elec { transform: scale(1.15); }
+            .access-link-elec:hover .link-icon-elec { color: var(--color-bg); transform: scale(1.1); }
             
             @keyframes pulse-glow-elec {
               0% { opacity: 0.4; transform: scale(1); }
@@ -158,19 +162,25 @@ const Electrical = () => {
           `}</style>
           
           <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '2rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-              <div style={{ 
-                width: '12px', height: '12px', borderRadius: '50%', 
-                backgroundColor: '#eab308', 
-                boxShadow: '0 0 15px #eab308',
-                animation: 'pulse-glow-elec 2s infinite'
-              }} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
+              <div style={{ position: 'relative' }}>
+                <div style={{ 
+                  width: '16px', height: '16px', borderRadius: '50%', 
+                  backgroundColor: 'white', 
+                  boxShadow: '0 0 20px white',
+                  animation: 'pulse-glow-elec 2s infinite'
+                }} />
+                <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '28px', height: '28px', borderRadius: '50%', border: '2px solid #eab308', animation: 'pulse-glow-elec 2s infinite linear reverse' }} />
+              </div>
               <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <span style={{ fontSize: '0.85rem', fontWeight: 900, letterSpacing: '0.3em', textTransform: 'uppercase', color: '#eab308' }}>
-                  Live Dispatch
-                </span>
-                <span style={{ fontSize: '0.7rem', fontWeight: 600, textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.1em' }}>
-                  Sydney Region Active
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.25rem' }}>
+                   <span style={{ backgroundColor: '#eab308', color: 'var(--color-bg)', padding: '0.25rem 0.6rem', fontSize: '0.65rem', fontWeight: 900, borderRadius: '2px' }}>LIVE</span>
+                   <span style={{ fontSize: '1rem', fontWeight: 900, letterSpacing: '0.35em', textTransform: 'uppercase', color: 'white' }}>
+                     Command Center
+                   </span>
+                </div>
+                <span style={{ fontSize: '0.8rem', fontWeight: 600, textTransform: 'uppercase', color: '#eab308', letterSpacing: '0.15em' }}>
+                  Sydney Region Techs Online
                 </span>
               </div>
             </div>
