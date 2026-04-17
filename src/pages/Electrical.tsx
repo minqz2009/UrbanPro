@@ -209,7 +209,8 @@ const Electrical = () => {
                 font-size: 0.8rem !important;
                 opacity: 0.7;
               }
-              .guarantee-item div:last-child { display: none !important; }
+              /* Hide only the decorative underline div, not the whole text container */
+              .guarantee-item div > div:last-child { display: none !important; }
               .guarantee-item > div:nth-of-type(2) { text-align: left !important; }
             }
           `}</style>
