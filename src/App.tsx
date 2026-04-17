@@ -37,7 +37,7 @@ const Header = () => {
     proColor = '#eab308';
   } else if (path === '/plumbing') {
     urbanColor = 'var(--color-plumbing)';
-    proColor = 'var(--color-plumbing)';
+    proColor = 'var(--color-electrical)';
   }
 
   const headerBg = isScrolled ? 'rgba(15, 23, 42, 0.95)' : 'transparent';
@@ -144,7 +144,7 @@ const Footer = () => {
     proColor = 'var(--color-electrical)';
   } else if (path === '/plumbing') {
     urbanColor = 'var(--color-plumbing)';
-    proColor = 'var(--color-plumbing)';
+    proColor = 'var(--color-electrical)';
   }
 
   return (
