@@ -100,16 +100,15 @@ const Plumbing = () => {
               </div>
             </div>
           ))}
-          <div style={{ flex: '1 1 400px', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '2.5rem 3rem', backgroundColor: 'var(--color-bg)', borderLeft: '1px solid rgba(255,255,255,0.05)', position: 'relative', overflow: 'hidden' }}>
+          <div style={{ flex: '1 1 400px', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '2rem 2.5rem', backgroundColor: 'var(--color-bg)', borderLeft: '1px solid rgba(255,255,255,0.05)', position: 'relative', overflow: 'hidden' }}>
              <style>{`
                .contact-card-plumb {
-                 display: flex; align-items: center; gap: 1rem;
+                 display: flex; align-items: center; gap: 1.25rem;
                  color: var(--color-text); text-decoration: none;
-                 padding: 1rem 1.25rem;
+                 padding: 0.85rem 1.25rem;
                  background-color: var(--color-surface);
                  border: 1px solid rgba(255,255,255,0.05);
                  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-                 overflow: hidden;
                }
                .contact-card-plumb:hover {
                  transform: translateY(-4px);
@@ -132,11 +131,11 @@ const Plumbing = () => {
              {/* Subtle accent glow */}
              <div style={{ position: 'absolute', top: '-50px', right: '-50px', width: '200px', height: '200px', background: 'radial-gradient(circle, var(--color-accent) 0%, transparent 70%)', opacity: 0.08, filter: 'blur(40px)', pointerEvents: 'none' }} />
              
-             <h3 style={{ color: 'white', fontSize: '1.25rem', marginBottom: '2rem', fontWeight: 800, letterSpacing: '0.15em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+             <h3 style={{ color: 'white', fontSize: '1.1rem', marginBottom: '1.5rem', fontWeight: 800, letterSpacing: '0.15em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '1rem' }}>
                <span style={{ width: '8px', height: '8px', backgroundColor: 'var(--color-accent)' }} />
                Direct Contact
              </h3>
-             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', position: 'relative', zIndex: 1 }}>
+             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', position: 'relative', zIndex: 1 }}>
                {[
                  { href: 'tel:+61412242997', label: '+61 412 242 997', sub: 'John', icon: <PhoneCall size={22} /> },
                  { href: 'tel:+61426051275', label: '+61 426 051 275', sub: 'Leo', icon: <PhoneCall size={22} /> },
@@ -146,9 +145,9 @@ const Plumbing = () => {
                    <div className="icon-wrapped">
                      {item.icon}
                    </div>
-                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem', overflow: 'hidden' }}>
-                     <span style={{ fontSize: '1.15rem', fontWeight: 800, letterSpacing: '0.02em', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.label}</span>
-                     {item.sub && <span style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 600, wordBreak: 'break-all' }}>{item.sub}</span>}
+                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.15rem', overflow: 'hidden' }}>
+                     <span style={{ fontSize: '1.1rem', fontWeight: 800, letterSpacing: '0.02em' }}>{item.label}</span>
+                     {item.sub && <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.sub}</span>}
                    </div>
                  </a>
                ))}
