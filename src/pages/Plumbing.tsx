@@ -100,15 +100,16 @@ const Plumbing = () => {
               </div>
             </div>
           ))}
-          <div style={{ flex: '1 1 400px', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '3.5rem 4rem', backgroundColor: 'var(--color-bg)', borderLeft: '1px solid rgba(255,255,255,0.05)', position: 'relative', overflow: 'hidden' }}>
+          <div style={{ flex: '1 1 400px', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '2.5rem 3rem', backgroundColor: 'var(--color-bg)', borderLeft: '1px solid rgba(255,255,255,0.05)', position: 'relative', overflow: 'hidden' }}>
              <style>{`
                .contact-card-plumb {
-                 display: flex; align-items: center; gap: 1.25rem;
+                 display: flex; align-items: center; gap: 1rem;
                  color: var(--color-text); text-decoration: none;
-                 padding: 1.25rem 1.5rem;
+                 padding: 1rem 1.25rem;
                  background-color: var(--color-surface);
                  border: 1px solid rgba(255,255,255,0.05);
                  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+                 overflow: hidden;
                }
                .contact-card-plumb:hover {
                  transform: translateY(-4px);
@@ -145,9 +146,9 @@ const Plumbing = () => {
                    <div className="icon-wrapped">
                      {item.icon}
                    </div>
-                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
-                     <span style={{ fontSize: '1.15rem', fontWeight: 800, letterSpacing: '0.02em' }}>{item.label}</span>
-                     {item.sub && <span style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 600 }}>{item.sub}</span>}
+                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem', overflow: 'hidden' }}>
+                     <span style={{ fontSize: '1.15rem', fontWeight: 800, letterSpacing: '0.02em', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.label}</span>
+                     {item.sub && <span style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 600, wordBreak: 'break-all' }}>{item.sub}</span>}
                    </div>
                  </a>
                ))}
