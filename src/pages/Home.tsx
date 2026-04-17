@@ -173,12 +173,27 @@ const Home = () => {
 
           <style>{`
             @media (max-width: 768px) {
-              .services-container { gap: 1rem !important; }
-              .service-card-wrapper { flex: 1 1 100% !important; }
-              .service-img-container { height: 240px !important; }
-              .service-content { padding: 2rem 1.25rem !important; }
-              .service-title { fontSize: 1.5rem !important; }
-              .service-icon-box { width: 60px !important; height: 60px !important; margin-top: -50px !important; }
+              .services-container { 
+                gap: 1rem !important; 
+                flex-wrap: nowrap !important;
+                overflow-x: auto !important;
+                scroll-snap-type: x mandatory !important;
+                padding: 1rem 0 !important;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+              }
+              .services-container::-webkit-scrollbar { display: none; }
+              
+              .service-card-wrapper { 
+                flex: 0 0 85% !important; 
+                scroll-snap-align: center !important;
+                maxWidth: 300px !important;
+              }
+              .service-img-container { height: 200px !important; }
+              .service-content { padding: 1.5rem 1.25rem !important; }
+              .service-title { font-size: 1.25rem !important; }
+              .service-icon-box { width: 50px !important; height: 50px !important; margin-top: -40px !important; padding: 0.75rem !important; }
+              .service-icon-box svg { width: 24px !important; height: 24px !important; }
             }
           `}</style>
           <motion.div className="services-container" style={{ display: 'flex', flexWrap: 'wrap', gap: '3rem', y: servicesCardsY }}>

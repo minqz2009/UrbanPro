@@ -177,11 +177,30 @@ const Electrical = () => {
                 width: 100%;
                 justify-content: center;
               }
-              .guarantees-box { padding: 2rem 1.5rem !important; gap: 1.5rem !important; }
-              .guarantee-item { flex: 1 1 140px !important; gap: 1rem !important; }
-              .guarantee-icon { padding: 1rem !important; }
-              .guarantee-icon svg { width: 24px !important; height: 24px !important; }
-              .guarantee-text { font-size: 1.125rem !important; }
+              .guarantees-box { 
+                padding: 1.5rem 1rem !important; 
+                gap: 0.5rem !important;
+                flex-wrap: nowrap !important;
+                justify-content: space-between !important;
+              }
+              .guarantee-item { 
+                flex: 1 1 0% !important; 
+                gap: 0.5rem !important; 
+                min-width: 0 !important;
+              }
+              .guarantee-icon { 
+                padding: 0.75rem !important; 
+                background: none !important;
+                color: var(--color-electrical) !important;
+              }
+              .guarantee-icon svg { width: 20px !important; height: 20px !important; }
+              .guarantee-text { 
+                font-size: 0.6rem !important; 
+                letter-spacing: 0.01em !important;
+                line-height: 1.1 !important;
+              }
+              .guarantee-item span:nth-of-type(2) { display: none !important; }
+              .guarantee-item div:last-child { display: none !important; }
             }
           `}</style>
           
