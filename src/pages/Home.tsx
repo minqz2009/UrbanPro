@@ -192,6 +192,7 @@ const Home = () => {
               .service-img-container { height: 200px !important; }
               .service-content { padding: 1.5rem 1.25rem !important; }
               .service-title { font-size: 1.25rem !important; }
+              .service-content p { font-size: 0.95rem !important; line-height: 1.6 !important; margin-bottom: 2rem !important; }
               .service-icon-box { width: 50px !important; height: 50px !important; margin-top: -40px !important; padding: 0.75rem !important; }
               .service-icon-box svg { width: 24px !important; height: 24px !important; }
             }

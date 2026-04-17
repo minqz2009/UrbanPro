@@ -39,7 +39,7 @@ const Electrical = () => {
       style={{ backgroundColor: 'var(--color-bg)', color: 'var(--color-text)' }}
     >
       {/* Hero Banner with Image */}
-      <section style={{ 
+      <section className="hero-section" style={{ 
         position: 'relative',
         padding: '10rem 0 8rem',
         backgroundImage: 'linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.95)), url(https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=100&w=3000&auto=format&fit=crop)',
@@ -52,10 +52,10 @@ const Electrical = () => {
              animate={{ y: 0, opacity: 1 }}
              transition={{ duration: 0.8 }}
           >
-            <h1 style={{ fontSize: 'clamp(3rem, 6vw, 4.5rem)', fontWeight: 800, marginBottom: '1.5rem', color: 'white', letterSpacing: '-0.02em' }}>
+            <h1 className="hero-title" style={{ fontSize: 'clamp(3rem, 6vw, 4.5rem)', fontWeight: 800, marginBottom: '1.5rem', color: 'white', letterSpacing: '-0.02em' }}>
               Expert Electrical Solutions
             </h1>
-            <p style={{ fontSize: '1.25rem', color: 'rgba(255,255,255,0.9)', maxWidth: '650px', margin: '0 auto 4rem', lineHeight: 1.6 }}>
+            <p className="hero-desc" style={{ fontSize: '1.25rem', color: 'rgba(255,255,255,0.9)', maxWidth: '650px', margin: '0 auto 4rem', lineHeight: 1.6 }}>
               Safe, efficient, and innovative electrical services. From rapid fault-finding to complete smart home installations, we keep the lights on globally.
             </p>
           </motion.div>
@@ -177,41 +177,52 @@ const Electrical = () => {
                 width: 100%;
                 justify-content: center;
               }
-              .guarantees-box { 
-                padding: 1.5rem 1rem !important; 
-                gap: 1rem !important;
+              .hero-section {
+                display: flex !important;
                 flex-direction: column !important;
-                align-items: stretch !important;
+                justify-content: center !important;
+                min-height: 100svh !important;
+                padding: 0 !important;
+              }
+              .hero-title { font-size: 2.25rem !important; margin-bottom: 1.5rem !important; }
+              .hero-desc { font-size: 1rem !important; margin-bottom: 5rem !important; line-height: 1.7 !important; }
+              .guarantees-box { 
+                padding: 1.5rem 0.5rem !important; 
+                gap: 0.25rem !important;
+                flex-direction: row !important;
+                flex-wrap: nowrap !important;
+                justify-content: space-around !important;
               }
               .guarantee-item { 
-                flex-direction: row !important; 
+                flex: 1 1 0% !important; 
+                gap: 0.5rem !important;
                 align-items: center !important;
-                justify-content: flex-start !important;
-                gap: 1.5rem !important;
-                padding-bottom: 1rem !important;
-                border-bottom: 1px solid rgba(255,255,255,0.05);
+                justify-content: center !important;
+                min-width: 0 !important;
+                border: none !important;
+                padding: 0 !important;
               }
-              .guarantee-item:last-child { border-bottom: none; }
               .guarantee-icon { 
                 padding: 0 !important; 
                 background: none !important;
-                flex-shrink: 0 !important;
+                color: var(--color-electrical) !important;
               }
               .guarantee-icon svg { width: 28px !important; height: 28px !important; }
               .guarantee-text { 
-                font-size: 1.1rem !important; 
-                text-align: left !important;
-                margin-bottom: 0.1rem !important;
+                font-size: 0.85rem !important; 
+                text-align: center !important;
+                margin-bottom: 0.2rem !important;
+                line-height: 1.2 !important;
               }
               .guarantee-item span:nth-of-type(2) { 
                 display: block !important; 
-                text-align: left !important; 
-                font-size: 0.8rem !important;
-                opacity: 0.7;
+                text-align: center !important; 
+                font-size: 0.65rem !important;
+                opacity: 0.8;
+                line-height: 1.1 !important;
               }
-              /* Hide only the decorative underline div, not the whole text container */
               .guarantee-item div > div:last-child { display: none !important; }
-              .guarantee-item > div:nth-of-type(2) { text-align: left !important; }
+              .guarantee-item > div:nth-of-type(2) { text-align: center !important; }
             }
           `}</style>
           
