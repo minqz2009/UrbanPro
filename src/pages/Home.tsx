@@ -173,11 +173,14 @@ const Home = () => {
 
           <style>{`
             @media (max-width: 768px) {
-              .services-container { gap: 1.5rem !important; }
+              .services-container { gap: 1rem !important; }
               .service-card-wrapper { flex: 1 1 100% !important; }
+              .service-img-container { height: 240px !important; }
+              .service-content { padding: 2rem 1.25rem !important; }
+              .service-title { fontSize: 1.5rem !important; }
+              .service-icon-box { width: 60px !important; height: 60px !important; margin-top: -50px !important; }
             }
           `}</style>
-
           <motion.div className="services-container" style={{ display: 'flex', flexWrap: 'wrap', gap: '3rem', y: servicesCardsY }}>
             {services.map((service, index) => (
               <motion.div
@@ -199,15 +202,15 @@ const Home = () => {
                   }}
                   className="service-card"
                   >
-                    <div style={{ height: '350px', overflow: 'hidden', position: 'relative' }}>
+                    <div className="service-img-container" style={{ height: '350px', overflow: 'hidden', position: 'relative' }}>
                       <div style={{ position: 'absolute', inset: 0, backgroundColor: 'var(--color-bg)', opacity: 0.4, zIndex: 1, transition: 'opacity 0.8s ease' }} className="service-overlay" />
                       <img src={service.image} alt={service.title} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 1.8s cubic-bezier(0.16, 1, 0.3, 1)' }} className="service-img" />
                     </div>
-                    <div style={{ padding: '2rem 1.5rem', flex: 1, display: 'flex', flexDirection: 'column', position: 'relative', zIndex: 2 }}>
-                      <div style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'center', alignItems: 'center', width: '80px', height: '80px', backgroundColor: 'var(--color-surface)', marginTop: '-70px', position: 'relative', zIndex: 2 }}>
+                    <div className="service-content" style={{ padding: '3rem 2.5rem', flex: 1, display: 'flex', flexDirection: 'column', position: 'relative', zIndex: 2 }}>
+                      <div className="service-icon-box" style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'center', alignItems: 'center', width: '80px', height: '80px', backgroundColor: 'var(--color-surface)', marginTop: '-70px', position: 'relative', zIndex: 2 }}>
                         {service.icon}
                       </div>
-                      <h3 style={{ fontSize: '2rem', marginBottom: '1rem', color: 'var(--color-text)', fontWeight: 800, letterSpacing: '-0.02em', lineHeight: 1.1 }}>{service.title}</h3>
+                      <h3 className="service-title" style={{ fontSize: '2rem', marginBottom: '1rem', color: 'var(--color-text)', fontWeight: 800, letterSpacing: '-0.02em', lineHeight: 1.1 }}>{service.title}</h3>
                       <p style={{ color: 'var(--color-text-muted)', marginBottom: '3rem', flex: 1, fontSize: '1.125rem', lineHeight: 1.8, fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>
                         {service.description}
                       </p>

@@ -62,6 +62,7 @@ const Electrical = () => {
 
           {/* Core Guarantees Banner */}
           <motion.div 
+            className="guarantees-box"
             initial={{ y: 40, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
@@ -83,12 +84,12 @@ const Electrical = () => {
             <div style={{ position: 'absolute', bottom: '-40px', right: '-40px', width: '200px', height: '200px', background: 'radial-gradient(circle, var(--color-electrical) 0%, transparent 70%)', opacity: 0.1, filter: 'blur(30px)', pointerEvents: 'none' }} />
             
             {guarantees.map((item, idx) => (
-              <div key={idx} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.25rem', flex: '1 1 200px', position: 'relative', zIndex: 1 }}>
-                <div style={{ color: 'var(--color-electrical)', backgroundColor: 'rgba(234,179,8,0.08)', padding: '1.25rem', borderRadius: '4px' }}>
+              <div key={idx} className="guarantee-item" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.25rem', flex: '1 1 200px', position: 'relative', zIndex: 1 }}>
+                <div className="guarantee-icon" style={{ color: 'var(--color-electrical)', backgroundColor: 'rgba(234,179,8,0.08)', padding: '1.25rem', borderRadius: '4px' }}>
                   {item.icon}
                 </div>
                 <div style={{ textAlign: 'center' }}>
-                   <span style={{ fontWeight: 800, fontSize: '1.25rem', display: 'block', marginBottom: '0.4rem', letterSpacing: '0.02em', color: 'white' }}>{item.text}</span>
+                   <span className="guarantee-text" style={{ fontWeight: 800, fontSize: '1.25rem', display: 'block', marginBottom: '0.4rem', letterSpacing: '0.02em', color: 'white' }}>{item.text}</span>
                    <span style={{ fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', color: 'var(--color-text-muted)', letterSpacing: '0.1em', display: 'block', marginBottom: '1rem' }}>{item.subtext}</span>
                    <div style={{ width: '30px', height: '2px', backgroundColor: 'var(--color-electrical)', margin: '0 auto' }} />
                 </div>
@@ -176,6 +177,11 @@ const Electrical = () => {
                 width: 100%;
                 justify-content: center;
               }
+              .guarantees-box { padding: 2rem 1.5rem !important; gap: 1.5rem !important; }
+              .guarantee-item { flex: 1 1 140px !important; gap: 1rem !important; }
+              .guarantee-icon { padding: 1rem !important; }
+              .guarantee-icon svg { width: 24px !important; height: 24px !important; }
+              .guarantee-text { font-size: 1.125rem !important; }
             }
           `}</style>
           
