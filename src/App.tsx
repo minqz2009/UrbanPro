@@ -218,7 +218,7 @@ const FloatingContact = () => {
   // Page-aware theming
   const getTheme = () => {
     if (path === '/building-reno') return { accent: '#ffffff', text: '#0f172a', headerBg: '#151e2d', btnBg: '#ffffff', btnText: '#0f172a' };
-    if (path === '/electrical') return { accent: 'var(--color-electrical)', text: 'var(--color-bg)', headerBg: '#422006', btnBg: 'var(--color-electrical)', btnText: 'var(--color-bg)' };
+    if (path === '/electrical') return { accent: 'var(--color-electrical)', text: 'var(--color-bg)', headerBg: '#d97706', btnBg: 'var(--color-electrical)', btnText: 'var(--color-bg)' };
     if (path === '/plumbing') return { accent: 'var(--color-plumbing)', text: 'white', headerBg: '#1e3a8a', btnBg: 'var(--color-plumbing)', btnText: 'white' };
     // Home Page: Blue Top, Yellow Button
     return { accent: 'white', text: 'var(--color-bg)', headerBg: 'var(--color-plumbing)', btnBg: 'var(--color-electrical)', btnText: 'var(--color-bg)' };
