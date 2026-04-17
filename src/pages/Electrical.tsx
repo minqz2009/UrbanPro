@@ -169,9 +169,17 @@ const Electrical = () => {
               50% { opacity: 1; transform: scale(1.2); }
               100% { opacity: 0.4; transform: scale(1); }
             }
+            @media (max-width: 768px) {
+              .access-link-elec {
+                padding: 1rem 1.5rem;
+                font-size: 1rem;
+                width: 100%;
+                justify-content: center;
+              }
+            }
           `}</style>
           
-          <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '2rem' }}>
+          <div className="container mobile-center" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '2rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
               <div style={{ position: 'relative' }}>
                 <div style={{ 
@@ -227,7 +235,7 @@ const Electrical = () => {
             <div style={{ width: '80px', height: '4px', backgroundColor: 'var(--color-electrical)', margin: '1.5rem auto' }} />
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '2rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '2rem' }}>
             {servicesBreakdown.map((service, idx) => (
               <motion.div 
                 key={idx}

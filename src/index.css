@@ -137,6 +137,22 @@ h1, h2, h3, h4, h5, h6 {
 .grid-cols-2 { grid-template-columns: repeat(1, 1fr); }
 .grid-cols-3 { grid-template-columns: repeat(1, 1fr); }
 
+@media (max-width: 768px) {
+  .container {
+    padding: 0 1.25rem;
+  }
+  .section {
+    padding: var(--spacing-md) 0;
+  }
+  .mobile-center {
+    justify-content: center !important;
+    text-align: center !important;
+  }
+  .mobile-stack {
+    flex-direction: column !important;
+  }
+}
+
 @media (min-width: 768px) {
   .grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
   .grid-cols-3 { grid-template-columns: repeat(3, 1fr); }

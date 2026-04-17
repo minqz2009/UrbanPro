@@ -171,7 +171,14 @@ const Home = () => {
             <div style={{ width: '100px', height: '2px', backgroundColor: 'var(--color-text-muted)', margin: '0 auto' }} />
           </motion.div>
 
-          <motion.div style={{ display: 'flex', flexWrap: 'wrap', gap: '3rem', y: servicesCardsY }}>
+          <style>{`
+            @media (max-width: 768px) {
+              .services-container { gap: 1.5rem !important; }
+              .service-card-wrapper { flex: 1 1 100% !important; }
+            }
+          `}</style>
+
+          <motion.div className="services-container" style={{ display: 'flex', flexWrap: 'wrap', gap: '3rem', y: servicesCardsY }}>
             {services.map((service, index) => (
               <motion.div
                 key={service.title}
@@ -179,7 +186,8 @@ const Home = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: false, margin: "-50px", amount: 0.2 }}
                 transition={{ duration: 1, delay: index * 0.15, ease: [0.22, 1, 0.36, 1] }}
-                style={{ flex: '1 1 350px' }}
+                style={{ flex: '1 1 300px', maxWidth: '100%' }}
+                className="service-card-wrapper"
               >
                 <Link to={service.link} style={{ display: 'block', height: '100%', textDecoration: 'none' }}>
                   <div style={{ 
@@ -195,7 +203,7 @@ const Home = () => {
                       <div style={{ position: 'absolute', inset: 0, backgroundColor: 'var(--color-bg)', opacity: 0.4, zIndex: 1, transition: 'opacity 0.8s ease' }} className="service-overlay" />
                       <img src={service.image} alt={service.title} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 1.8s cubic-bezier(0.16, 1, 0.3, 1)' }} className="service-img" />
                     </div>
-                    <div style={{ padding: '3rem 2.5rem', flex: 1, display: 'flex', flexDirection: 'column', position: 'relative', zIndex: 2 }}>
+                    <div style={{ padding: '2rem 1.5rem', flex: 1, display: 'flex', flexDirection: 'column', position: 'relative', zIndex: 2 }}>
                       <div style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'center', alignItems: 'center', width: '80px', height: '80px', backgroundColor: 'var(--color-surface)', marginTop: '-70px', position: 'relative', zIndex: 2 }}>
                         {service.icon}
                       </div>

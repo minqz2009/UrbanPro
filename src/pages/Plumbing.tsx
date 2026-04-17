@@ -159,9 +159,18 @@ const Plumbing = () => {
               50% { opacity: 1; transform: scale(1.2); }
               100% { opacity: 0.4; transform: scale(1); }
             }
+
+            @media (max-width: 768px) {
+              .access-link {
+                padding: 1rem 1.5rem;
+                font-size: 1rem;
+                width: 100%;
+                justify-content: center;
+              }
+            }
           `}</style>
           
-          <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '2rem' }}>
+          <div className="container mobile-center" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '2rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
               <div style={{ position: 'relative' }}>
                 <div style={{ 
@@ -228,7 +237,7 @@ const Plumbing = () => {
                 whileHover={{ y: -5, borderColor: 'var(--color-plumbing)' }}
                 style={{ 
                   backgroundColor: 'var(--color-surface)', 
-                  padding: '2.5rem 1.5rem', 
+                  padding: '2.5rem 1rem', 
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
@@ -236,6 +245,7 @@ const Plumbing = () => {
                   gap: '1.5rem',
                   boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.5)',
                   cursor: 'pointer',
+                  width: '100%',
                   transition: 'background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease',
                   transform: 'translateZ(0)',
                   backfaceVisibility: 'hidden',
