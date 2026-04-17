@@ -26,13 +26,13 @@ const Plumbing = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      style={{ backgroundColor: 'var(--color-bg)', color: 'var(--color-text)' }}
+      style={{ backgroundColor: 'var(--color-plumbing-bg)', color: 'var(--color-text)' }}
     >
       {/* Hero Banner with Image */}
       <section style={{ 
         position: 'relative',
         padding: '10rem 0 8rem',
-        backgroundImage: 'linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.95)), url(https://images.unsplash.com/photo-1585704032915-c3400ca199e7?q=100&w=3000&auto=format&fit=crop)',
+        backgroundImage: 'linear-gradient(rgba(17, 26, 46, 0.6), rgba(17, 26, 46, 0.85)), url(https://images.unsplash.com/photo-1585704032915-c3400ca199e7?q=100&w=3000&auto=format&fit=crop)',
         backgroundSize: 'cover',
         backgroundPosition: 'center'
       }}>
@@ -97,7 +97,7 @@ const Plumbing = () => {
       </section>
 
       {/* Emergency System & Direct Access Strip */}
-      <section style={{ backgroundColor: 'var(--color-bg)' }}>
+      <section style={{ backgroundColor: 'var(--color-plumbing-bg)' }}>
         <div className="container" style={{ 
           display: 'grid', 
           gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
@@ -283,7 +283,7 @@ const Plumbing = () => {
       </section>
 
       {/* Full-width Contact CTA */}
-      <section style={{ padding: '6rem 0', backgroundColor: 'var(--color-bg)', textAlign: 'center' }}>
+      <section style={{ padding: '6rem 0', backgroundColor: 'var(--color-plumbing-bg)', textAlign: 'center' }}>
         <div className="container">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
