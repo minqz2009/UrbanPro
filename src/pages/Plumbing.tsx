@@ -170,28 +170,38 @@ const Plumbing = () => {
               }
               .guarantees-box { 
                 padding: 1.5rem 1rem !important; 
-                gap: 0.5rem !important;
-                flex-wrap: nowrap !important;
-                justify-content: space-between !important;
+                gap: 1rem !important;
+                flex-direction: column !important;
+                align-items: stretch !important;
               }
               .guarantee-item { 
-                flex: 1 1 0% !important; 
-                gap: 0.5rem !important; 
-                min-width: 0 !important;
+                flex-direction: row !important; 
+                align-items: center !important;
+                justify-content: flex-start !important;
+                gap: 1.5rem !important;
+                padding-bottom: 1rem !important;
+                border-bottom: 1px solid rgba(255,255,255,0.05);
               }
+              .guarantee-item:last-child { border-bottom: none; }
               .guarantee-icon { 
-                padding: 0.75rem !important; 
+                padding: 0 !important; 
                 background: none !important;
-                color: var(--color-plumbing) !important;
+                flex-shrink: 0 !important;
               }
-              .guarantee-icon svg { width: 20px !important; height: 20px !important; }
+              .guarantee-icon svg { width: 28px !important; height: 28px !important; }
               .guarantee-text { 
-                font-size: 0.6rem !important; 
-                letter-spacing: 0.01em !important;
-                line-height: 1.1 !important;
+                font-size: 1.1rem !important; 
+                text-align: left !important;
+                margin-bottom: 0.1rem !important;
               }
-              .guarantee-item span:nth-of-type(2) { display: none !important; }
+              .guarantee-item span:nth-of-type(2) { 
+                display: block !important; 
+                text-align: left !important; 
+                font-size: 0.8rem !important;
+                opacity: 0.7;
+              }
               .guarantee-item div:last-child { display: none !important; }
+              .guarantee-item > div:nth-of-type(2) { text-align: left !important; }
             }
           `}</style>
           
