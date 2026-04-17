@@ -4,7 +4,8 @@
   --color-primary: #3b82f6; /* Lighter Blue for dark mode contrast */
   --color-primary-dark: #1d4ed8;
   --color-accent: #eab308; /* Default accent is Yellow (Electrical) */
-  --color-plumbing: #3b82f6; 
+  --color-plumbing: #3b82f6; /* Water Blue */
+  --color-plumbing-steel: #94a3b8; /* Pipe Steel */
   --color-electrical: #eab308;
   --color-accent-light: #fbbf24;
   --color-bg: #0f172a;

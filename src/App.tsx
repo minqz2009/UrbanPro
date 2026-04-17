@@ -218,9 +218,10 @@ const FloatingContact = () => {
   // Page-aware theming
   const getTheme = () => {
     if (path === '/building-reno') return { accent: '#ffffff', text: '#0f172a', headerBg: '#151e2d' };
-    if (path === '/electrical') return { accent: '#eab308', text: 'var(--color-bg)', headerBg: '#7a4a0a' };
+    if (path === '/electrical') return { accent: 'var(--color-electrical)', text: 'var(--color-bg)', headerBg: '#422006' };
     if (path === '/plumbing') return { accent: 'var(--color-plumbing)', text: 'white', headerBg: '#1e3a8a' };
-    return { accent: 'var(--color-accent)', text: 'var(--color-bg)', headerBg: '#7a4a0a' };
+    // Home Page: Multi-service gradient
+    return { accent: 'white', text: 'var(--color-bg)', headerBg: 'linear-gradient(to right, #3b82f6, #eab308)' };
   };
   const theme = getTheme();
 

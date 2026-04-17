@@ -79,7 +79,7 @@ const Plumbing = () => {
                 </div>
                 <div style={{ textAlign: 'center' }}>
                    <span style={{ fontWeight: 800, fontSize: '1.25rem', display: 'block', marginBottom: '0.4rem', letterSpacing: '0.02em', color: 'white' }}>{item.text}</span>
-                   <span style={{ fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', color: 'var(--color-text-muted)', letterSpacing: '0.1em', display: 'block', marginBottom: '1rem' }}>{item.subtext}</span>
+                   <span style={{ fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', color: 'var(--color-plumbing-steel)', letterSpacing: '0.1em', display: 'block', marginBottom: '1rem' }}>{item.subtext}</span>
                    <div style={{ width: '30px', height: '2px', backgroundColor: 'var(--color-plumbing)', margin: '0 auto' }} />
                 </div>
               </div>
@@ -242,10 +242,10 @@ const Plumbing = () => {
                   WebkitBackfaceVisibility: 'hidden'
                 }}
               >
-                <div style={{ padding: '1rem', backgroundColor: 'rgba(255,255,255,0.05)' }}>
-                  <img src={service.img} alt={service.title} style={{ width: '64px', height: '64px', objectFit: 'contain' }} />
+                <div style={{ padding: '1rem', backgroundColor: 'rgba(255,255,255,0.03)', borderBottom: '1px solid var(--color-plumbing-steel)' }}>
+                  <img src={service.img} alt={service.title} style={{ width: '64px', height: '64px', objectFit: 'contain', filter: 'brightness(0.9)' }} />
                 </div>
-                <h4 style={{ margin: 0, fontSize: '1.125rem', fontWeight: 800, color: 'var(--color-text)' }}>
+                <h4 style={{ margin: 0, fontSize: '1rem', fontWeight: 800, color: 'white', letterSpacing: '-0.01em', padding: '0 1rem' }}>
                   {service.title}
                 </h4>
               </motion.div>
