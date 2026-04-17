@@ -126,27 +126,29 @@ const Electrical = () => {
         {/* The New Horizontal Command Strip */}
         <div style={{ 
           backgroundColor: '#020617', 
-          borderTop: '1px solid rgba(255,255,255,0.03)', 
-          padding: '1.5rem 0',
+          borderTop: '1px solid rgba(255,255,255,0.05)', 
+          padding: '2.5rem 0',
           position: 'relative',
           overflow: 'hidden'
         }}>
           <style>{`
             .access-link-elec {
-              display: flex; align-items: center; gap: 0.75rem;
-              color: rgba(255,255,255,0.6); text-decoration: none;
-              font-weight: 700; font-size: 0.9rem; letter-spacing: 0.05em;
-              transition: all 0.3s ease;
-              padding: 0.5rem 1rem;
-              border: 1px solid transparent;
+              display: flex; align-items: center; gap: 1rem;
+              color: rgba(255,255,255,0.7); text-decoration: none;
+              font-weight: 800; font-size: 1.1rem; letter-spacing: 0.02em;
+              transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+              padding: 0.8rem 1.5rem;
+              background-color: rgba(255,255,255,0.03);
+              border: 1px solid rgba(255,255,255,0.05);
             }
             .access-link-elec:hover {
               color: white;
-              background-color: rgba(255,255,255,0.03);
-              border-color: rgba(255,255,255,0.08);
+              background-color: rgba(255,255,255,0.07);
+              border-color: #eab308;
+              transform: translateY(-2px);
             }
-            .access-link-elec .link-icon-elec { color: #eab308; opacity: 0.7; transition: all 0.3s ease; }
-            .access-link-elec:hover .link-icon-elec { transform: scale(1.1); opacity: 1; }
+            .access-link-elec .link-icon-elec { color: #eab308; transition: all 0.3s ease; }
+            .access-link-elec:hover .link-icon-elec { transform: scale(1.15); }
             
             @keyframes pulse-glow-elec {
               0% { opacity: 0.4; transform: scale(1); }
@@ -156,28 +158,35 @@ const Electrical = () => {
           `}</style>
           
           <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '2rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
               <div style={{ 
-                width: '8px', height: '8px', borderRadius: '50%', 
+                width: '12px', height: '12px', borderRadius: '50%', 
                 backgroundColor: '#eab308', 
-                boxShadow: '0 0 12px #eab308',
+                boxShadow: '0 0 15px #eab308',
                 animation: 'pulse-glow-elec 2s infinite'
               }} />
-              <span style={{ fontSize: '0.75rem', fontWeight: 900, letterSpacing: '0.25em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)' }}>
-                Direct Dispatch Available
-              </span>
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <span style={{ fontSize: '0.85rem', fontWeight: 900, letterSpacing: '0.3em', textTransform: 'uppercase', color: '#eab308' }}>
+                  Live Dispatch
+                </span>
+                <span style={{ fontSize: '0.7rem', fontWeight: 600, textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.1em' }}>
+                  Sydney Region Active
+                </span>
+              </div>
             </div>
             
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
               {[
-                { href: 'tel:+61412242997', label: '+61 412 242 997', sub: 'John', icon: <PhoneCall size={16} className="link-icon-elec" /> },
-                { href: 'tel:+61426051275', label: '+61 426 051 275', sub: 'Leo', icon: <PhoneCall size={16} className="link-icon-elec" /> },
-                { href: 'mailto:service@urbanproplumbing.com.au', label: 'Email Request', sub: '', icon: <span className="link-icon-elec" style={{ fontWeight: 800 }}>@</span> }
+                { href: 'tel:+61412242997', label: 'Call John', sub: '+61 412 242 997', icon: <PhoneCall size={20} className="link-icon-elec" /> },
+                { href: 'tel:+61426051275', label: 'Call Leo', sub: '+61 426 051 275', icon: <PhoneCall size={20} className="link-icon-elec" /> },
+                { href: 'mailto:service@urbanproplumbing.com.au', label: 'Email Request', sub: 'Instant Response', icon: <span className="link-icon-elec" style={{ fontSize: '1.2rem', fontWeight: 800 }}>@</span> }
               ].map((item) => (
                 <a key={item.href} href={item.href} className="access-link-elec">
                   {item.icon}
-                  <span>{item.label}</span>
-                  {item.sub && <span style={{ opacity: 0.4, fontSize: '0.75rem', fontWeight: 500 }}>({item.sub})</span>}
+                  <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <span>{item.label}</span>
+                    <span style={{ opacity: 0.4, fontSize: '0.7rem', fontWeight: 500, letterSpacing: '0.02em' }}>{item.sub}</span>
+                  </div>
                 </a>
               ))}
             </div>
