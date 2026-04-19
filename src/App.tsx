@@ -72,6 +72,7 @@ const Header = () => {
           
           {/* Desktop Navigation */}
           <nav className="desktop-nav" style={{ display: 'flex', gap: '3rem', fontWeight: 600, fontSize: '0.875rem', textTransform: 'uppercase', letterSpacing: '0.15em' }}>
+            <Link to="/" className="nav-link">Home</Link>
             <Link to="/building-reno" className="nav-link">Building</Link>
             <Link to="/plumbing" className="nav-link">Plumbing</Link>
             <Link to="/electrical" className="nav-link">Electrical</Link>
@@ -98,6 +99,7 @@ const Header = () => {
               style={{ position: 'absolute', top: '100%', left: 0, right: 0, backgroundColor: 'rgba(15, 23, 42, 0.98)', borderBottom: '1px solid rgba(255,255,255,0.05)', overflow: 'hidden' }}
             >
               <div style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '2rem', textAlign: 'center' }}>
+                <Link to="/" className="nav-link" style={{ fontSize: '1.25rem' }}>Home</Link>
                 <Link to="/building-reno" className="nav-link" style={{ fontSize: '1.25rem' }}>Building & Reno</Link>
                 <Link to="/plumbing" className="nav-link" style={{ fontSize: '1.25rem' }}>Plumbing</Link>
                 <Link to="/electrical" className="nav-link" style={{ fontSize: '1.25rem' }}>Electrical</Link>
