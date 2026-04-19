@@ -124,8 +124,9 @@ const Home = () => {
           <motion.div style={{ y: textY, opacity: textOpacity, position: 'relative', zIndex: 3, textAlign: 'center', padding: '0 1rem' }}>
             <motion.div variants={itemVariants}>
               <h1 style={{ fontSize: 'clamp(3.25rem, 8vw, 6.5rem)', marginBottom: '1.5rem', letterSpacing: '-0.04em', color: 'white', fontWeight: 800, lineHeight: 1.05 }}>
-                Build. <span style={{ color: 'var(--color-plumbing)' }}>Plumb.</span><br/>
-                <span style={{ color: 'var(--color-electrical)' }}>Power.</span>
+                <Link to="/building-reno" style={{ color: 'inherit', textDecoration: 'none', cursor: 'pointer' }}>Build.</Link>{' '}
+                <Link to="/plumbing" style={{ color: 'var(--color-plumbing)', textDecoration: 'none', cursor: 'pointer' }}>Plumb.</Link><br/>
+                <Link to="/electrical" style={{ color: 'var(--color-electrical)', textDecoration: 'none', cursor: 'pointer' }}>Power.</Link>
               </h1>
             </motion.div>
             <motion.div variants={itemVariants}>
