@@ -75,10 +75,10 @@ const Electrical = () => {
                animate={{ y: 0, opacity: 1 }}
                transition={{ duration: 0.8 }}
             >
-              <h1 className="hero-title" style={{ fontSize: 'var(--font-size-h1)', fontWeight: 800, marginBottom: '1rem', color: 'white', letterSpacing: '-0.02em' }}>
+              <h1 className="hero-title" style={{ fontSize: 'calc(var(--font-size-h1) * 0.85)', fontWeight: 800, marginBottom: '1rem', color: 'white', letterSpacing: '-0.02em' }}>
                 Expert Electrical Solutions
               </h1>
-              <p className="hero-desc" style={{ fontSize: 'var(--font-size-body)', color: 'rgba(255,255,255,0.9)', maxWidth: '600px', margin: '0 auto 2.5rem', lineHeight: 1.6 }}>
+              <p className="hero-desc" style={{ fontSize: 'calc(var(--font-size-body) * 0.85)', color: 'rgba(255,255,255,0.9)', maxWidth: '600px', margin: '0 auto 2.5rem', lineHeight: 1.6 }}>
                 Safe, efficient, and innovative electrical services. From rapid fault-finding to complete smart home installations, we keep the lights on.
               </p>
             </motion.div>
@@ -196,8 +196,8 @@ const Electrical = () => {
             @media (max-width: 768px) {
               .hero-section { min-height: 100svh !important; height: auto !important; }
               .hero-container { padding: 6rem 1rem 1.5rem !important; }
-              .hero-title { font-size: var(--font-size-h1) !important; margin-bottom: 0.75rem !important; }
-              .hero-desc { font-size: var(--font-size-body) !important; margin-bottom: 1.5rem !important; line-height: 1.5 !important; }
+              .hero-title { font-size: calc(var(--font-size-h1) * 0.85) !important; margin-bottom: 0.75rem !important; }
+              .hero-desc { font-size: calc(var(--font-size-body) * 0.85) !important; margin-bottom: 1.5rem !important; line-height: 1.5 !important; }
               .guarantees-box {
                 padding: 1.25rem 0.5rem !important;
                 gap: 0.5rem !important;
