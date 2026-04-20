@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Shield, Clock, CheckCircle, Award, PhoneCall, MapPin, Users } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const About = () => {
   const navigate = useNavigate();
