@@ -208,20 +208,20 @@ const Electrical = () => {
               }
               .guarantee-item { flex: 1 1 0% !important; gap: 0.4rem !important; min-width: 0 !important; }
               .guarantee-icon { display: flex !important; }
-              .guarantee-icon svg { width: 18px !important; height: 18px !important; }
-              .guarantee-text { font-size: var(--font-size-sm) !important; margin-bottom: 0 !important; line-height: 1.2 !important; }
+              .guarantee-icon svg { width: 16px !important; height: 16px !important; }
+              .guarantee-text { font-size: var(--font-size-xs) !important; margin-bottom: 0 !important; line-height: 1.2 !important; }
               .guarantee-item span:nth-of-type(2) { display: none !important; }
-              .guarantees-wrapper { max-width: 100% !important; margin-top: 1.5rem !important; }
+              .guarantees-wrapper { max-width: 90% !important; margin: 1.5rem auto 0 !important; }
               .emergency-strip { gap: 0.75rem !important; padding: 0.6rem 0.5rem !important; }
               .emergency-strip div span:first-child { font-size: 0.7rem !important; }
               .emergency-strip div span:last-child { font-size: 0.5rem !important; }
               .emergency-strip span svg { width: 14px !important; height: 14px !important; }
               .elec-cmd-label { display: none !important; }
-              .elec-cmd-bar { padding: 0.75rem 0 !important; }
+              .elec-cmd-bar { padding: 0.6rem 0 !important; }
               .access-link-elec {
-                padding: 0.5rem 0.75rem !important;
-                font-size: 0.75rem !important;
-                gap: 0.4rem !important;
+                padding: 0.4rem 0.6rem !important;
+                font-size: var(--font-size-xs) !important;
+                gap: 0.3rem !important;
               }
               .access-link-elec span:last-child { display: none !important; }
               .scroll-indicator { display: none !important; }

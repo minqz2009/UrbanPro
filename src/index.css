@@ -26,13 +26,13 @@
   --transition-slow: 0.5s ease;
 
   /* Typography Scale */
-  --font-size-h1: clamp(2.5rem, 8vw, 4.5rem);
-  --font-size-h2: clamp(2rem, 5vw, 3rem);
-  --font-size-h3: clamp(1.5rem, 4vw, 2rem);
-  --font-size-h4: clamp(1.25rem, 3vw, 1.5rem);
-  --font-size-body: clamp(0.95rem, 1.2vw, 1.125rem);
-  --font-size-sm: clamp(0.8rem, 1vw, 0.95rem);
-  --font-size-xs: clamp(0.7rem, 0.8vw, 0.8rem);
+  --font-size-h1: clamp(3.2rem, 10vw, 5.5rem);
+  --font-size-h2: clamp(2.4rem, 7vw, 3.5rem);
+  --font-size-h3: clamp(1.8rem, 5vw, 2.5rem);
+  --font-size-h4: clamp(1.4rem, 4vw, 1.8rem);
+  --font-size-body: clamp(1rem, 1.2vw, 1.125rem);
+  --font-size-sm: clamp(0.85rem, 1vw, 0.95rem);
+  --font-size-xs: clamp(0.75rem, 0.8vw, 0.85rem);
 }
 
 * {
