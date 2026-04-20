@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
 import { Zap, Lightbulb, Activity, Shield, AlertTriangle, Clock, PhoneCall, Mail, CheckCircle, ChevronDown, BatteryCharging, Power } from 'lucide-react';
 
 const Electrical = () => {
@@ -32,6 +33,24 @@ const Electrical = () => {
 
 
   return (
+    <>
+    <Helmet>
+      <title>Sydney Electrician | 24/7 Emergency Electrical | UrbanPro</title>
+      <meta name="description" content="Licensed master electricians in Sydney. Residential wiring, switchboard upgrades, lighting, EV chargers, fault diagnostics. 24/7 emergency service across Bondi, Surry Hills, Parramatta and all Sydney suburbs." />
+      <link rel="canonical" href="https://urbanproplumbing.com.au/electrical" />
+      <meta property="og:title" content="Sydney Electrician | 24/7 Emergency Electrical | UrbanPro" />
+      <meta property="og:description" content="Licensed master electricians. 24/7 emergency service, upfront pricing, lifetime workmanship guarantee." />
+      <meta property="og:url" content="https://urbanproplumbing.com.au/electrical" />
+      <meta property="og:image" content="https://urbanproplumbing.com.au/images/electrical-hero.jpg" />
+      <script type="application/ld+json">{JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "name": "Electrician Sydney",
+        "provider": {"@type": "LocalBusiness", "name": "UrbanPro", "telephone": "+61412242997"},
+        "areaServed": "Sydney, NSW, Australia",
+        "description": "Residential wiring, switchboard upgrades, lighting installation, EV chargers, home automation and emergency electrical across Greater Sydney."
+      })}</script>
+    </Helmet>
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -44,7 +63,7 @@ const Electrical = () => {
         minHeight: '100svh',
         display: 'flex',
         flexDirection: 'column',
-        backgroundImage: 'linear-gradient(rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.9)), url(https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=100&w=3000&auto=format&fit=crop)',
+        backgroundImage: 'linear-gradient(rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.9)), url(images/electrical-hero.jpg)',
         backgroundSize: 'cover',
         backgroundPosition: 'center'
       }}>
@@ -206,6 +225,22 @@ const Electrical = () => {
               }
               .access-link-elec span:last-child { display: none !important; }
             }
+
+            @media (max-width: 640px) {
+              .benefit-grid {
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                gap: 1.5rem !important;
+              }
+              .benefit-card {
+                width: 80% !important;
+                max-width: 320px !important;
+                flex-direction: column !important;
+                text-align: center !important;
+                padding: 2rem 1.5rem !important;
+              }
+            }
           `}</style>
 
           <div className="container mobile-center" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
@@ -301,13 +336,19 @@ const Electrical = () => {
         </div>
       </section>
 
-      <section className="section elec-section" style={{ backgroundColor: 'var(--color-surface)', padding: '6rem 0' }}>
+      <section className="section elec-section" style={{
+        padding: '6rem 0',
+        backgroundImage: 'linear-gradient(rgba(10, 18, 35, 0.8), rgba(10, 18, 35, 0.88)), url(images/electrical-why-bg.jpg)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}>
         <div className="container" style={{ textAlign: 'center', maxWidth: '800px' }}>
-          <h2 style={{ fontSize: '2.5rem', fontWeight: 800, marginBottom: '3rem', color: 'var(--color-text)' }}>Why Choose UrbanPro Electrical?</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '3rem', textAlign: 'left' }}>
+          <h2 style={{ fontSize: '2.5rem', fontWeight: 800, marginBottom: '3rem', color: 'white' }}>Why Choose UrbanPro Electrical?</h2>
+          <div className="benefit-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '3rem', textAlign: 'left' }}>
             {['Fully Licensed Master Electricians', 'Transparent Upfront Pricing', 'Latest Diagnostics Technology', 'Clean & Respectful Team'].map((benefit, i) => (
               <motion.div 
                 key={i} 
+                className="benefit-card"
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
@@ -357,6 +398,7 @@ const Electrical = () => {
         </div>
       </section>
     </motion.div>
+    </>
   );
 };
 

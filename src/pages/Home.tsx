@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Hammer, Droplets, Zap, ArrowRight, CheckCircle2, ChevronLeft, ChevronRight } from 'lucide-react';
@@ -74,7 +75,7 @@ const Home = () => {
       icon: <Hammer size={40} className="text-text" />,
       link: "/building-reno",
       color: "var(--color-text)",
-      image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=100&w=1200"
+      image: "images/building-glass-house.jpg"
     },
     {
       title: "Plumbing Services",
@@ -82,7 +83,7 @@ const Home = () => {
       icon: <Droplets size={40} style={{ color: '#3b82f6' }} />,
       link: "/plumbing",
       color: "#3b82f6",
-      image: "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?q=100&w=1200"
+      image: "images/plumbing-hero.jpg"
     },
     {
       title: "Electrical Services",
@@ -90,12 +91,21 @@ const Home = () => {
       icon: <Zap size={40} style={{ color: 'var(--color-electrical)' }} />,
       link: "/electrical",
       color: "var(--color-electrical)",
-      image: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=100&w=1200"
+      image: "images/electrical-card.jpg"
     }
   ];
 
   return (
-    <motion.div 
+    <>
+    <Helmet>
+      <title>UrbanPro Sydney | Plumber, Electrician & Building Renovations</title>
+      <meta name="description" content="UrbanPro — Sydney's trusted plumber, electrician and builder. 24/7 emergency service, no call-out fee, no fix no pay guarantee. Serving Bondi, Surry Hills, Parramatta, North Shore and all of Greater Sydney." />
+      <link rel="canonical" href="https://urbanproplumbing.com.au/" />
+      <meta property="og:title" content="UrbanPro Sydney | Plumber, Electrician & Building Renovations" />
+      <meta property="og:description" content="Sydney's trusted trade specialists. 24/7 emergency service across Greater Sydney." />
+      <meta property="og:url" content="https://urbanproplumbing.com.au/" />
+    </Helmet>
+    <motion.div
       className="page-enter-active"
       variants={containerVariants}
       initial="hidden"
@@ -122,7 +132,7 @@ const Home = () => {
               scale: bgScale,
               position: 'absolute',
               inset: '-10%',
-              backgroundImage: 'url(https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?q=100&w=3000&auto=format&fit=crop)',
+              backgroundImage: 'url(images/home-hero.jpg)',
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               zIndex: 0,
@@ -316,6 +326,7 @@ const Home = () => {
         </div>
       </section>
     </motion.div>
+    </>
   );
 };
 

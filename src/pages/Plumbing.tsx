@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
 import { ShieldCheck, Clock, BadgeDollarSign, Wrench, AlertTriangle, CheckCircle, PhoneCall, Mail, ChevronDown, Star } from 'lucide-react';
 
 const MAPS_URL = 'https://www.google.com/maps/place/UrbanPro+Plumbing+Sydney/@-33.8461026,150.3081854,10z/data=!4m15!1m8!3m7!1s0xaa99133edb90a697:0xe93f25ae63342f5d!2sUrbanPro+Plumbing+Sydney!8m2!3d-33.8482439!4d150.9319747!10e1!16s%2Fg%2F11n4td_svt!3m5!1s0xaa99133edb90a697:0xe93f25ae63342f5d!8m2!3d-33.8482439!4d150.9319747!16s%2Fg%2F11n4td_svt?entry=ttu&g_ep=EgoyMDI2MDQxNS4wIKXMDSoASAFQAw%3D%3D';
@@ -37,6 +38,25 @@ const Plumbing = () => {
 
 
   return (
+    <>
+    <Helmet>
+      <title>Sydney Plumber | 24/7 Emergency Plumbing | UrbanPro</title>
+      <meta name="description" content="Licensed Sydney plumber available 24/7. No call-out fee, $250 fixed drain cleaning, no fix no pay. Serving Bondi, Surry Hills, Paddington, Parramatta, North Shore and all Greater Sydney suburbs." />
+      <link rel="canonical" href="https://urbanproplumbing.com.au/plumbing" />
+      <meta property="og:title" content="Sydney Plumber | 24/7 Emergency Plumbing | UrbanPro" />
+      <meta property="og:description" content="Licensed Sydney plumber available 24/7. No call-out fee, $250 fixed drain cleaning, no fix no pay." />
+      <meta property="og:url" content="https://urbanproplumbing.com.au/plumbing" />
+      <meta property="og:image" content="https://urbanproplumbing.com.au/images/plumbing-hero.jpg" />
+      <script type="application/ld+json">{JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "name": "Emergency Plumbing Sydney",
+        "provider": {"@type": "LocalBusiness", "name": "UrbanPro", "telephone": "+61412242997"},
+        "areaServed": "Sydney, NSW, Australia",
+        "description": "24/7 emergency plumbing, blocked drains, hot water systems, gas heating, water leak detection across Greater Sydney.",
+        "offers": {"@type": "Offer", "price": "250", "priceCurrency": "AUD", "description": "Fixed $250 drain cleaning"}
+      })}</script>
+    </Helmet>
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -49,7 +69,7 @@ const Plumbing = () => {
         minHeight: '100svh',
         display: 'flex',
         flexDirection: 'column',
-        backgroundImage: 'linear-gradient(rgba(17, 26, 46, 0.55), rgba(17, 26, 46, 0.88)), url(https://images.unsplash.com/photo-1585704032915-c3400ca199e7?q=100&w=3000&auto=format&fit=crop)',
+        backgroundImage: 'linear-gradient(rgba(17, 26, 46, 0.55), rgba(17, 26, 46, 0.88)), url(images/plumbing-hero.jpg)',
         backgroundSize: 'cover',
         backgroundPosition: 'center'
       }}>
@@ -222,6 +242,22 @@ const Plumbing = () => {
               }
               .access-link span:last-child { display: none !important; }
             }
+
+            @media (max-width: 640px) {
+              .benefit-grid {
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                gap: 1.5rem !important;
+              }
+              .benefit-card {
+                width: 80% !important;
+                max-width: 320px !important;
+                flex-direction: column !important;
+                text-align: center !important;
+                padding: 2rem 1.5rem !important;
+              }
+            }
           `}</style>
 
           <div className="container mobile-center" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
@@ -320,10 +356,15 @@ const Plumbing = () => {
         </div>
       </section>
 
-      <section className="section plumbing-section" style={{ backgroundColor: 'var(--color-surface)', padding: '6rem 0' }}>
+      <section className="section plumbing-section" style={{
+        padding: '6rem 0',
+        backgroundImage: 'linear-gradient(rgba(10, 18, 35, 0.8), rgba(10, 18, 35, 0.88)), url(images/plumbing-sydney-bg.jpg)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}>
         <div className="container" style={{ textAlign: 'center', maxWidth: '800px' }}>
-          <h2 style={{ fontSize: '2.5rem', fontWeight: 800, marginBottom: '3rem', color: 'var(--color-text)' }}>Serving Greater Sydney Since 2015</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem', textAlign: 'left' }}>
+          <h2 style={{ fontSize: '2.5rem', fontWeight: 800, marginBottom: '3rem', color: 'white' }}>Serving Greater Sydney Since 2015</h2>
+          <div className="benefit-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem', textAlign: 'left' }}>
             {[
               'Fully Licensed & Insured Plumbers', 
               'No Call Out Fees', 
@@ -334,6 +375,7 @@ const Plumbing = () => {
             ].map((benefit, i) => (
               <motion.div 
                 key={i} 
+                className="benefit-card"
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
@@ -507,6 +549,7 @@ const Plumbing = () => {
         </div>
       </section>
     </motion.div>
+    </>
   );
 };
 

@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Shield, Clock, CheckCircle, Award, PhoneCall, MapPin, Users } from 'lucide-react';
+import { Shield, Clock, CheckCircle, Award, PhoneCall, MapPin } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const About = () => {
@@ -30,7 +30,7 @@ const About = () => {
       role: 'Lead Plumber & Co-Founder',
       phone: '+61 412 242 997',
       href: 'tel:+61412242997',
-      photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=faces&auto=format',
+      photo: 'images/team-john.jpg',
       bio: 'With over 15 years of hands-on experience, John leads every emergency call with precision and calm. He co-founded UrbanPro with one goal: honest plumbing you can count on, any hour of the day.',
     },
     {
@@ -38,7 +38,7 @@ const About = () => {
       role: 'Senior Plumber',
       phone: '+61 426 051 275',
       href: 'tel:+61426051275',
-      photo: 'https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=400&h=400&fit=crop&crop=faces&auto=format',
+      photo: 'images/team-leo.jpg',
       bio: 'Leo specialises in commercial plumbing, gas heating systems, and complex installations. Known for meticulous attention to detail — and always leaving the worksite cleaner than he found it.',
     },
   ];
@@ -54,7 +54,7 @@ const About = () => {
       <section style={{
         position: 'relative',
         padding: '10rem 0 8rem',
-        backgroundImage: 'linear-gradient(rgba(15, 23, 42, 0.5), rgba(15, 23, 42, 0.88)), url(https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=3000&auto=format&fit=crop)',
+        backgroundImage: 'linear-gradient(rgba(15, 23, 42, 0.5), rgba(15, 23, 42, 0.88)), url(images/about-hero.jpg)',
         backgroundSize: 'cover',
         backgroundPosition: 'center top',
       }}>
@@ -62,12 +62,13 @@ const About = () => {
           <motion.div initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.8 }}>
             <div style={{
               display: 'inline-flex', alignItems: 'center', gap: '0.75rem',
-              backgroundColor: 'rgba(96,165,250,0.15)',
-              border: '1px solid rgba(96,165,250,0.35)',
+              backgroundColor: 'rgba(255, 255, 255, 0.1)',
+              backdropFilter: 'blur(8px)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
               padding: '0.5rem 1.5rem', marginBottom: '2rem',
             }}>
-              <MapPin size={16} style={{ color: 'var(--color-plumbing)' }} />
-              <span style={{ color: 'var(--color-plumbing)', fontWeight: 700, fontSize: '0.8rem', letterSpacing: '0.2em', textTransform: 'uppercase' }}>Sydney, Australia</span>
+              <MapPin size={16} style={{ color: '#60a5fa' }} />
+              <span style={{ color: 'white', fontWeight: 700, fontSize: '0.8rem', letterSpacing: '0.2em', textTransform: 'uppercase' }}>Sydney, Australia</span>
             </div>
             <h1 style={{ fontSize: 'clamp(3rem, 6vw, 4.5rem)', fontWeight: 800, marginBottom: '1.5rem', color: 'white', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
               About <span style={{ color: 'var(--color-plumbing)' }}>Urban</span><span style={{ color: 'var(--color-electrical)' }}>Pro</span>
@@ -143,58 +144,88 @@ const About = () => {
       </section>
 
       {/* Team */}
-      <section style={{ padding: '8rem 0', backgroundColor: 'var(--color-surface)' }}>
+      <section style={{
+        padding: '8rem 0',
+        position: 'relative',
+        backgroundImage: 'linear-gradient(rgba(10, 18, 35, 0.72), rgba(10, 18, 35, 0.88)), url(images/team-bg.jpg)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}>
         <div className="container">
           <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem', marginBottom: '1rem' }}>
-              <Users size={28} style={{ color: 'var(--color-plumbing)' }} />
-              <h2 style={{ fontSize: '3rem', fontWeight: 800, color: 'var(--color-text)', margin: 0 }}>Meet the Team</h2>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', color: 'var(--color-plumbing)', fontWeight: 700, fontSize: '0.8rem', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '1.5rem' }}>
+              <div style={{ width: '24px', height: '2px', backgroundColor: 'var(--color-plumbing)' }} />
+              The People Behind the Work
+              <div style={{ width: '24px', height: '2px', backgroundColor: 'var(--color-plumbing)' }} />
             </div>
-            <div style={{ width: '80px', height: '4px', backgroundColor: 'var(--color-plumbing)', margin: '1.5rem auto' }} />
-            <p style={{ color: 'var(--color-text-muted)', fontSize: '1.1rem', maxWidth: '520px', margin: '0 auto' }}>
+            <h2 style={{ fontSize: 'clamp(2.25rem, 4vw, 3rem)', fontWeight: 800, color: 'white', margin: '0 0 1.5rem' }}>Meet the Team</h2>
+            <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 'clamp(0.95rem, 2vw, 1.1rem)', maxWidth: '520px', margin: '0 auto' }}>
               Two experienced plumbers. One shared commitment to doing the job right.
             </p>
           </div>
 
-          <div className="team-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '2rem', maxWidth: '900px', margin: '0 auto' }}>
+          <div className="team-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '2rem', maxWidth: '960px', margin: '0 auto' }}>
             {team.map((member, idx) => (
               <motion.div
                 key={idx}
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: idx * 0.15 }}
+                whileHover={{ y: -6, transition: { duration: 0.2 } }}
                 style={{
-                  backgroundColor: 'var(--color-bg)',
+                  backgroundColor: 'rgba(15, 23, 42, 0.75)',
+                  backdropFilter: 'blur(12px)',
                   padding: '3rem 2.5rem',
-                  border: '1px solid rgba(255,255,255,0.05)',
+                  border: '1px solid rgba(255,255,255,0.08)',
+                  borderTop: '3px solid var(--color-plumbing)',
                   position: 'relative',
                   overflow: 'hidden',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  textAlign: 'center',
                 }}
               >
-                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '4px', backgroundColor: 'var(--color-plumbing)' }} />
-
+                {/* Avatar */}
                 <div style={{
-                  width: '100px', height: '100px',
+                  width: '110px', height: '110px',
                   borderRadius: '50%',
-                  border: '3px solid var(--color-plumbing)',
-                  overflow: 'hidden',
+                  padding: '3px',
+                  background: 'linear-gradient(135deg, var(--color-plumbing), rgba(96,165,250,0.15))',
                   marginBottom: '1.75rem',
                   flexShrink: 0,
                 }}>
-                  <img
-                    src={member.photo}
-                    alt={member.name}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                  />
+                  <div style={{ width: '100%', height: '100%', borderRadius: '50%', overflow: 'hidden', backgroundColor: 'rgba(15,23,42,0.9)' }}>
+                    <img
+                      src={member.photo}
+                      alt={member.name}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                    />
+                  </div>
                 </div>
 
-                <h3 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--color-text)', marginBottom: '0.25rem' }}>{member.name}</h3>
-                <div style={{ color: 'var(--color-plumbing)', fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '1.5rem' }}>{member.role}</div>
-                <p style={{ color: 'var(--color-text-muted)', lineHeight: 1.75, marginBottom: '2rem', fontSize: '0.95rem' }}>{member.bio}</p>
+                <h3 style={{ fontSize: 'clamp(1.4rem, 2.5vw, 1.65rem)', fontWeight: 800, color: 'white', marginBottom: '0.4rem', lineHeight: 1.2 }}>{member.name}</h3>
 
-                <a href={member.href} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', color: 'var(--color-plumbing)', textDecoration: 'none', fontWeight: 700, fontSize: '0.95rem' }}>
-                  <PhoneCall size={18} /> {member.phone}
+                <div style={{
+                  color: 'var(--color-plumbing)', fontSize: '0.75rem', fontWeight: 700,
+                  textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '1.5rem',
+                }}>{member.role}</div>
+
+                <p style={{ color: 'rgba(255,255,255,0.65)', lineHeight: 1.8, marginBottom: '2rem', fontSize: '0.95rem', flexGrow: 1 }}>{member.bio}</p>
+
+                <a href={member.href} style={{
+                  display: 'inline-flex', alignItems: 'center', gap: '0.6rem',
+                  color: 'var(--color-plumbing)', textDecoration: 'none', fontWeight: 700,
+                  fontSize: '0.95rem', letterSpacing: '0.02em',
+                  borderBottom: '2px solid var(--color-plumbing)',
+                  paddingBottom: '2px',
+                  transition: 'opacity 0.2s ease',
+                }}
+                  onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.7')}
+                  onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
+                >
+                  <PhoneCall size={16} /> {member.phone}
                 </a>
               </motion.div>
             ))}
@@ -202,8 +233,9 @@ const About = () => {
         </div>
 
         <style>{`
-          @media (max-width: 640px) {
-            .team-grid { grid-template-columns: 1fr !important; }
+          @media (max-width: 680px) {
+            .team-grid { grid-template-columns: 1fr !important; gap: 1.5rem !important; }
+            .team-grid > div { padding: 2.5rem 1.5rem !important; }
           }
         `}</style>
       </section>
