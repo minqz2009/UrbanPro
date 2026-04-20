@@ -395,7 +395,10 @@ const Electrical = () => {
                   padding: '1.75rem', 
                   backgroundColor: 'rgba(30, 41, 59, 0.5)', 
                   border: '1px solid rgba(255,255,255,0.05)',
-                  borderRadius: '12px'
+                  borderRadius: '12px',
+                  transform: 'translateZ(0)',
+                  WebkitBackfaceVisibility: 'hidden',
+                  backfaceVisibility: 'hidden'
                 }}
               >
                 <div className="benefit-icon-wrapper" style={{ color: 'var(--color-electrical)', display: 'flex', flexShrink: 0 }}>
