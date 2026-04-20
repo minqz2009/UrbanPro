@@ -15,7 +15,6 @@ const Electrical = () => {
 
   const emergencyInfo = [
     { text: "EMERGENCY 24/7", subtext: "Quick response for blackouts", icon: <AlertTriangle size={18} /> },
-    { text: "EMERGENCY 7 DAYS", subtext: "Always on call in Sydney", icon: <Clock size={18} /> },
   ];
 
   const servicesBreakdown = [

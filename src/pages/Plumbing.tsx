@@ -25,7 +25,6 @@ const Plumbing = () => {
 
   const emergencyInfo = [
     { text: "EMERGENCY 24/7", subtext: "Covering all Sydney area", icon: <AlertTriangle size={18} /> },
-    { text: "EMERGENCY 7 DAYS", subtext: "Ready when you need us most", icon: <Clock size={18} /> },
   ];
 
   const servicesBreakdown = [
