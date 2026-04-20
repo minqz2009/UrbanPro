@@ -234,11 +234,16 @@ const Electrical = () => {
                 gap: 1.5rem !important;
               }
               .benefit-card {
-                width: 80% !important;
-                max-width: 320px !important;
+                width: fit-content !important;
+                min-width: 60% !important;
+                max-width: 90% !important;
                 flex-direction: column !important;
                 text-align: center !important;
                 padding: 2rem 1.5rem !important;
+              }
+              .benefit-card span {
+                white-space: nowrap !important;
+                font-size: 0.95rem !important;
               }
             }
           `}</style>
