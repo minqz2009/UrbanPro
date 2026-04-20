@@ -196,20 +196,21 @@ const Electrical = () => {
             @media (max-width: 768px) {
               .hero-section { min-height: 100svh !important; height: auto !important; }
               .hero-container { padding: 6rem 1rem 1.5rem !important; }
-              .hero-title { font-size: clamp(2rem, 8vw, 2.75rem) !important; margin-bottom: 0.5rem !important; }
-              .hero-desc { font-size: 0.875rem !important; margin-bottom: 1rem !important; line-height: 1.5 !important; }
+              .hero-title { font-size: clamp(2.2rem, 9vw, 3.1rem) !important; margin-bottom: 0.75rem !important; }
+              .hero-desc { font-size: 0.95rem !important; margin-bottom: 1.5rem !important; line-height: 1.5 !important; }
               .guarantees-box {
-                padding: 0.85rem 0.5rem !important;
-                gap: 0.15rem !important;
+                padding: 1.25rem 0.5rem !important;
+                gap: 0.5rem !important;
                 flex-wrap: nowrap !important;
                 flex-direction: row !important;
                 justify-content: space-around !important;
               }
-              .guarantee-item { flex: 1 1 0% !important; gap: 0.25rem !important; min-width: 0 !important; }
-              .guarantee-icon { display: none !important; }
-              .guarantee-text { font-size: 0.65rem !important; margin-bottom: 0.05rem !important; }
-              .guarantee-item span:nth-of-type(2) { font-size: 0.52rem !important; }
-              .guarantees-wrapper { max-width: 100% !important; margin-top: 0.5rem !important; }
+              .guarantee-item { flex: 1 1 0% !important; gap: 0.4rem !important; min-width: 0 !important; }
+              .guarantee-icon { display: flex !important; }
+              .guarantee-icon svg { width: 18px !important; height: 18px !important; }
+              .guarantee-text { font-size: 0.75rem !important; margin-bottom: 0 !important; line-height: 1.2 !important; }
+              .guarantee-item span:nth-of-type(2) { display: none !important; }
+              .guarantees-wrapper { max-width: 100% !important; margin-top: 1.5rem !important; }
               .emergency-strip { gap: 0.75rem !important; padding: 0.6rem 0.5rem !important; }
               .emergency-strip div span:first-child { font-size: 0.7rem !important; }
               .emergency-strip div span:last-child { font-size: 0.5rem !important; }
