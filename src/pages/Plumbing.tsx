@@ -219,14 +219,14 @@ const Plumbing = () => {
                 min-width: 0 !important;
               }
               .guarantee-icon { display: flex !important; }
-              .guarantee-icon svg { width: 18px !important; height: 18px !important; }
-              .guarantee-text { font-size: 0.82rem !important; margin-bottom: 0 !important; line-height: 1.2 !important; }
+              .guarantee-icon svg { width: 20px !important; height: 20px !important; }
+              .guarantee-text { font-size: 0.9rem !important; margin-bottom: 0 !important; line-height: 1.2 !important; }
               .guarantee-item span:nth-of-type(2) { display: none !important; }
               .guarantees-wrapper { max-width: 90% !important; margin: 1.5rem auto 0 !important; }
               .emergency-strip { gap: 0.75rem !important; padding: 0.6rem 0.5rem !important; }
-              .emergency-strip div span:first-child { font-size: 0.78rem !important; }
-              .emergency-strip div span:last-child { font-size: 0.55rem !important; }
-              .emergency-strip span svg { width: 15px !important; height: 15px !important; }
+              .emergency-strip div span:first-child { font-size: 0.86rem !important; }
+              .emergency-strip div span:last-child { font-size: 0.6rem !important; }
+              .emergency-strip span svg { width: 16px !important; height: 16px !important; }
               .hero-cmd-label { display: none !important; }
               .plumb-cmd-bar { padding: 0.8rem 0 !important; }
               .hero-cmd-buttons { justify-content: center !important; gap: 0.5rem !important; }
