@@ -231,19 +231,42 @@ const Electrical = () => {
                 display: flex !important;
                 flex-direction: column !important;
                 align-items: center !important;
-                gap: 1.5rem !important;
+                gap: 1.25rem !important;
               }
               .benefit-card {
-                width: fit-content !important;
-                min-width: 60% !important;
-                max-width: 90% !important;
-                flex-direction: column !important;
-                text-align: center !important;
-                padding: 2rem 1.5rem !important;
+                width: 90% !important;
+                max-width: 360px !important;
+                min-width: 320px !important;
+                flex-direction: row !important;
+                text-align: left !important;
+                padding: 1.25rem !important;
+                background: rgba(255, 255, 255, 0.03) !important;
+                backdrop-filter: blur(10px) !important;
+                border: 1px solid rgba(255, 255, 255, 0.08) !important;
+                border-radius: 12px !important;
+                box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.2) !important;
+                transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+              }
+              .benefit-card:hover {
+                transform: translateY(-5px) scale(1.02) !important;
+                border-color: var(--color-electrical) !important;
+                box-shadow: 0 10px 30px -10px var(--color-electrical) !important;
+                background: rgba(234, 179, 8, 0.05) !important;
               }
               .benefit-card span {
                 white-space: nowrap !important;
                 font-size: 0.95rem !important;
+                color: white !important;
+                letter-spacing: 0.02em !important;
+              }
+              .benefit-icon-wrapper {
+                background: rgba(234, 179, 8, 0.1) !important;
+                padding: 0.75rem !important;
+                border-radius: 10px !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                box-shadow: inset 0 0 12px rgba(234, 179, 8, 0.2) !important;
               }
             }
           `}</style>
@@ -349,19 +372,30 @@ const Electrical = () => {
       }}>
         <div className="container" style={{ textAlign: 'center', maxWidth: '800px' }}>
           <h2 style={{ fontSize: '2.5rem', fontWeight: 800, marginBottom: '3rem', color: 'white' }}>Why Choose UrbanPro Electrical?</h2>
-          <div className="benefit-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '3rem', textAlign: 'left' }}>
+          <div className="benefit-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem', textAlign: 'left' }}>
             {['Fully Licensed Master Electricians', 'Transparent Upfront Pricing', 'Latest Diagnostics Technology', 'Clean & Respectful Team'].map((benefit, i) => (
               <motion.div 
                 key={i} 
                 className="benefit-card"
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                style={{ display: 'flex', gap: '1rem', alignItems: 'center', padding: '1.5rem', backgroundColor: 'var(--color-bg)' }}
+                transition={{ delay: i * 0.1, duration: 0.5 }}
+                whileHover={{ scale: 1.05 }}
+                style={{ 
+                  display: 'flex', 
+                  gap: '1.25rem', 
+                  alignItems: 'center', 
+                  padding: '1.75rem', 
+                  backgroundColor: 'rgba(30, 41, 59, 0.5)', 
+                  border: '1px solid rgba(255,255,255,0.05)',
+                  borderRadius: '12px'
+                }}
               >
-                <CheckCircle color="var(--color-electrical)" size={32} style={{ flexShrink: 0 }} />
-                <span style={{ fontWeight: 700, fontSize: '1.125rem', color: 'var(--color-text)' }}>{benefit}</span>
+                <div className="benefit-icon-wrapper" style={{ color: 'var(--color-electrical)', display: 'flex', flexShrink: 0 }}>
+                  <CheckCircle size={28} />
+                </div>
+                <span style={{ fontWeight: 700, fontSize: '1.125rem', color: 'white', letterSpacing: '-0.01em' }}>{benefit}</span>
               </motion.div>
             ))}
           </div>
