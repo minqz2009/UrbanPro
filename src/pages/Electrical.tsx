@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
-import { Zap, Lightbulb, Activity, Shield, AlertTriangle, Clock, PhoneCall, Mail, CheckCircle, ChevronDown, BatteryCharging, Power } from 'lucide-react';
+import { Zap, Lightbulb, Activity, Shield, AlertTriangle, PhoneCall, Mail, CheckCircle, ChevronDown, BatteryCharging, Power } from 'lucide-react';
 
 const Electrical = () => {
   function BadgeIcon() {

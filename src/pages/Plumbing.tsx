@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
-import { ShieldCheck, Clock, BadgeDollarSign, Wrench, AlertTriangle, CheckCircle, PhoneCall, Mail, ChevronDown, Star } from 'lucide-react';
+import { ShieldCheck, BadgeDollarSign, Wrench, AlertTriangle, CheckCircle, PhoneCall, Mail, ChevronDown, Star } from 'lucide-react';
 
 const MAPS_URL = 'https://www.google.com/maps/place/UrbanPro+Plumbing+Sydney/@-33.8461026,150.3081854,10z/data=!4m15!1m8!3m7!1s0xaa99133edb90a697:0xe93f25ae63342f5d!2sUrbanPro+Plumbing+Sydney!8m2!3d-33.8482439!4d150.9319747!10e1!16s%2Fg%2F11n4td_svt!3m5!1s0xaa99133edb90a697:0xe93f25ae63342f5d!8m2!3d-33.8482439!4d150.9319747!16s%2Fg%2F11n4td_svt?entry=ttu&g_ep=EgoyMDI2MDQxNS4wIKXMDSoASAFQAw%3D%3D';
 
