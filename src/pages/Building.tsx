@@ -75,11 +75,11 @@ const CaseItem = ({ project, setSelectedProject }: { project: any, index?: numbe
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginTop: '2rem', flexWrap: 'wrap', gap: '2rem' }}>
         <div style={{ flex: '1 1 300px' }}>
-          <h3 style={{ fontSize: '2.5rem', fontWeight: 700, letterSpacing: '-0.04em', color: 'var(--color-text)', margin: 0 }}>{project.title}</h3>
-          <p style={{ color: 'var(--color-text-muted)', marginTop: '0.5rem', fontSize: '1rem', letterSpacing: '0.05em', textTransform: 'uppercase' }}>{project.location}</p>
+          <h3 style={{ fontSize: 'var(--font-size-h2)', fontWeight: 800, letterSpacing: '-0.04em', color: 'var(--color-text)', margin: 0 }}>{project.title}</h3>
+          <p style={{ color: 'var(--color-text-muted)', marginTop: '0.5rem', fontSize: 'var(--font-size-sm)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>{project.location}</p>
         </div>
         <div style={{ flex: '1 1 400px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-          <p style={{ color: 'var(--color-text-muted)', lineHeight: 1.6, fontSize: '1rem', fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', margin: 0 }}>{project.description}</p>
+          <p style={{ color: 'var(--color-text-muted)', lineHeight: 1.6, fontSize: 'var(--font-size-body)', margin: 0 }}>{project.description}</p>
           <button 
             onClick={() => setSelectedProject(project)}
             style={{ 
@@ -196,8 +196,8 @@ const Building = () => {
             transition={{ duration: 2.2, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
           >
             <h1 style={{ 
-              fontSize: 'clamp(2.5rem, 10vw, 12rem)',
-              fontWeight: 700, 
+              fontSize: 'var(--font-size-h1)',
+              fontWeight: 800, 
               color: 'white',
               lineHeight: 0.9,
               letterSpacing: '-0.06em',
@@ -214,8 +214,8 @@ const Building = () => {
             style={{ marginBottom: '4rem' }}
           >
             <h1 style={{ 
-              fontSize: 'clamp(2.5rem, 10vw, 12rem)',
-              fontWeight: 700, 
+              fontSize: 'var(--font-size-h1)',
+              fontWeight: 800, 
               color: 'var(--color-text-muted)',
               lineHeight: 0.9,
               letterSpacing: '-0.06em',
@@ -233,7 +233,7 @@ const Building = () => {
             transition={{ duration: 2.2, delay: 1.6, ease: [0.16, 1, 0.3, 1] }}
             style={{ marginLeft: '10vw', maxWidth: '600px' }}
           >
-            <p style={{ fontSize: '1.25rem', color: 'rgba(255,255,255,0.9)', lineHeight: 1.6, fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>
+            <p style={{ fontSize: 'var(--font-size-body)', color: 'rgba(255,255,255,0.9)', lineHeight: 1.6 }}>
               We don't just build walls. We construct lifestyles. From full-scale New Home Builds, to masterly executed Renovations, and precise Small Projects (carpentry, ceilings, specialized fixes). We handle everything end-to-end.
             </p>
           </motion.div>
@@ -250,7 +250,7 @@ const Building = () => {
           viewport={{ once: true }}
           style={{ paddingBottom: '3rem' }}
         >
-          <h2 style={{ fontSize: 'clamp(1.75rem, 6vw, 4.5rem)', fontWeight: 700, letterSpacing: '-0.05em', color: 'var(--color-text)', textTransform: 'uppercase', margin: 0 }}>Exhibitions</h2>
+          <h2 style={{ fontSize: 'var(--font-size-h2)', fontWeight: 800, letterSpacing: '-0.05em', color: 'var(--color-text)', textTransform: 'uppercase', margin: 0 }}>Exhibitions</h2>
           
           {/* Tabs */}
           <div style={{ display: 'flex', gap: 'clamp(1rem, 3vw, 3rem)', marginTop: '4rem', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '1rem', flexWrap: 'nowrap' }}>
@@ -339,10 +339,10 @@ const Building = () => {
             <p style={{ fontSize: '1rem', textTransform: 'uppercase', letterSpacing: '0.2em', color: 'var(--color-text-muted)', marginBottom: '1.5rem', fontWeight: 600 }}>
               Start Your Project
             </p>
-            <h2 style={{ fontSize: 'clamp(3rem, 6vw, 5rem)', fontWeight: 700, color: 'white', letterSpacing: '-0.04em', margin: '0 0 1.5rem', lineHeight: 1.1 }}>
+            <h2 style={{ fontSize: 'var(--font-size-h1)', fontWeight: 800, color: 'white', letterSpacing: '-0.04em', margin: '0 0 1.5rem', lineHeight: 1.1 }}>
               Ready to Build?
             </h2>
-            <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '1.25rem', fontFamily: '"Helvetica Neue", Helvetica, sans-serif', maxWidth: '550px', margin: '0 auto 3rem', lineHeight: 1.7 }}>
+            <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 'var(--font-size-body)', maxWidth: '550px', margin: '0 auto 3rem', lineHeight: 1.7 }}>
               Transform your vision into reality with Sydney's most trusted architects and builders.
             </p>
           </motion.div>
@@ -433,12 +433,12 @@ const Building = () => {
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginTop: '2rem', flexWrap: 'wrap', gap: '2rem' }}>
                 <div>
-                  <h3 style={{ fontSize: 'clamp(2rem, 5vw, 3rem)', fontWeight: 700, letterSpacing: '-0.04em', margin: 0, textTransform: 'uppercase' }}>
+                  <h3 style={{ fontSize: 'var(--font-size-h2)', fontWeight: 800, letterSpacing: '-0.04em', margin: 0, textTransform: 'uppercase' }}>
                     {selectedProject.title}
                   </h3>
                 </div>
                 <div style={{ maxWidth: '400px' }}>
-                  <p style={{ color: 'var(--color-text-muted)', fontSize: '1rem', lineHeight: 1.6, fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>
+                  <p style={{ color: 'var(--color-text-muted)', fontSize: 'var(--font-size-body)', lineHeight: 1.6 }}>
                     {selectedProject.description}
                   </p>
                 </div>

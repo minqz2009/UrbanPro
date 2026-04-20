@@ -76,10 +76,10 @@ const Electrical = () => {
                animate={{ y: 0, opacity: 1 }}
                transition={{ duration: 0.8 }}
             >
-              <h1 className="hero-title" style={{ fontSize: 'clamp(2.5rem, 5.5vw, 4.5rem)', fontWeight: 800, marginBottom: '1rem', color: 'white', letterSpacing: '-0.02em' }}>
+              <h1 className="hero-title" style={{ fontSize: 'var(--font-size-h1)', fontWeight: 800, marginBottom: '1rem', color: 'white', letterSpacing: '-0.02em' }}>
                 Expert Electrical Solutions
               </h1>
-              <p className="hero-desc" style={{ fontSize: '1.15rem', color: 'rgba(255,255,255,0.9)', maxWidth: '600px', margin: '0 auto 2.5rem', lineHeight: 1.6 }}>
+              <p className="hero-desc" style={{ fontSize: 'var(--font-size-body)', color: 'rgba(255,255,255,0.9)', maxWidth: '600px', margin: '0 auto 2.5rem', lineHeight: 1.6 }}>
                 Safe, efficient, and innovative electrical services. From rapid fault-finding to complete smart home installations, we keep the lights on.
               </p>
             </motion.div>
@@ -118,8 +118,8 @@ const Electrical = () => {
                       {item.icon}
                     </div>
                     <div style={{ textAlign: 'center' }}>
-                      <span className="guarantee-text" style={{ fontWeight: 800, fontSize: '1rem', display: 'block', marginBottom: '0.2rem', letterSpacing: '0.02em', color: 'white' }}>{item.text}</span>
-                      <span style={{ fontSize: '0.68rem', fontWeight: 600, textTransform: 'uppercase', color: 'var(--color-text-muted)', letterSpacing: '0.08em', display: 'block' }}>{item.subtext}</span>
+                      <span className="guarantee-text" style={{ fontWeight: 800, fontSize: 'var(--font-size-body)', display: 'block', marginBottom: '0.2rem', letterSpacing: '0.02em', color: 'white' }}>{item.text}</span>
+                      <span style={{ fontSize: 'var(--font-size-xs)', fontWeight: 600, textTransform: 'uppercase', color: 'var(--color-text-muted)', letterSpacing: '0.08em', display: 'block' }}>{item.subtext}</span>
                     </div>
                   </div>
                 ))}
@@ -197,8 +197,8 @@ const Electrical = () => {
             @media (max-width: 768px) {
               .hero-section { min-height: 100svh !important; height: auto !important; }
               .hero-container { padding: 6rem 1rem 1.5rem !important; }
-              .hero-title { font-size: clamp(2.2rem, 9vw, 3.1rem) !important; margin-bottom: 0.75rem !important; }
-              .hero-desc { font-size: 0.95rem !important; margin-bottom: 1.5rem !important; line-height: 1.5 !important; }
+              .hero-title { font-size: var(--font-size-h1) !important; margin-bottom: 0.75rem !important; }
+              .hero-desc { font-size: var(--font-size-body) !important; margin-bottom: 1.5rem !important; line-height: 1.5 !important; }
               .guarantees-box {
                 padding: 1.25rem 0.5rem !important;
                 gap: 0.5rem !important;
@@ -209,7 +209,7 @@ const Electrical = () => {
               .guarantee-item { flex: 1 1 0% !important; gap: 0.4rem !important; min-width: 0 !important; }
               .guarantee-icon { display: flex !important; }
               .guarantee-icon svg { width: 18px !important; height: 18px !important; }
-              .guarantee-text { font-size: 0.75rem !important; margin-bottom: 0 !important; line-height: 1.2 !important; }
+              .guarantee-text { font-size: var(--font-size-sm) !important; margin-bottom: 0 !important; line-height: 1.2 !important; }
               .guarantee-item span:nth-of-type(2) { display: none !important; }
               .guarantees-wrapper { max-width: 100% !important; margin-top: 1.5rem !important; }
               .emergency-strip { gap: 0.75rem !important; padding: 0.6rem 0.5rem !important; }
@@ -256,7 +256,7 @@ const Electrical = () => {
               }
               .benefit-card span {
                 white-space: nowrap !important;
-                font-size: 0.85rem !important;
+                font-size: var(--font-size-sm) !important;
                 color: white !important;
                 letter-spacing: 0.01em !important;
               }
@@ -328,7 +328,7 @@ const Electrical = () => {
           <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
             <motion.h2 
               initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
-              style={{ fontSize: '3rem', fontWeight: 800, color: 'var(--color-text)' }}
+              style={{ fontSize: 'var(--font-size-h2)', fontWeight: 800, color: 'var(--color-text)' }}
             >
               Our Services
             </motion.h2>
@@ -361,7 +361,7 @@ const Electrical = () => {
                 <div style={{ color: 'var(--color-electrical)', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--color-bg)', padding: '1rem' }}>
                   {service.icon}
                 </div>
-                <h4 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 800, color: 'var(--color-text)' }}>
+                <h4 style={{ margin: 0, fontSize: 'var(--font-size-h4)', fontWeight: 800, color: 'var(--color-text)' }}>
                   {service.title}
                 </h4>
               </motion.div>
@@ -377,7 +377,7 @@ const Electrical = () => {
         backgroundPosition: 'center',
       }}>
         <div className="container" style={{ textAlign: 'center', maxWidth: '800px' }}>
-          <h2 style={{ fontSize: '2.5rem', fontWeight: 800, marginBottom: '3rem', color: 'white' }}>Why Choose UrbanPro Electrical?</h2>
+          <h2 style={{ fontSize: 'var(--font-size-h2)', fontWeight: 800, marginBottom: '3rem', color: 'white' }}>Why Choose UrbanPro Electrical?</h2>
           <div className="benefit-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem', textAlign: 'left' }}>
             {['Fully Licensed Master Electricians', 'Transparent Upfront Pricing', 'Latest Diagnostics Technology', 'Clean & Respectful Team'].map((benefit, i) => (
               <motion.div 
@@ -420,8 +420,8 @@ const Electrical = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 800, color: 'var(--color-text)', marginBottom: '1.5rem' }}>Need an Electrician?</h2>
-            <p style={{ color: 'var(--color-text-muted)', fontSize: '1.25rem', maxWidth: '600px', margin: '0 auto 3rem', lineHeight: 1.6 }}>
+            <h2 style={{ fontSize: 'var(--font-size-h1)', fontWeight: 800, color: 'var(--color-text)', marginBottom: '1.5rem' }}>Need an Electrician?</h2>
+            <p style={{ color: 'var(--color-text-muted)', fontSize: 'var(--font-size-body)', maxWidth: '600px', margin: '0 auto 3rem', lineHeight: 1.6 }}>
               Call us now for fast, upfront service — or send us an email anytime.
             </p>
             <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '1.5rem', marginBottom: '3rem' }}>

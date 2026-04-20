@@ -70,10 +70,10 @@ const About = () => {
               <MapPin size={16} style={{ color: '#60a5fa' }} />
               <span style={{ color: 'white', fontWeight: 700, fontSize: '0.8rem', letterSpacing: '0.2em', textTransform: 'uppercase' }}>Sydney, Australia</span>
             </div>
-            <h1 style={{ fontSize: 'clamp(3rem, 6vw, 4.5rem)', fontWeight: 800, marginBottom: '1.5rem', color: 'white', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
+            <h1 style={{ fontSize: 'var(--font-size-h1)', fontWeight: 800, marginBottom: '1.5rem', color: 'white', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
               About <span style={{ color: 'var(--color-plumbing)' }}>Urban</span><span style={{ color: 'var(--color-electrical)' }}>Pro</span>
             </h1>
-            <p style={{ fontSize: '1.25rem', color: 'rgba(255,255,255,0.85)', maxWidth: '650px', margin: '0 auto', lineHeight: 1.7 }}>
+            <p style={{ fontSize: 'var(--font-size-body)', color: 'rgba(255,255,255,0.85)', maxWidth: '650px', margin: '0 auto', lineHeight: 1.7 }}>
               Sydney's trusted plumbing professionals. Built on transparency, driven by quality, and available when it matters most.
             </p>
           </motion.div>
@@ -94,10 +94,10 @@ const About = () => {
                 <div style={{ width: '24px', height: '2px', backgroundColor: 'var(--color-plumbing)' }} />
                 Our Story
               </div>
-              <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 800, color: 'var(--color-text)', marginBottom: '2rem', lineHeight: 1.2 }}>
+              <h2 style={{ fontSize: 'var(--font-size-h2)', fontWeight: 800, color: 'var(--color-text)', marginBottom: '2rem', lineHeight: 1.2 }}>
                 Serving Greater Sydney Since 2015
               </h2>
-              <p style={{ color: 'var(--color-text-muted)', lineHeight: 1.8, marginBottom: '1.5rem', fontSize: '1.05rem' }}>
+              <p style={{ color: 'var(--color-text-muted)', lineHeight: 1.8, marginBottom: '1.5rem', fontSize: 'var(--font-size-body)' }}>
                 Urban Pro Plumbing was founded with a straightforward mission: give Sydney homeowners and businesses access to reliable, honest plumbing without the runaround.
               </p>
               <p style={{ color: 'var(--color-text-muted)', lineHeight: 1.8, marginBottom: '2.5rem', fontSize: '1.05rem' }}>
@@ -128,8 +128,8 @@ const About = () => {
                     textAlign: 'center',
                   }}
                 >
-                  <div style={{ fontSize: '2.75rem', fontWeight: 900, color: 'white', marginBottom: '0.5rem', letterSpacing: '-0.03em', lineHeight: 1 }}>{stat.value}</div>
-                  <div style={{ color: 'var(--color-text-muted)', fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: '0.75rem' }}>{stat.label}</div>
+                  <div style={{ fontSize: 'var(--font-size-h2)', fontWeight: 900, color: 'white', marginBottom: '0.5rem', letterSpacing: '-0.03em', lineHeight: 1 }}>{stat.value}</div>
+                  <div style={{ color: 'var(--color-text-muted)', fontSize: 'var(--font-size-xs)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: '0.75rem' }}>{stat.label}</div>
                 </motion.div>
               ))}
             </div>
@@ -158,7 +158,7 @@ const About = () => {
               The People Behind the Work
               <div style={{ width: '24px', height: '2px', backgroundColor: 'var(--color-plumbing)' }} />
             </div>
-            <h2 style={{ fontSize: 'clamp(2.25rem, 4vw, 3rem)', fontWeight: 800, color: 'white', margin: '0 0 1.5rem' }}>Meet the Team</h2>
+            <h2 style={{ fontSize: 'var(--font-size-h2)', fontWeight: 800, color: 'white', margin: '0 0 1.5rem' }}>Meet the Team</h2>
             <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 'clamp(0.95rem, 2vw, 1.1rem)', maxWidth: '520px', margin: '0 auto' }}>
               Two experienced plumbers. One shared commitment to doing the job right.
             </p>
@@ -205,14 +205,14 @@ const About = () => {
                   </div>
                 </div>
 
-                <h3 style={{ fontSize: 'clamp(1.4rem, 2.5vw, 1.65rem)', fontWeight: 800, color: 'white', marginBottom: '0.4rem', lineHeight: 1.2 }}>{member.name}</h3>
+                <h3 style={{ fontSize: 'var(--font-size-h3)', fontWeight: 800, color: 'white', marginBottom: '0.4rem', lineHeight: 1.2 }}>{member.name}</h3>
 
                 <div style={{
                   color: 'var(--color-plumbing)', fontSize: '0.75rem', fontWeight: 700,
                   textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '1.5rem',
                 }}>{member.role}</div>
 
-                <p style={{ color: 'rgba(255,255,255,0.65)', lineHeight: 1.8, marginBottom: '2rem', fontSize: '0.95rem', flexGrow: 1 }}>{member.bio}</p>
+                <p style={{ color: 'rgba(255,255,255,0.65)', lineHeight: 1.8, marginBottom: '2rem', fontSize: 'var(--font-size-sm)', flexGrow: 1 }}>{member.bio}</p>
 
                 <a href={member.href} style={{
                   display: 'inline-flex', alignItems: 'center', gap: '0.6rem',
@@ -244,7 +244,7 @@ const About = () => {
       <section style={{ padding: '8rem 0', backgroundColor: 'var(--color-bg)' }}>
         <div className="container">
           <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
-            <h2 style={{ fontSize: '3rem', fontWeight: 800, color: 'var(--color-text)', marginBottom: '1.5rem' }}>How We Work</h2>
+            <h2 style={{ fontSize: 'var(--font-size-h2)', fontWeight: 800, color: 'var(--color-text)', marginBottom: '1.5rem' }}>How We Work</h2>
             <div style={{ width: '80px', height: '4px', backgroundColor: 'var(--color-plumbing)', margin: '0 auto' }} />
           </div>
 
@@ -274,8 +274,8 @@ const About = () => {
                 }}>
                   {val.icon}
                 </div>
-                <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--color-text)', marginBottom: '1rem' }}>{val.title}</h3>
-                <p style={{ color: 'var(--color-text-muted)', lineHeight: 1.7, margin: 0, fontSize: '0.95rem' }}>{val.desc}</p>
+                <h3 style={{ fontSize: 'var(--font-size-h4)', fontWeight: 800, color: 'var(--color-text)', marginBottom: '1rem' }}>{val.title}</h3>
+                <p style={{ color: 'var(--color-text-muted)', lineHeight: 1.7, margin: 0, fontSize: 'var(--font-size-sm)' }}>{val.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -291,10 +291,10 @@ const About = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 800, color: 'var(--color-text)', marginBottom: '1.5rem' }}>
+            <h2 style={{ fontSize: 'var(--font-size-h1)', fontWeight: 800, color: 'var(--color-text)', marginBottom: '1.5rem' }}>
               Ready to Work with Us?
             </h2>
-            <p style={{ color: 'var(--color-text-muted)', fontSize: '1.25rem', maxWidth: '600px', margin: '0 auto 3rem', lineHeight: 1.6 }}>
+            <p style={{ color: 'var(--color-text-muted)', fontSize: 'var(--font-size-body)', maxWidth: '600px', margin: '0 auto 3rem', lineHeight: 1.6 }}>
               Contact Sydney's most trusted plumbing team today.
             </p>
             <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '1.5rem' }}>

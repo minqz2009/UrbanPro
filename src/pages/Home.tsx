@@ -159,14 +159,14 @@ const Home = () => {
           {/* Hero content */}
           <motion.div style={{ y: textY, opacity: textOpacity, position: 'relative', zIndex: 3, textAlign: 'center', padding: '0 1rem' }}>
             <motion.div variants={itemVariants}>
-              <h1 style={{ fontSize: 'clamp(3.25rem, 8vw, 6.5rem)', marginBottom: '1.5rem', letterSpacing: '-0.04em', color: 'white', fontWeight: 800, lineHeight: 1.05 }}>
+              <h1 style={{ fontSize: 'var(--font-size-h1)', marginBottom: '1.5rem', letterSpacing: '-0.04em', color: 'white', fontWeight: 800, lineHeight: 1.05 }}>
                 <Link to="/building-reno" style={{ color: 'inherit', textDecoration: 'none', cursor: 'pointer' }}>Build.</Link>{' '}
                 <Link to="/plumbing" style={{ color: 'var(--color-plumbing)', textDecoration: 'none', cursor: 'pointer' }}>Plumb.</Link><br/>
                 <Link to="/electrical" style={{ color: 'var(--color-electrical)', textDecoration: 'none', cursor: 'pointer' }}>Power.</Link>
               </h1>
             </motion.div>
             <motion.div variants={itemVariants}>
-              <p style={{ fontSize: 'clamp(1.05rem, 1.6vw, 1.35rem)', color: 'rgba(255,255,255,0.85)', maxWidth: '600px', margin: '0 auto 2.5rem', lineHeight: 1.7, fontWeight: 400, fontFamily: '"Helvetica Neue", Helvetica, sans-serif' }}>
+              <p style={{ fontSize: 'var(--font-size-body)', color: 'rgba(255,255,255,0.85)', maxWidth: '600px', margin: '0 auto 2.5rem', lineHeight: 1.7, fontWeight: 400 }}>
                 Sydney's all-in-one property specialists — architecture, plumbing & electrical under one uncompromising standard.
               </p>
             </motion.div>
@@ -204,7 +204,7 @@ const Home = () => {
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             style={{ textAlign: 'center', marginBottom: '4rem', y: servicesHeadingY }}
           >
-            <h2 style={{ fontSize: 'clamp(3rem, 5vw, 4rem)', marginBottom: '1.5rem', color: 'var(--color-text)', fontWeight: 800, letterSpacing: '-0.04em' }}>Our Capabilities</h2>
+            <h2 style={{ fontSize: 'var(--font-size-h2)', marginBottom: '1.5rem', color: 'var(--color-text)', fontWeight: 800, letterSpacing: '-0.04em' }}>Our Capabilities</h2>
             <div style={{ width: '100px', height: '2px', backgroundColor: 'var(--color-text-muted)', margin: '0 auto' }} />
           </motion.div>
 
@@ -298,8 +298,8 @@ const Home = () => {
                       <div className="service-icon-box" style={{ marginBottom: '1.25rem', display: 'flex', justifyContent: 'center', alignItems: 'center', width: '58px', height: '58px', backgroundColor: 'var(--color-surface)', marginTop: '-46px', position: 'relative', zIndex: 2 }}>
                         {service.icon}
                       </div>
-                      <h3 className="service-title" style={{ fontSize: '1.5rem', marginBottom: '0.75rem', color: 'var(--color-text)', fontWeight: 800, letterSpacing: '-0.02em', lineHeight: 1.1 }}>{service.title}</h3>
-                      <p style={{ color: 'var(--color-text-muted)', marginBottom: '1.75rem', flex: 1, fontSize: '1rem', lineHeight: 1.7, fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>
+                      <h3 className="service-title" style={{ fontSize: 'var(--font-size-h3)', marginBottom: '0.75rem', color: 'var(--color-text)', fontWeight: 800, letterSpacing: '-0.02em', lineHeight: 1.1 }}>{service.title}</h3>
+                      <p style={{ color: 'var(--color-text-muted)', marginBottom: '1.75rem', flex: 1, fontSize: 'var(--font-size-sm)', lineHeight: 1.7 }}>
                         {service.description}
                       </p>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', color: service.color, fontWeight: 700, marginTop: 'auto', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
