@@ -217,11 +217,14 @@ const Electrical = () => {
               .emergency-strip div span:last-child { font-size: 0.5rem !important; }
               .emergency-strip span svg { width: 14px !important; height: 14px !important; }
               .elec-cmd-label { display: none !important; }
-              .elec-cmd-bar { padding: 0.6rem 0 !important; }
+              .elec-cmd-bar { padding: 0.8rem 0 !important; }
+              .elec-cmd-buttons { justify-content: center !important; gap: 0.5rem !important; }
               .access-link-elec {
-                padding: 0.4rem 0.6rem !important;
-                font-size: var(--font-size-xs) !important;
-                gap: 0.3rem !important;
+                padding: 0.75rem 1rem !important;
+                font-size: var(--font-size-sm) !important;
+                gap: 0.4rem !important;
+                flex: 1 1 auto !important;
+                min-width: 140px !important;
               }
               .access-link-elec span:last-child { display: none !important; }
               .scroll-indicator { display: none !important; }
