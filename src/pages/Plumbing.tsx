@@ -76,7 +76,7 @@ const Plumbing = () => {
 
         {/* ── Title + description + guarantees (grows to fill space) ── */}
         <div style={{ flex: 1, display: 'flex', alignItems: 'center' }}>
-          <div className="container" style={{ textAlign: 'center', position: 'relative', zIndex: 2, width: '100%', padding: '7rem 1rem 2rem' }}>
+          <div className="container hero-container" style={{ textAlign: 'center', position: 'relative', zIndex: 2, width: '100%', padding: '7rem 1rem 2rem' }}>
             <motion.div
                initial={{ y: 30, opacity: 0 }}
                animate={{ y: 0, opacity: 1 }}
@@ -162,7 +162,7 @@ const Plumbing = () => {
         </div>
 
         {/* ── Command Center ── */}
-        <div style={{
+        <div className="plumb-cmd-bar" style={{
           background: 'linear-gradient(to right, rgba(2,6,23,0.95), rgba(8,13,26,0.95), rgba(2,6,23,0.95))',
           borderTop: '2px solid var(--color-plumbing)',
           padding: '1.1rem 0',
@@ -201,44 +201,37 @@ const Plumbing = () => {
             }
 
             @media (max-width: 768px) {
-              .hero-section {
-                min-height: 100svh !important;
-              }
-              .plumbing-section {
-                min-height: 100svh !important;
-                display: flex !important;
-                flex-direction: column !important;
-                justify-content: center !important;
-              }
-              .hero-title { font-size: clamp(2.2rem, 7vw, 3rem) !important; margin-bottom: 0.75rem !important; }
-              .hero-desc { font-size: 0.95rem !important; margin-bottom: 1.5rem !important; line-height: 1.6 !important; }
+              .hero-section { min-height: 100svh !important; height: auto !important; }
+              .hero-container { padding: 6rem 1rem 1.5rem !important; }
+              .hero-title { font-size: clamp(2rem, 8vw, 2.75rem) !important; margin-bottom: 0.5rem !important; }
+              .hero-desc { font-size: 0.875rem !important; margin-bottom: 1rem !important; line-height: 1.5 !important; }
               .guarantees-box {
-                padding: 1rem 0.5rem !important;
-                gap: 0.25rem !important;
-                flex-direction: row !important;
+                padding: 0.85rem 0.5rem !important;
+                gap: 0.15rem !important;
                 flex-wrap: nowrap !important;
+                flex-direction: row !important;
                 justify-content: space-around !important;
               }
               .guarantee-item {
                 flex: 1 1 0% !important;
-                gap: 0.4rem !important;
+                gap: 0.25rem !important;
                 align-items: center !important;
                 min-width: 0 !important;
               }
-              .guarantee-icon {
-                padding: 0 !important;
-                background: none !important;
-              }
-              .guarantee-icon svg { width: 24px !important; height: 24px !important; }
-              .guarantee-text { font-size: 0.75rem !important; margin-bottom: 0.1rem !important; line-height: 1.2 !important; }
-              .guarantee-item span:nth-of-type(2) { font-size: 0.6rem !important; }
-              .guarantees-wrapper { max-width: 100% !important; }
-              .emergency-strip { gap: 1rem !important; padding: 0.75rem 1rem !important; }
+              .guarantee-icon { display: none !important; }
+              .guarantee-text { font-size: 0.65rem !important; margin-bottom: 0.05rem !important; line-height: 1.2 !important; }
+              .guarantee-item span:nth-of-type(2) { font-size: 0.52rem !important; }
+              .guarantees-wrapper { max-width: 100% !important; margin-top: 0.5rem !important; }
+              .emergency-strip { gap: 0.75rem !important; padding: 0.6rem 0.5rem !important; }
+              .emergency-strip div span:first-child { font-size: 0.7rem !important; }
+              .emergency-strip div span:last-child { font-size: 0.5rem !important; }
+              .emergency-strip span svg { width: 14px !important; height: 14px !important; }
               .hero-cmd-label { display: none !important; }
+              .plumb-cmd-bar { padding: 0.75rem 0 !important; }
               .access-link {
-                padding: 0.6rem 0.85rem !important;
-                font-size: 0.82rem !important;
-                gap: 0.5rem !important;
+                padding: 0.5rem 0.75rem !important;
+                font-size: 0.75rem !important;
+                gap: 0.4rem !important;
               }
               .access-link span:last-child { display: none !important; }
             }
