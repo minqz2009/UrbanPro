@@ -26,7 +26,7 @@
   --transition-slow: 0.5s ease;
 
   /* Typography Scale */
-  --font-size-h1: clamp(3.5rem, 10vw, 5.5rem);
+  --font-size-h1: clamp(3.85rem, 10vw, 5.5rem);
   --font-size-h2: clamp(2.4rem, 7vw, 3.5rem);
   --font-size-h3: clamp(1.8rem, 5vw, 2.5rem);
   --font-size-h4: clamp(1.4rem, 4vw, 1.8rem);
