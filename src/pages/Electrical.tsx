@@ -84,6 +84,7 @@ const Electrical = () => {
               </p>
             </motion.div>
 
+
             <motion.div
               initial={{ y: 40, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
@@ -223,6 +224,7 @@ const Electrical = () => {
                 gap: 0.4rem !important;
               }
               .access-link-elec span:last-child { display: none !important; }
+              .scroll-indicator { display: none !important; }
             }
 
             @media (max-width: 640px) {
@@ -311,9 +313,10 @@ const Electrical = () => {
 
         {/* Scroll indicator */}
         <motion.div
+          className="scroll-indicator"
           animate={{ y: [0, 8, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-          style={{ position: 'absolute', bottom: '0.5rem', left: '50%', transform: 'translateX(-50%)', color: 'rgba(255,255,255,0.4)', zIndex: 3 }}
+          style={{ position: 'absolute', bottom: '3.5rem', left: '50%', transform: 'translateX(-50%)', color: 'rgba(255,255,255,0.4)', zIndex: 3 }}
         >
           <ChevronDown size={26} />
         </motion.div>
