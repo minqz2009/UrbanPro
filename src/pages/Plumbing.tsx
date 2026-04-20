@@ -287,6 +287,32 @@ const Plumbing = () => {
                 width: 22px !important;
                 height: 22px !important;
               }
+              .service-grid-plumb {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 0.75rem !important;
+              }
+              .service-card-plumb {
+                padding: 1rem 0.5rem !important;
+                gap: 0.75rem !important;
+              }
+              .service-card-plumb h4 {
+                font-size: 0.8rem !important;
+                padding: 0 0.25rem !important;
+                line-height: 1.3 !important;
+              }
+              .service-card-plumb div {
+                padding: 0.5rem !important;
+              }
+              .service-card-plumb img {
+                width: 36px !important;
+                height: 36px !important;
+              }
+              .plumbing-services-heading {
+                margin-bottom: 2rem !important;
+              }
+              .plumbing-services-section {
+                padding: 4rem 0 !important;
+              }
             }
           `}</style>
 
@@ -337,9 +363,9 @@ const Plumbing = () => {
       </section>
 
       {/* Services List */}
-      <section className="section plumbing-section" style={{ padding: '8rem 0' }}>
+      <section className="section plumbing-section plumbing-services-section" style={{ padding: '8rem 0' }}>
         <div className="container">
-          <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
+          <div className="plumbing-services-heading" style={{ textAlign: 'center', marginBottom: '5rem' }}>
             <motion.h2 
               initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
               style={{ fontSize: 'var(--font-size-h2)', fontWeight: 800, color: 'var(--color-text)' }}
@@ -349,10 +375,11 @@ const Plumbing = () => {
             <div style={{ width: '80px', height: '4px', backgroundColor: 'var(--color-plumbing)', margin: '1.5rem auto' }} />
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '2rem' }}>
+          <div className="service-grid-plumb" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '2rem' }}>
             {servicesBreakdown.map((service, idx) => (
               <motion.div 
                 key={idx}
+                className="service-card-plumb"
                 initial={{ opacity: 0, scale: 0.95 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}

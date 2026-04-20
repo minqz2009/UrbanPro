@@ -276,6 +276,29 @@ const Electrical = () => {
                 width: 22px !important;
                 height: 22px !important;
               }
+              .service-grid-elec {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 0.75rem !important;
+              }
+              .service-card-elec {
+                padding: 1rem 0.5rem !important;
+                flex-direction: column !important;
+                text-align: center !important;
+                gap: 0.75rem !important;
+              }
+              .service-card-elec h4 {
+                font-size: 0.8rem !important;
+                line-height: 1.3 !important;
+              }
+              .service-card-elec div {
+                padding: 0.5rem !important;
+              }
+              .elec-services-heading {
+                margin-bottom: 2rem !important;
+              }
+              .elec-services-section {
+                padding: 4rem 0 !important;
+              }
             }
           `}</style>
 
@@ -326,9 +349,9 @@ const Electrical = () => {
       </section>
 
       {/* Services List */}
-      <section className="section elec-section" style={{ padding: '8rem 0' }}>
+      <section className="section elec-section elec-services-section" style={{ padding: '8rem 0' }}>
         <div className="container">
-          <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
+          <div className="elec-services-heading" style={{ textAlign: 'center', marginBottom: '5rem' }}>
             <motion.h2 
               initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
               style={{ fontSize: 'var(--font-size-h2)', fontWeight: 800, color: 'var(--color-text)' }}
@@ -338,10 +361,11 @@ const Electrical = () => {
             <div style={{ width: '80px', height: '4px', backgroundColor: 'var(--color-electrical)', margin: '1.5rem auto' }} />
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '2rem' }}>
+          <div className="service-grid-elec" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '2rem' }}>
             {servicesBreakdown.map((service, idx) => (
               <motion.div 
                 key={idx}
+                className="service-card-elec"
                 initial={{ opacity: 0, scale: 0.95 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
