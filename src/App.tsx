@@ -8,6 +8,7 @@ import Home from './pages/Home';
 import Building from './pages/Building';
 import Plumbing from './pages/Plumbing';
 import Electrical from './pages/Electrical';
+import About from './pages/About';
 
 const Header = () => {
   const location = useLocation();
@@ -35,7 +36,7 @@ const Header = () => {
     proColor = 'var(--color-text-muted)';
   } else if (path === '/electrical') {
     proColor = '#eab308';
-  } else if (path === '/plumbing') {
+  } else if (path === '/plumbing' || path === '/about') {
     urbanColor = 'var(--color-plumbing)';
     proColor = 'var(--color-electrical)';
   }
@@ -76,6 +77,7 @@ const Header = () => {
             <Link to="/building-reno" className="nav-link">Building</Link>
             <Link to="/plumbing" className="nav-link">Plumbing</Link>
             <Link to="/electrical" className="nav-link">Electrical</Link>
+            <Link to="/about" className="nav-link">About</Link>
           </nav>
 
           {/* Mobile Navigation Toggle */}
@@ -98,11 +100,12 @@ const Header = () => {
               transition={{ duration: 0.3 }}
               style={{ position: 'absolute', top: '100%', left: 0, right: 0, backgroundColor: 'rgba(15, 23, 42, 0.98)', borderBottom: '1px solid rgba(255,255,255,0.05)', overflow: 'hidden' }}
             >
-              <div style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '2rem', textAlign: 'center' }}>
-                <Link to="/" className="nav-link" style={{ fontSize: '1.25rem' }}>Home</Link>
-                <Link to="/building-reno" className="nav-link" style={{ fontSize: '1.25rem' }}>Building & Reno</Link>
-                <Link to="/plumbing" className="nav-link" style={{ fontSize: '1.25rem' }}>Plumbing</Link>
-                <Link to="/electrical" className="nav-link" style={{ fontSize: '1.25rem' }}>Electrical</Link>
+              <div style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '2rem', textAlign: 'center', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.15em' }}>
+                <Link to="/" className="nav-link" style={{ fontSize: '1rem' }}>Home</Link>
+                <Link to="/building-reno" className="nav-link" style={{ fontSize: '1rem' }}>Building & Reno</Link>
+                <Link to="/plumbing" className="nav-link" style={{ fontSize: '1rem' }}>Plumbing</Link>
+                <Link to="/electrical" className="nav-link" style={{ fontSize: '1rem' }}>Electrical</Link>
+                <Link to="/about" className="nav-link" style={{ fontSize: '1rem' }}>About</Link>
               </div>
             </motion.div>
           )}
@@ -144,7 +147,7 @@ const Footer = () => {
     proColor = 'var(--color-text-muted)';
   } else if (path === '/electrical') {
     proColor = 'var(--color-electrical)';
-  } else if (path === '/plumbing') {
+  } else if (path === '/plumbing' || path === '/about') {
     urbanColor = 'var(--color-plumbing)';
     proColor = 'var(--color-electrical)';
   }
@@ -177,15 +180,15 @@ const Footer = () => {
           <h4 style={{ color: 'white', marginBottom: '1.5rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}>Contact</h4>
           <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '1rem', color: 'var(--color-text-muted)', padding: 0 }}>
             <li style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <Phone size={16} style={{ flexShrink: 0, color: path === '/plumbing' ? 'var(--color-plumbing)' : 'var(--color-accent)' }} />
+              <Phone size={16} style={{ flexShrink: 0, color: (path === '/plumbing' || path === '/about') ? 'var(--color-plumbing)' : 'var(--color-accent)' }} />
               <a href="tel:+61412242997" style={{ color: 'inherit', textDecoration: 'none' }}>+61 412 242 997 (John)</a>
             </li>
             <li style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <Phone size={16} style={{ flexShrink: 0, color: path === '/plumbing' ? 'var(--color-plumbing)' : 'var(--color-accent)' }} />
+              <Phone size={16} style={{ flexShrink: 0, color: (path === '/plumbing' || path === '/about') ? 'var(--color-plumbing)' : 'var(--color-accent)' }} />
               <a href="tel:+61426051275" style={{ color: 'inherit', textDecoration: 'none' }}>+61 426 051 275 (Leo)</a>
             </li>
             <li style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <Mail size={16} style={{ flexShrink: 0, color: path === '/plumbing' ? 'var(--color-plumbing)' : 'var(--color-accent)' }} />
+              <Mail size={16} style={{ flexShrink: 0, color: (path === '/plumbing' || path === '/about') ? 'var(--color-plumbing)' : 'var(--color-accent)' }} />
               <a href="mailto:service@urbanproplumbing.com.au" style={{ color: 'inherit', textDecoration: 'none' }}>service@urbanproplumbing.com.au</a>
             </li>
           </ul>
@@ -208,6 +211,7 @@ const AnimatedRoutes = () => {
         <Route path="/building-reno" element={<Building />} />
         <Route path="/plumbing" element={<Plumbing />} />
         <Route path="/electrical" element={<Electrical />} />
+        <Route path="/about" element={<About />} />
       </Routes>
     </AnimatePresence>
   );
@@ -221,7 +225,7 @@ const FloatingContact = () => {
   const getTheme = () => {
     if (path === '/building-reno') return { accent: '#ffffff', text: '#0f172a', headerBg: '#151e2d', headerText: 'white', headerSub: 'rgba(255,255,255,0.8)', btnBg: '#ffffff', btnText: '#0f172a' };
     if (path === '/electrical') return { accent: 'var(--color-electrical)', text: 'var(--color-bg)', headerBg: '#facc15', headerText: 'var(--color-bg)', headerSub: 'rgba(15,23,42,0.7)', btnBg: 'var(--color-electrical)', btnText: 'var(--color-bg)' };
-    if (path === '/plumbing') return { accent: 'var(--color-plumbing)', text: 'white', headerBg: '#1e3a8a', headerText: 'white', headerSub: 'rgba(255,255,255,0.8)', btnBg: 'var(--color-plumbing)', btnText: 'white' };
+    if (path === '/plumbing' || path === '/about') return { accent: 'var(--color-plumbing)', text: 'white', headerBg: '#1e3a8a', headerText: 'white', headerSub: 'rgba(255,255,255,0.8)', btnBg: 'var(--color-plumbing)', btnText: 'white' };
     // Home Page: Blue Top, Yellow Button
     return { accent: 'white', text: 'var(--color-bg)', headerBg: 'var(--color-plumbing)', headerText: 'white', headerSub: 'rgba(255,255,255,0.8)', btnBg: 'var(--color-electrical)', btnText: 'var(--color-bg)' };
   };

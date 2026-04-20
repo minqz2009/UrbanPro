@@ -1,20 +1,20 @@
 import { motion } from 'framer-motion';
-import { Zap, Lightbulb, Activity, Shield, AlertTriangle, Clock, PhoneCall, CheckCircle, ChevronDown, BatteryCharging, Power } from 'lucide-react';
+import { Zap, Lightbulb, Activity, Shield, AlertTriangle, Clock, PhoneCall, Mail, CheckCircle, ChevronDown, BatteryCharging, Power } from 'lucide-react';
 
 const Electrical = () => {
-  const guarantees = [
-    { text: "LIFETIME WORKMANSHIP", subtext: "On all electrical services", icon: <Shield size={32} /> },
-    { text: "FIXED UPFRONT PRICING", subtext: "No hidden costs promised", icon: <BadgeIcon /> },
-    { text: "MASTER ELECTRICIANS", subtext: "Sydney's finest technicians", icon: <Zap size={32} /> }
-  ];
-
   function BadgeIcon() {
-    return <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-badge-dollar-sign"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>;
+    return <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>;
   }
 
+  const guarantees = [
+    { text: "LIFETIME WORKMANSHIP", subtext: "On all electrical services", icon: <Shield size={28} /> },
+    { text: "FIXED UPFRONT PRICING", subtext: "No hidden costs promised", icon: <BadgeIcon /> },
+    { text: "MASTER ELECTRICIANS", subtext: "Sydney's finest technicians", icon: <Zap size={28} /> },
+  ];
+
   const emergencyInfo = [
-    { text: "EMERGENCY POWER 24/7", subtext: "Quick response for blackouts", icon: <AlertTriangle size={24} className="text-accent" /> },
-    { text: "EMERGENCY 7 DAYS", subtext: "Always on call in Sydney", icon: <Clock size={24} className="text-accent" /> }
+    { text: "EMERGENCY 24/7", subtext: "Quick response for blackouts", icon: <AlertTriangle size={18} /> },
+    { text: "EMERGENCY 7 DAYS", subtext: "Always on call in Sydney", icon: <Clock size={18} /> },
   ];
 
   const servicesBreakdown = [
@@ -38,239 +38,223 @@ const Electrical = () => {
       exit={{ opacity: 0 }}
       style={{ backgroundColor: 'var(--color-bg)', color: 'var(--color-text)' }}
     >
-      {/* Hero Banner with Image */}
-      <section className="hero-section" style={{ 
+      {/* Hero — full viewport */}
+      <section className="hero-section" style={{
         position: 'relative',
-        padding: '10rem 0 8rem',
-        backgroundImage: 'linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.95)), url(https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=100&w=3000&auto=format&fit=crop)',
+        minHeight: '100svh',
+        display: 'flex',
+        flexDirection: 'column',
+        backgroundImage: 'linear-gradient(rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.9)), url(https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=100&w=3000&auto=format&fit=crop)',
         backgroundSize: 'cover',
         backgroundPosition: 'center'
       }}>
-        <div className="container" style={{ textAlign: 'center', position: 'relative', zIndex: 2 }}>
-          <motion.div
-             initial={{ y: 30, opacity: 0 }}
-             animate={{ y: 0, opacity: 1 }}
-             transition={{ duration: 0.8 }}
-          >
-            <h1 className="hero-title" style={{ fontSize: 'clamp(3rem, 6vw, 4.5rem)', fontWeight: 800, marginBottom: '1.5rem', color: 'white', letterSpacing: '-0.02em' }}>
-              Expert Electrical Solutions
-            </h1>
-            <p className="hero-desc" style={{ fontSize: '1.25rem', color: 'rgba(255,255,255,0.9)', maxWidth: '650px', margin: '0 auto 4rem', lineHeight: 1.6 }}>
-              Safe, efficient, and innovative electrical services. From rapid fault-finding to complete smart home installations, we keep the lights on globally.
-            </p>
-          </motion.div>
 
-          {/* Core Guarantees Banner */}
-          <motion.div 
-            className="guarantees-box"
-            initial={{ y: 40, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            style={{ 
-              display: 'flex', 
-              justifyContent: 'center', 
-              flexWrap: 'wrap', 
-              gap: '2rem',
-              backgroundColor: 'var(--color-surface)',
-              border: '1px solid rgba(255,255,255,0.05)',
-              padding: '3rem 2.5rem',
-              color: 'white',
-              boxShadow: '0 30px 60px -12px rgba(0, 0, 0, 0.9)',
-              position: 'relative',
-              overflow: 'hidden'
-            }}
-          >
-            {/* Subtle electrical accent glow inside the box */}
-            <div style={{ position: 'absolute', bottom: '-40px', right: '-40px', width: '200px', height: '200px', background: 'radial-gradient(circle, var(--color-electrical) 0%, transparent 70%)', opacity: 0.1, filter: 'blur(30px)', pointerEvents: 'none' }} />
-            
-            {guarantees.map((item, idx) => (
-              <div key={idx} className="guarantee-item" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.25rem', flex: '1 1 200px', position: 'relative', zIndex: 1 }}>
-                <div className="guarantee-icon" style={{ color: 'var(--color-electrical)', backgroundColor: 'rgba(234,179,8,0.08)', padding: '1.25rem', borderRadius: '4px' }}>
-                  {item.icon}
-                </div>
-                <div style={{ textAlign: 'center' }}>
-                   <span className="guarantee-text" style={{ fontWeight: 800, fontSize: '1.25rem', display: 'block', marginBottom: '0.4rem', letterSpacing: '0.02em', color: 'white' }}>{item.text}</span>
-                   <span style={{ fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', color: 'var(--color-text-muted)', letterSpacing: '0.1em', display: 'block', marginBottom: '1rem' }}>{item.subtext}</span>
-                   <div style={{ width: '30px', height: '2px', backgroundColor: 'var(--color-electrical)', margin: '0 auto' }} />
-                </div>
+        {/* Title + desc + guarantees */}
+        <div style={{ flex: 1, display: 'flex', alignItems: 'center' }}>
+          <div className="container" style={{ textAlign: 'center', position: 'relative', zIndex: 2, width: '100%', padding: '7rem 1rem 2rem' }}>
+            <motion.div
+               initial={{ y: 30, opacity: 0 }}
+               animate={{ y: 0, opacity: 1 }}
+               transition={{ duration: 0.8 }}
+            >
+              <h1 className="hero-title" style={{ fontSize: 'clamp(2.5rem, 5.5vw, 4.5rem)', fontWeight: 800, marginBottom: '1rem', color: 'white', letterSpacing: '-0.02em' }}>
+                Expert Electrical Solutions
+              </h1>
+              <p className="hero-desc" style={{ fontSize: '1.15rem', color: 'rgba(255,255,255,0.9)', maxWidth: '600px', margin: '0 auto 2.5rem', lineHeight: 1.6 }}>
+                Safe, efficient, and innovative electrical services. From rapid fault-finding to complete smart home installations, we keep the lights on.
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ y: 40, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="guarantees-wrapper"
+              style={{ maxWidth: '75%', margin: '0 auto', width: '100%' }}
+            >
+              {/* Main guarantees card */}
+              <div
+                className="guarantees-box"
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  flexWrap: 'wrap',
+                  gap: '1rem',
+                  backgroundColor: 'rgba(30,41,59,0.9)',
+                  border: '1px solid rgba(255,255,255,0.07)',
+                  borderBottom: 'none',
+                  padding: '2rem',
+                  color: 'white',
+                  boxShadow: '0 20px 40px -12px rgba(0,0,0,0.8)',
+                  position: 'relative',
+                  overflow: 'hidden',
+                  backdropFilter: 'blur(8px)',
+                }}
+              >
+                <div style={{ position: 'absolute', bottom: '-30px', right: '-30px', width: '160px', height: '160px', background: 'radial-gradient(circle, var(--color-electrical) 0%, transparent 70%)', opacity: 0.1, filter: 'blur(20px)', pointerEvents: 'none' }} />
+                {guarantees.map((item, idx) => (
+                  <div key={idx} className="guarantee-item" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.6rem', flex: '1 1 160px', position: 'relative', zIndex: 1 }}>
+                    <div className="guarantee-icon" style={{ color: 'var(--color-electrical)', backgroundColor: 'rgba(234,179,8,0.08)', padding: '0.9rem', borderRadius: '4px' }}>
+                      {item.icon}
+                    </div>
+                    <div style={{ textAlign: 'center' }}>
+                      <span className="guarantee-text" style={{ fontWeight: 800, fontSize: '1rem', display: 'block', marginBottom: '0.2rem', letterSpacing: '0.02em', color: 'white' }}>{item.text}</span>
+                      <span style={{ fontSize: '0.68rem', fontWeight: 600, textTransform: 'uppercase', color: 'var(--color-text-muted)', letterSpacing: '0.08em', display: 'block' }}>{item.subtext}</span>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </motion.div>
+
+              {/* Emergency strip — flush below the card, same width */}
+              <div
+                className="emergency-strip"
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  gap: '2rem',
+                  flexWrap: 'wrap',
+                  backgroundColor: 'rgba(15,25,48,0.95)',
+                  borderLeft: '1px solid rgba(255,255,255,0.07)',
+                  borderRight: '1px solid rgba(255,255,255,0.07)',
+                  borderTop: '2px solid var(--color-electrical)',
+                  borderBottom: '2px solid var(--color-electrical)',
+                  padding: '0.85rem 2rem',
+                  backdropFilter: 'blur(8px)',
+                }}
+              >
+                {emergencyInfo.map((item, idx) => (
+                  <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                    <span style={{ color: 'var(--color-electrical)', display: 'flex' }}>{item.icon}</span>
+                    <div>
+                      <span style={{ fontWeight: 800, fontSize: '0.82rem', color: 'white', display: 'block', letterSpacing: '0.04em' }}>{item.text}</span>
+                      <span style={{ fontSize: '0.62rem', fontWeight: 600, textTransform: 'uppercase', color: 'var(--color-text-muted)', letterSpacing: '0.1em' }}>{item.subtext}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
         </div>
 
-        <motion.div 
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-          style={{ position: 'absolute', bottom: '2rem', left: '50%', transform: 'translateX(-50%)', color: 'white', opacity: 0.8 }}
-        >
-          <ChevronDown size={32} />
-        </motion.div>
-      </section>
-
-      {/* Emergency System & Direct Access Strip */}
-      <section style={{ backgroundColor: 'var(--color-bg)' }}>
-        <div className="container" style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
-          backgroundColor: 'var(--color-surface)',
-          borderTop: '4px solid var(--color-electrical)'
-        }}>
-          {emergencyInfo.map((info, idx) => (
-            <div key={idx} style={{ 
-              padding: '3rem 2rem', 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: '1.5rem',
-              borderRight: idx === 0 ? '1px solid rgba(255,255,255,0.05)' : 'none'
-            }}>
-              <div style={{ backgroundColor: 'rgba(234,179,8,0.08)', padding: '1.25rem' }}>
-                {info.icon}
-              </div>
-              <div>
-                <h3 style={{ color: 'var(--color-text)', fontWeight: 800, fontSize: '1.25rem', margin: '0 0 0.25rem 0', letterSpacing: '-0.01em' }}>{info.text}</h3>
-                <p style={{ color: 'var(--color-text-muted)', margin: 0, fontWeight: 500, fontSize: '0.95rem' }}>{info.subtext}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* The New Horizontal Command Strip */}
-        <div style={{ 
-          background: 'linear-gradient(to right, #020617, #080d1a, #020617)', 
-          borderTop: '2px solid var(--color-electrical)', 
-          borderBottom: '1px solid rgba(234,179,8,0.15)',
-          padding: '3.5rem 0',
+        {/* Command Center */}
+        <div style={{
+          background: 'linear-gradient(to right, rgba(2,6,23,0.95), rgba(8,13,26,0.95), rgba(2,6,23,0.95))',
+          borderTop: '2px solid var(--color-electrical)',
+          padding: '1.1rem 0',
           position: 'relative',
-          overflow: 'hidden',
-          boxShadow: '0 20px 50px rgba(0,0,0,0.5)'
+          zIndex: 2,
         }}>
           <style>{`
             .access-link-elec {
-              display: flex; align-items: center; gap: 1.25rem;
+              display: flex; align-items: center; gap: 0.85rem;
               color: white; text-decoration: none;
-              font-weight: 900; font-size: 1.25rem; letter-spacing: 0.02em;
+              font-weight: 800; font-size: 1rem; letter-spacing: 0.02em;
               transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-              padding: 1.25rem 2.5rem;
+              padding: 0.7rem 1.5rem;
               background-color: rgba(255,255,255,0.05);
               border: 1px solid rgba(255,255,255,0.1);
-              box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             }
             .access-link-elec:hover {
               background-color: var(--color-electrical);
               color: var(--color-bg);
               border-color: var(--color-electrical);
-              transform: translateY(-4px);
-              box-shadow: 0 12px 30px -10px var(--color-electrical);
+              transform: translateY(-3px);
+              box-shadow: 0 8px 20px -8px var(--color-electrical);
             }
             .access-link-elec .link-icon-elec { color: var(--color-electrical); transition: all 0.3s ease; }
-            .access-link-elec:hover .link-icon-elec { color: var(--color-bg); transform: scale(1.1); }
-            
+            .access-link-elec:hover .link-icon-elec { color: var(--color-bg); }
+
             @keyframes pulse-glow-elec {
               0% { opacity: 0.4; transform: scale(1); }
               50% { opacity: 1; transform: scale(1.2); }
               100% { opacity: 0.4; transform: scale(1); }
             }
+
+            @media (max-width: 900px) {
+              .elec-cmd-buttons { gap: 0.5rem !important; }
+              .access-link-elec { padding: 0.6rem 1rem !important; font-size: 0.9rem !important; }
+            }
             @media (max-width: 768px) {
-              .access-link-elec {
-                padding: 1rem 1.5rem;
-                font-size: 1rem;
-                width: 100%;
-                justify-content: center;
-              }
-              .hero-section {
+              .hero-section { min-height: 100svh !important; }
+              .elec-section {
+                min-height: 100svh !important;
                 display: flex !important;
                 flex-direction: column !important;
                 justify-content: center !important;
-                min-height: 100svh !important;
-                padding: 0 !important;
               }
-              .hero-title { font-size: 2.25rem !important; margin-bottom: 1.5rem !important; }
-              .hero-desc { font-size: 1rem !important; margin-bottom: 5rem !important; line-height: 1.7 !important; }
-              .guarantees-box { 
-                padding: 1.5rem 0.5rem !important; 
+              .hero-title { font-size: clamp(2.2rem, 7vw, 3rem) !important; margin-bottom: 0.75rem !important; }
+              .hero-desc { font-size: 0.95rem !important; margin-bottom: 1.5rem !important; }
+              .guarantees-box {
+                padding: 1rem 0.5rem !important;
                 gap: 0.25rem !important;
-                flex-direction: row !important;
                 flex-wrap: nowrap !important;
+                flex-direction: row !important;
                 justify-content: space-around !important;
               }
-              .guarantee-item { 
-                flex: 1 1 0% !important; 
+              .guarantee-item { flex: 1 1 0% !important; gap: 0.4rem !important; min-width: 0 !important; }
+              .guarantee-icon { padding: 0 !important; background: none !important; }
+              .guarantee-icon svg { width: 22px !important; height: 22px !important; }
+              .guarantee-text { font-size: 0.7rem !important; margin-bottom: 0.1rem !important; }
+              .guarantee-item span:nth-of-type(2) { font-size: 0.58rem !important; }
+              .guarantees-wrapper { max-width: 100% !important; }
+              .emergency-strip { gap: 1rem !important; padding: 0.75rem 1rem !important; }
+              .elec-cmd-label { display: none !important; }
+              .access-link-elec {
+                padding: 0.6rem 0.85rem !important;
+                font-size: 0.82rem !important;
                 gap: 0.5rem !important;
-                align-items: center !important;
-                justify-content: center !important;
-                min-width: 0 !important;
-                border: none !important;
-                padding: 0 !important;
               }
-              .guarantee-icon { 
-                padding: 0 !important; 
-                background: none !important;
-                color: var(--color-electrical) !important;
-              }
-              .guarantee-icon svg { width: 28px !important; height: 28px !important; }
-              .guarantee-text { 
-                font-size: 0.85rem !important; 
-                text-align: center !important;
-                margin-bottom: 0.2rem !important;
-                line-height: 1.2 !important;
-              }
-              .guarantee-item span:nth-of-type(2) { 
-                display: block !important; 
-                text-align: center !important; 
-                font-size: 0.65rem !important;
-                opacity: 0.8;
-                line-height: 1.1 !important;
-              }
-              .guarantee-item div > div:last-child { display: none !important; }
-              .guarantee-item > div:nth-of-type(2) { text-align: center !important; }
+              .access-link-elec span:last-child { display: none !important; }
             }
           `}</style>
-          
-          <div className="container mobile-center" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '2rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
+
+          <div className="container mobile-center" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
+            <div className="elec-cmd-label" style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
               <div style={{ position: 'relative' }}>
-                <div style={{ 
-                  width: '16px', height: '16px', borderRadius: '50%', 
-                  backgroundColor: 'white', 
-                  boxShadow: '0 0 20px white',
-                  animation: 'pulse-glow-elec 2s infinite'
-                }} />
-                <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '28px', height: '28px', borderRadius: '50%', border: '2px solid var(--color-electrical)', animation: 'pulse-glow-elec 2s infinite linear reverse' }} />
+                <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: 'white', boxShadow: '0 0 14px white', animation: 'pulse-glow-elec 2s infinite' }} />
+                <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '22px', height: '22px', borderRadius: '50%', border: '2px solid var(--color-electrical)', animation: 'pulse-glow-elec 2s infinite linear reverse' }} />
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.25rem' }}>
-                   <span style={{ backgroundColor: 'var(--color-electrical)', color: 'var(--color-bg)', padding: '0.25rem 0.6rem', fontSize: '0.65rem', fontWeight: 900, borderRadius: '2px' }}>LIVE</span>
-                   <span style={{ fontSize: '1rem', fontWeight: 900, letterSpacing: '0.35em', textTransform: 'uppercase', color: 'white' }}>
-                     Command Center
-                   </span>
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.15rem' }}>
+                  <span style={{ backgroundColor: 'var(--color-electrical)', color: 'var(--color-bg)', padding: '0.15rem 0.5rem', fontSize: '0.6rem', fontWeight: 900, borderRadius: '2px' }}>LIVE</span>
+                  <span style={{ fontSize: '0.85rem', fontWeight: 900, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'white' }}>Command Center</span>
                 </div>
-                <span style={{ fontSize: '0.8rem', fontWeight: 600, textTransform: 'uppercase', color: 'var(--color-electrical)', letterSpacing: '0.15em' }}>
+                <span style={{ fontSize: '0.7rem', fontWeight: 600, textTransform: 'uppercase', color: 'var(--color-electrical)', letterSpacing: '0.15em' }}>
                   Sydney Region Techs Online
                 </span>
               </div>
             </div>
-            
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+
+            <div className="elec-cmd-buttons" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
               {[
-                { href: 'tel:+61412242997', label: 'Call John', sub: '+61 412 242 997', icon: <PhoneCall size={20} className="link-icon-elec" /> },
-                { href: 'tel:+61426051275', label: 'Call Leo', sub: '+61 426 051 275', icon: <PhoneCall size={20} className="link-icon-elec" /> },
-                { href: 'mailto:service@urbanproplumbing.com.au', label: 'Email Request', sub: 'Instant Response', icon: <span className="link-icon-elec" style={{ fontSize: '1.2rem', fontWeight: 800 }}>@</span> }
+                { href: 'tel:+61412242997', label: 'Call John', sub: '+61 412 242 997', icon: <PhoneCall size={17} className="link-icon-elec" /> },
+                { href: 'tel:+61426051275', label: 'Call Leo', sub: '+61 426 051 275', icon: <PhoneCall size={17} className="link-icon-elec" /> },
+                { href: 'mailto:service@urbanproplumbing.com.au', label: 'Email Us', sub: 'Instant Response', icon: <Mail size={17} className="link-icon-elec" /> }
               ].map((item) => (
                 <a key={item.href} href={item.href} className="access-link-elec">
                   {item.icon}
                   <div style={{ display: 'flex', flexDirection: 'column' }}>
                     <span>{item.label}</span>
-                    <span style={{ opacity: 0.4, fontSize: '0.7rem', fontWeight: 500, letterSpacing: '0.02em' }}>{item.sub}</span>
+                    <span style={{ opacity: 0.4, fontSize: '0.65rem', fontWeight: 500 }}>{item.sub}</span>
                   </div>
                 </a>
               ))}
             </div>
           </div>
         </div>
+
+        {/* Scroll indicator */}
+        <motion.div
+          animate={{ y: [0, 8, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+          style={{ position: 'absolute', bottom: '0.5rem', left: '50%', transform: 'translateX(-50%)', color: 'rgba(255,255,255,0.4)', zIndex: 3 }}
+        >
+          <ChevronDown size={26} />
+        </motion.div>
       </section>
 
       {/* Services List */}
-      <section className="section" style={{ padding: '8rem 0' }}>
+      <section className="section elec-section" style={{ padding: '8rem 0' }}>
         <div className="container">
           <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
             <motion.h2 
@@ -317,7 +301,7 @@ const Electrical = () => {
         </div>
       </section>
 
-      <section className="section" style={{ backgroundColor: 'var(--color-surface)', padding: '6rem 0' }}>
+      <section className="section elec-section" style={{ backgroundColor: 'var(--color-surface)', padding: '6rem 0' }}>
         <div className="container" style={{ textAlign: 'center', maxWidth: '800px' }}>
           <h2 style={{ fontSize: '2.5rem', fontWeight: 800, marginBottom: '3rem', color: 'var(--color-text)' }}>Why Choose UrbanPro Electrical?</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '3rem', textAlign: 'left' }}>
@@ -339,7 +323,7 @@ const Electrical = () => {
       </section>
 
       {/* Full-width Contact CTA */}
-      <section style={{ padding: '6rem 0', backgroundColor: 'var(--color-bg)', textAlign: 'center' }}>
+      <section className="elec-section" style={{ padding: '6rem 0', backgroundColor: 'var(--color-bg)', textAlign: 'center' }}>
         <div className="container">
           <motion.div
             initial={{ opacity: 0, y: 40 }}

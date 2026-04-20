@@ -177,7 +177,7 @@ const Building = () => {
             transition={{ duration: 2.2, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
           >
             <h1 style={{ 
-              fontSize: 'clamp(4rem, 10vw, 12rem)', 
+              fontSize: 'clamp(2.5rem, 10vw, 12rem)',
               fontWeight: 700, 
               color: 'white',
               lineHeight: 0.9,
@@ -195,7 +195,7 @@ const Building = () => {
             style={{ marginBottom: '4rem' }}
           >
             <h1 style={{ 
-              fontSize: 'clamp(4rem, 10vw, 12rem)', 
+              fontSize: 'clamp(2.5rem, 10vw, 12rem)',
               fontWeight: 700, 
               color: 'var(--color-text-muted)',
               lineHeight: 0.9,
@@ -231,7 +231,7 @@ const Building = () => {
           viewport={{ once: true }}
           style={{ paddingBottom: '3rem' }}
         >
-          <h2 style={{ fontSize: '5rem', fontWeight: 700, letterSpacing: '-0.05em', color: 'var(--color-text)', textTransform: 'uppercase', margin: 0 }}>Exhibitions</h2>
+          <h2 style={{ fontSize: 'clamp(2rem, 7vw, 4.5rem)', fontWeight: 700, letterSpacing: '-0.05em', color: 'var(--color-text)', textTransform: 'uppercase', margin: 0 }}>Exhibitions</h2>
           
           {/* Tabs */}
           <div style={{ display: 'flex', gap: '3rem', marginTop: '4rem', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '1rem', flexWrap: 'wrap' }}>

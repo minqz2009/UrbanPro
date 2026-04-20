@@ -1,7 +1,7 @@
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Hammer, Droplets, Zap, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Hammer, Droplets, Zap, ArrowRight, CheckCircle2, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const Home = () => {
   const heroRef = useRef(null);
@@ -18,6 +18,32 @@ const Home = () => {
   const textOpacity = useTransform(heroScroll, [0, 0.4, 0.7], [1, 1, 0]);
   // Overlay darkens as you scroll, blending hero into the next section
   const overlayOpacity = useTransform(heroScroll, [0, 0.6, 1], [0, 0, 0.6]);
+
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [showLeft, setShowLeft] = useState(false);
+  const [showRight, setShowRight] = useState(true);
+
+  useEffect(() => {
+    if (sessionStorage.getItem('scrollToServices')) {
+      sessionStorage.removeItem('scrollToServices');
+      const t = setTimeout(() => {
+        const el = document.getElementById('services');
+        if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 80, behavior: 'smooth' });
+      }, 50);
+      return () => clearTimeout(t);
+    }
+  }, []);
+
+  useEffect(() => {
+    const el = scrollContainerRef.current;
+    if (!el) return;
+    const update = () => {
+      setShowLeft(el.scrollLeft > 20);
+      setShowRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 20);
+    };
+    el.addEventListener('scroll', update, { passive: true });
+    return () => el.removeEventListener('scroll', update);
+  }, []);
 
   const servicesRef = useRef(null);
   const { scrollYProgress: servicesScrollProgress } = useScroll({
@@ -159,7 +185,7 @@ const Home = () => {
       </div>
 
       {/* Services Section */}
-      <section id="services" ref={servicesRef} style={{ padding: '6vh 0 15vh', backgroundColor: 'var(--color-bg)', overflow: 'hidden' }}>
+      <section id="services" ref={servicesRef} style={{ padding: '2rem 0 15vh', backgroundColor: 'var(--color-bg)', overflow: 'hidden' }}>
         <div className="container">
           <motion.div
             initial={{ opacity: 0 }}
@@ -173,32 +199,67 @@ const Home = () => {
           </motion.div>
 
           <style>{`
+            .scroll-hint {
+              display: none;
+              position: absolute;
+              top: 50%;
+              transform: translateY(-50%);
+              z-index: 10;
+              pointer-events: none;
+              width: 3rem;
+              height: 7rem;
+              align-items: center;
+              justify-content: center;
+              opacity: 0;
+              transition: opacity 0.35s ease;
+            }
+            .scroll-hint.visible { opacity: 1; }
+            .scroll-hint-left {
+              left: 0;
+              background: linear-gradient(to right, rgba(15,23,42,0.9) 0%, transparent 100%);
+            }
+            .scroll-hint-right {
+              right: 0;
+              background: linear-gradient(to left, rgba(15,23,42,0.9) 0%, transparent 100%);
+            }
+
             @media (max-width: 768px) {
-              .services-container { 
-                gap: 1rem !important; 
+              .scroll-hint { display: flex !important; }
+
+              .services-container {
+                gap: 1rem !important;
                 flex-wrap: nowrap !important;
                 overflow-x: auto !important;
                 scroll-snap-type: x mandatory !important;
-                padding: 1rem 0 !important;
+                padding: 1rem 9vw !important;
+                width: 100vw !important;
+                margin-left: -1.25rem !important;
                 -webkit-overflow-scrolling: touch;
                 scrollbar-width: none;
               }
               .services-container::-webkit-scrollbar { display: none; }
-              
-              .service-card-wrapper { 
-                flex: 0 0 85% !important; 
+
+              .service-card-wrapper {
+                flex: 0 0 82vw !important;
+                max-width: 82vw !important;
                 scroll-snap-align: center !important;
-                maxWidth: 300px !important;
               }
-              .service-img-container { height: 200px !important; }
-              .service-content { padding: 1.5rem 1.25rem !important; }
-              .service-title { font-size: 1.25rem !important; }
-              .service-content p { font-size: 0.95rem !important; line-height: 1.6 !important; margin-bottom: 2rem !important; }
-              .service-icon-box { width: 50px !important; height: 50px !important; margin-top: -40px !important; padding: 0.75rem !important; }
-              .service-icon-box svg { width: 24px !important; height: 24px !important; }
+              .service-img-container { height: 140px !important; }
+              .service-content { padding: 1rem 1.25rem 1.25rem !important; }
+              .service-title { font-size: 1.1rem !important; margin-bottom: 0.5rem !important; }
+              .service-content p { font-size: 0.88rem !important; line-height: 1.55 !important; margin-bottom: 1rem !important; }
+              .service-icon-box { width: 40px !important; height: 40px !important; margin-top: -28px !important; margin-bottom: 0.75rem !important; padding: 0.5rem !important; }
+              .service-icon-box svg { width: 20px !important; height: 20px !important; }
             }
           `}</style>
-          <motion.div className="services-container" style={{ display: 'flex', flexWrap: 'wrap', gap: '3rem', y: servicesCardsY }}>
+          <div style={{ position: 'relative' }}>
+            <div className={`scroll-hint scroll-hint-left${showLeft ? ' visible' : ''}`}>
+              <ChevronLeft size={22} color="rgba(255,255,255,0.8)" />
+            </div>
+            <div className={`scroll-hint scroll-hint-right${showRight ? ' visible' : ''}`}>
+              <ChevronRight size={22} color="rgba(255,255,255,0.8)" />
+            </div>
+          <motion.div className="services-container" ref={scrollContainerRef} style={{ display: 'flex', flexWrap: 'wrap', gap: '3rem', y: servicesCardsY }}>
             {services.map((service, index) => (
               <motion.div
                 key={service.title}
@@ -219,16 +280,16 @@ const Home = () => {
                   }}
                   className="service-card"
                   >
-                    <div className="service-img-container" style={{ height: '350px', overflow: 'hidden', position: 'relative' }}>
+                    <div className="service-img-container" style={{ height: '200px', overflow: 'hidden', position: 'relative' }}>
                       <div style={{ position: 'absolute', inset: 0, backgroundColor: 'var(--color-bg)', opacity: 0.4, zIndex: 1, transition: 'opacity 0.8s ease' }} className="service-overlay" />
                       <img src={service.image} alt={service.title} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 1.8s cubic-bezier(0.16, 1, 0.3, 1)' }} className="service-img" />
                     </div>
-                    <div className="service-content" style={{ padding: '3rem 2.5rem', flex: 1, display: 'flex', flexDirection: 'column', position: 'relative', zIndex: 2 }}>
-                      <div className="service-icon-box" style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'center', alignItems: 'center', width: '80px', height: '80px', backgroundColor: 'var(--color-surface)', marginTop: '-70px', position: 'relative', zIndex: 2 }}>
+                    <div className="service-content" style={{ padding: '1.75rem 2rem', flex: 1, display: 'flex', flexDirection: 'column', position: 'relative', zIndex: 2 }}>
+                      <div className="service-icon-box" style={{ marginBottom: '1.25rem', display: 'flex', justifyContent: 'center', alignItems: 'center', width: '58px', height: '58px', backgroundColor: 'var(--color-surface)', marginTop: '-46px', position: 'relative', zIndex: 2 }}>
                         {service.icon}
                       </div>
-                      <h3 className="service-title" style={{ fontSize: '2rem', marginBottom: '1rem', color: 'var(--color-text)', fontWeight: 800, letterSpacing: '-0.02em', lineHeight: 1.1 }}>{service.title}</h3>
-                      <p style={{ color: 'var(--color-text-muted)', marginBottom: '3rem', flex: 1, fontSize: '1.125rem', lineHeight: 1.8, fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>
+                      <h3 className="service-title" style={{ fontSize: '1.5rem', marginBottom: '0.75rem', color: 'var(--color-text)', fontWeight: 800, letterSpacing: '-0.02em', lineHeight: 1.1 }}>{service.title}</h3>
+                      <p style={{ color: 'var(--color-text-muted)', marginBottom: '1.75rem', flex: 1, fontSize: '1rem', lineHeight: 1.7, fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>
                         {service.description}
                       </p>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', color: service.color, fontWeight: 700, marginTop: 'auto', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
@@ -251,6 +312,7 @@ const Home = () => {
               </motion.div>
             ))}
           </motion.div>
+          </div>
         </div>
       </section>
     </motion.div>
