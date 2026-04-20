@@ -251,12 +251,12 @@ const Plumbing = () => {
                 gap: 1.25rem !important;
               }
               .benefit-card {
-                width: 90% !important;
-                max-width: 360px !important;
-                min-width: 320px !important;
+                width: 95% !important;
+                max-width: 400px !important;
+                min-width: 280px !important;
                 flex-direction: row !important;
                 text-align: left !important;
-                padding: 1.25rem !important;
+                padding: 1rem 0.75rem !important;
                 background: rgba(255, 255, 255, 0.03) !important;
                 backdrop-filter: blur(10px) !important;
                 border: 1px solid rgba(255, 255, 255, 0.08) !important;
@@ -272,18 +272,22 @@ const Plumbing = () => {
               }
               .benefit-card span {
                 white-space: nowrap !important;
-                font-size: 0.95rem !important;
+                font-size: 0.85rem !important;
                 color: white !important;
-                letter-spacing: 0.02em !important;
+                letter-spacing: 0.01em !important;
               }
               .benefit-icon-wrapper {
                 background: rgba(59, 130, 246, 0.1) !important;
-                padding: 0.75rem !important;
-                border-radius: 10px !important;
+                padding: 0.6rem !important;
+                border-radius: 8px !important;
                 display: flex !important;
                 align-items: center !important;
                 justify-content: center !important;
                 box-shadow: inset 0 0 12px rgba(59, 130, 246, 0.2) !important;
+              }
+              .benefit-icon-wrapper svg {
+                width: 22px !important;
+                height: 22px !important;
               }
             }
           `}</style>
