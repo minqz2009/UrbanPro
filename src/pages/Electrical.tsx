@@ -18,12 +18,12 @@ const Electrical = () => {
   ];
 
   const servicesBreakdown = [
-    { title: "RESIDENTIAL WIRING", icon: <Activity size={24} /> },
-    { title: "LIGHTING INSTALLATION", icon: <Lightbulb size={24} /> },
-    { title: "SWITCHBOARD UPGRADES", icon: <Shield size={24} /> },
-    { title: "FAULT DIAGNOSTICS", icon: <SearchIcon /> },
-    { title: "EV CHARGERS", icon: <BatteryCharging size={24} /> },
-    { title: "HOME AUTOMATION", icon: <Power size={24} /> }
+    { title: "Residential Wiring", icon: <Activity size={24} /> },
+    { title: "Lighting Installation", icon: <Lightbulb size={24} /> },
+    { title: "Switchboard Upgrades", icon: <Shield size={24} /> },
+    { title: "Fault Diagnostics", icon: <SearchIcon /> },
+    { title: "EV Chargers", icon: <BatteryCharging size={24} /> },
+    { title: "Home Automation", icon: <Power size={24} /> }
   ];
 
   function SearchIcon() {
@@ -387,7 +387,7 @@ const Electrical = () => {
                 <div style={{ color: 'var(--color-electrical)', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--color-bg)', padding: '1rem' }}>
                   {service.icon}
                 </div>
-                <h4 style={{ margin: 0, fontSize: 'var(--font-size-h4)', fontWeight: 800, color: 'var(--color-text)' }}>
+                <h4 style={{ margin: 0, fontSize: 'calc(var(--font-size-h4) * 0.81)', fontWeight: 800, color: 'var(--color-text)', textTransform: 'none' }}>
                   {service.title}
                 </h4>
               </motion.div>

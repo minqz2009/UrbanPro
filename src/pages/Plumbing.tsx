@@ -28,11 +28,11 @@ const Plumbing = () => {
   ];
 
   const servicesBreakdown = [
-    { title: "GENERAL PLUMBING", img: "https://urbanproplumbing.com.au/wp-content/uploads/elementor/thumbs/technician-rhtn80s1xnpu86dtmlwtjefkv73ps41h86f41rvv2c.png" },
-    { title: "HOT WATER", img: "https://urbanproplumbing.com.au/wp-content/uploads/elementor/thumbs/shower-rhtnh04j8o0h61c56hohd4u57qtzbzp54mu54ykflw.png" },
-    { title: "GAS HEATING", img: "https://urbanproplumbing.com.au/wp-content/uploads/elementor/thumbs/boiler-rhtnm2h82iy3qdz9loi3sutkghv6t9t2hpec8n222s.png" },
-    { title: "BLOCKAGES", img: "https://urbanproplumbing.com.au/wp-content/uploads/elementor/thumbs/appliances-rhtnvyq20qhryllstghpjux9lj3auk3c6ond4idukk.png" },
-    { title: "WATER LEAK DETECTION", img: "https://urbanproplumbing.com.au/wp-content/uploads/elementor/thumbs/leak-rhtoa46kwxv6r91s6kpi3ad3kdc8qi9usq8j8hegw4.png" }
+    { title: "General Plumbing", img: "https://urbanproplumbing.com.au/wp-content/uploads/elementor/thumbs/technician-rhtn80s1xnpu86dtmlwtjefkv73ps41h86f41rvv2c.png" },
+    { title: "Hot Water", img: "https://urbanproplumbing.com.au/wp-content/uploads/elementor/thumbs/shower-rhtnh04j8o0h61c56hohd4u57qtzbzp54mu54ykflw.png" },
+    { title: "Gas Heating", img: "https://urbanproplumbing.com.au/wp-content/uploads/elementor/thumbs/boiler-rhtnm2h82iy3qdz9loi3sutkghv6t9t2hpec8n222s.png" },
+    { title: "Blockages", img: "https://urbanproplumbing.com.au/wp-content/uploads/elementor/thumbs/appliances-rhtnvyq20qhryllstghpjux9lj3auk3c6ond4idukk.png" },
+    { title: "Water Leak Detection", img: "https://urbanproplumbing.com.au/wp-content/uploads/elementor/thumbs/leak-rhtoa46kwxv6r91s6kpi3ad3kdc8qi9usq8j8hegw4.png" }
   ];
 
 
@@ -404,7 +404,7 @@ const Plumbing = () => {
                 <div style={{ padding: '1rem', backgroundColor: 'rgba(255,255,255,0.03)', borderBottom: '1px solid var(--color-plumbing-steel)' }}>
                   <img src={service.img} alt={service.title} style={{ width: '64px', height: '64px', objectFit: 'contain', filter: 'brightness(0.9)' }} />
                 </div>
-                <h4 style={{ margin: 0, fontSize: 'var(--font-size-h4)', fontWeight: 800, color: 'white', letterSpacing: '-0.01em', padding: '0 1rem' }}>
+                <h4 style={{ margin: 0, fontSize: 'calc(var(--font-size-h4) * 0.81)', fontWeight: 800, color: 'white', letterSpacing: '-0.01em', padding: '0 1rem', textTransform: 'none' }}>
                   {service.title}
                 </h4>
               </motion.div>

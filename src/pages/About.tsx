@@ -1,9 +1,19 @@
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { Shield, Clock, CheckCircle, Award, PhoneCall, MapPin } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useRef } from 'react';
 
 const About = () => {
   const navigate = useNavigate();
+
+  const teamSectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress: teamScroll } = useScroll({
+    target: teamSectionRef,
+    offset: ['start end', 'end start'],
+  });
+  const teamBgY = useTransform(teamScroll, [0, 1], ['-15%', '15%']);
+  const teamBgScale = useTransform(teamScroll, [0, 0.5, 1], [1.15, 1, 1.15]);
+  const teamOverlayOpacity = useTransform(teamScroll, [0, 0.5, 1], [0.95, 0.75, 0.95]);
 
   const goToCapabilities = () => {
     sessionStorage.setItem('scrollToServices', '1');
@@ -144,15 +154,44 @@ const About = () => {
       </section>
 
       {/* Team */}
-      <section style={{
+      <section ref={teamSectionRef} style={{
         padding: '8rem 0',
         position: 'relative',
-        backgroundImage: 'linear-gradient(rgba(10, 18, 35, 0.72), rgba(10, 18, 35, 0.88)), url(images/team-bg.jpg)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
+        backgroundColor: '#0a1223',
+        overflow: 'hidden',
       }}>
-        <div className="container">
-          <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
+        {/* Parallax background image */}
+        <motion.div
+          style={{
+            position: 'absolute',
+            inset: '-10% 0',
+            backgroundImage: 'url(images/team-bg.jpg)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            y: teamBgY,
+            scale: teamBgScale,
+            zIndex: 0,
+          }}
+        />
+        {/* Dark overlay (opacity tied to scroll) */}
+        <motion.div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            backgroundColor: '#0a1223',
+            opacity: teamOverlayOpacity,
+            zIndex: 1,
+          }}
+        />
+
+        <div className="container" style={{ position: 'relative', zIndex: 2 }}>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.4 }}
+            transition={{ duration: 0.8, ease: 'easeOut' }}
+            style={{ textAlign: 'center', marginBottom: '5rem' }}
+          >
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', color: 'var(--color-plumbing)', fontWeight: 700, fontSize: '0.8rem', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '1.5rem' }}>
               <div style={{ width: '24px', height: '2px', backgroundColor: 'var(--color-plumbing)' }} />
               The People Behind the Work
@@ -162,7 +201,7 @@ const About = () => {
             <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 'clamp(0.95rem, 2vw, 1.1rem)', maxWidth: '520px', margin: '0 auto' }}>
               Two experienced plumbers. One shared commitment to doing the job right.
             </p>
-          </div>
+          </motion.div>
 
           <div className="team-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '2rem', maxWidth: '960px', margin: '0 auto' }}>
             {team.map((member, idx) => (
