@@ -38,18 +38,27 @@ const About = () => {
     {
       name: 'John Zhao',
       role: 'Lead Plumber & Co-Founder',
-      phone: '+61 412 242 997',
-      href: 'tel:+61412242997',
-      photo: 'images/team-john.jpg',
-      bio: 'With over 15 years of hands-on experience, John leads every emergency call with precision and calm. He co-founded UrbanPro with one goal: honest plumbing you can count on, any hour of the day.',
+      phone: '',
+      href: '',
+      photo: 'images/team-john.jpeg',
+      imgStyle: { transform: 'scale(1.0)', transformOrigin: 'center 55%' },
+      bio: 'John is a seasoned plumbing professional with over 15 years of hands-on experience servicing residential and commercial properties across Sydney. As co-founder of UrbanPro, he leads every emergency call with precision and calm, drawing on deep expertise in burst pipe repair, hot water systems, gas fitting, and complex drainage diagnostics. John has built his reputation on transparent pricing, technical excellence, and an unwavering commitment to honest plumbing customers can count on, any hour of the day.',
     },
     {
       name: 'Leo',
       role: 'Senior Plumber',
-      phone: '+61 426 051 275',
-      href: 'tel:+61426051275',
+      phone: '',
+      href: '',
       photo: 'images/team-leo.jpg',
-      bio: 'Leo specialises in commercial plumbing, gas heating systems, and complex installations. Known for meticulous attention to detail — and always leaving the worksite cleaner than he found it.',
+      bio: 'Leo is a senior plumbing specialist whose career spans high-stakes commercial installations, gas heating systems, and intricate residential plumbing across Sydney. Trained to the highest licensing standards, he brings meticulous attention to detail, deep knowledge of compliance and safety codes, and a methodical approach to the most complex jobs. Known for diagnosing problems other plumbers miss — and always leaving the worksite cleaner than he found it — Leo is the craftsman you want when the work has to be done right the first time.',
+    },
+    {
+      name: 'Ben Wong',
+      role: 'Construction Lead',
+      phone: '',
+      href: '',
+      photo: 'images/team-ben.png',
+      bio: 'Ben is a highly accomplished construction leader with a proven track record of managing complex structural and building components across some of Australia’s most high-profile developments. With deep expertise gained at Tier-1 firms including Lendlease, CPB Contractors, and Arcadis, Ben brings elite project management, exacting quality assurance, and high-level structural knowledge to the building and renovation sector.',
     },
   ];
 
@@ -199,11 +208,11 @@ const About = () => {
             </div>
             <h2 style={{ fontSize: 'var(--font-size-h2)', fontWeight: 800, color: 'white', margin: '0 0 1.5rem' }}>Meet the Team</h2>
             <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 'clamp(0.95rem, 2vw, 1.1rem)', maxWidth: '520px', margin: '0 auto' }}>
-              Two experienced plumbers. One shared commitment to doing the job right.
+              Three experienced tradespeople. One shared commitment to doing the job right.
             </p>
           </motion.div>
 
-          <div className="team-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '2rem', maxWidth: '960px', margin: '0 auto' }}>
+          <div className="team-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2rem', maxWidth: '1200px', margin: '0 auto' }}>
             {team.map((member, idx) => (
               <motion.div
                 key={idx}
@@ -215,7 +224,7 @@ const About = () => {
                 style={{
                   backgroundColor: 'rgba(15, 23, 42, 0.75)',
                   backdropFilter: 'blur(12px)',
-                  padding: '3rem 2.5rem',
+                  padding: '1.75rem 2.5rem',
                   border: '1px solid rgba(255,255,255,0.08)',
                   borderTop: '3px solid var(--color-plumbing)',
                   position: 'relative',
@@ -228,18 +237,18 @@ const About = () => {
               >
                 {/* Avatar */}
                 <div style={{
-                  width: '110px', height: '110px',
+                  width: '88px', height: '88px',
                   borderRadius: '50%',
                   padding: '3px',
                   background: 'linear-gradient(135deg, var(--color-plumbing), rgba(96,165,250,0.15))',
-                  marginBottom: '1.75rem',
+                  marginBottom: '1rem',
                   flexShrink: 0,
                 }}>
                   <div style={{ width: '100%', height: '100%', borderRadius: '50%', overflow: 'hidden', backgroundColor: 'rgba(15,23,42,0.9)' }}>
                     <img
                       src={member.photo}
                       alt={member.name}
-                      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block', ...(member.imgStyle || {}) }}
                     />
                   </div>
                 </div>
@@ -248,33 +257,38 @@ const About = () => {
 
                 <div style={{
                   color: 'var(--color-plumbing)', fontSize: '0.75rem', fontWeight: 700,
-                  textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '1.5rem',
+                  textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '0.9rem',
                 }}>{member.role}</div>
 
-                <p style={{ color: 'rgba(255,255,255,0.65)', lineHeight: 1.8, marginBottom: '2rem', fontSize: 'var(--font-size-sm)', flexGrow: 1 }}>{member.bio}</p>
+                <p style={{ color: 'rgba(255,255,255,0.65)', lineHeight: 1.55, marginBottom: '1.25rem', fontSize: 'var(--font-size-sm)', flexGrow: 1 }}>{member.bio}</p>
 
-                <a href={member.href} style={{
-                  display: 'inline-flex', alignItems: 'center', gap: '0.6rem',
-                  color: 'var(--color-plumbing)', textDecoration: 'none', fontWeight: 700,
-                  fontSize: '0.95rem', letterSpacing: '0.02em',
-                  borderBottom: '2px solid var(--color-plumbing)',
-                  paddingBottom: '2px',
-                  transition: 'opacity 0.2s ease',
-                }}
-                  onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.7')}
-                  onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
-                >
-                  <PhoneCall size={16} /> {member.phone}
-                </a>
+                {member.phone && (
+                  <a href={member.href} style={{
+                    display: 'inline-flex', alignItems: 'center', gap: '0.6rem',
+                    color: 'var(--color-plumbing)', textDecoration: 'none', fontWeight: 700,
+                    fontSize: '0.95rem', letterSpacing: '0.02em',
+                    borderBottom: '2px solid var(--color-plumbing)',
+                    paddingBottom: '2px',
+                    transition: 'opacity 0.2s ease',
+                  }}
+                    onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.7')}
+                    onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
+                  >
+                    <PhoneCall size={16} /> {member.phone}
+                  </a>
+                )}
               </motion.div>
             ))}
           </div>
         </div>
 
         <style>{`
+          @media (max-width: 960px) {
+            .team-grid { grid-template-columns: repeat(2, 1fr) !important; }
+          }
           @media (max-width: 680px) {
             .team-grid { grid-template-columns: 1fr !important; gap: 1.5rem !important; }
-            .team-grid > div { padding: 2.5rem 1.5rem !important; }
+            .team-grid > div { padding: 1.5rem 1.5rem !important; }
           }
         `}</style>
       </section>

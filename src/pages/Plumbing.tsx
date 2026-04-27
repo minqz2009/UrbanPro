@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
-import { ShieldCheck, BadgeDollarSign, Wrench, AlertTriangle, CheckCircle, PhoneCall, Mail, ChevronDown, Star } from 'lucide-react';
+import { ShieldCheck, BadgeDollarSign, Wrench, AlertTriangle, CheckCircle, PhoneCall, Mail, ChevronDown, Star, ShowerHead, Flame, Waves, Droplets } from 'lucide-react';
 
 const MAPS_URL = 'https://www.google.com/maps/place/UrbanPro+Plumbing+Sydney/@-33.8461026,150.3081854,10z/data=!4m15!1m8!3m7!1s0xaa99133edb90a697:0xe93f25ae63342f5d!2sUrbanPro+Plumbing+Sydney!8m2!3d-33.8482439!4d150.9319747!10e1!16s%2Fg%2F11n4td_svt!3m5!1s0xaa99133edb90a697:0xe93f25ae63342f5d!8m2!3d-33.8482439!4d150.9319747!16s%2Fg%2F11n4td_svt?entry=ttu&g_ep=EgoyMDI2MDQxNS4wIKXMDSoASAFQAw%3D%3D';
 
@@ -28,11 +28,11 @@ const Plumbing = () => {
   ];
 
   const servicesBreakdown = [
-    { title: "General Plumbing", img: "https://urbanproplumbing.com.au/wp-content/uploads/elementor/thumbs/technician-rhtn80s1xnpu86dtmlwtjefkv73ps41h86f41rvv2c.png" },
-    { title: "Hot Water", img: "https://urbanproplumbing.com.au/wp-content/uploads/elementor/thumbs/shower-rhtnh04j8o0h61c56hohd4u57qtzbzp54mu54ykflw.png" },
-    { title: "Gas Heating", img: "https://urbanproplumbing.com.au/wp-content/uploads/elementor/thumbs/boiler-rhtnm2h82iy3qdz9loi3sutkghv6t9t2hpec8n222s.png" },
-    { title: "Blockages", img: "https://urbanproplumbing.com.au/wp-content/uploads/elementor/thumbs/appliances-rhtnvyq20qhryllstghpjux9lj3auk3c6ond4idukk.png" },
-    { title: "Water Leak Detection", img: "https://urbanproplumbing.com.au/wp-content/uploads/elementor/thumbs/leak-rhtoa46kwxv6r91s6kpi3ad3kdc8qi9usq8j8hegw4.png" }
+    { title: "General Plumbing", icon: <Wrench size={64} strokeWidth={1.5} /> },
+    { title: "Hot Water", icon: <ShowerHead size={64} strokeWidth={1.5} /> },
+    { title: "Gas Heating", icon: <Flame size={64} strokeWidth={1.5} /> },
+    { title: "Blockages", icon: <Waves size={64} strokeWidth={1.5} /> },
+    { title: "Water Leak Detection", icon: <Droplets size={64} strokeWidth={1.5} /> }
   ];
 
 
@@ -401,8 +401,8 @@ const Plumbing = () => {
                   WebkitBackfaceVisibility: 'hidden'
                 }}
               >
-                <div style={{ padding: '1rem', backgroundColor: 'rgba(255,255,255,0.03)', borderBottom: '1px solid var(--color-plumbing-steel)' }}>
-                  <img src={service.img} alt={service.title} style={{ width: '64px', height: '64px', objectFit: 'contain', filter: 'brightness(0.9)' }} />
+                <div style={{ padding: '1rem', backgroundColor: 'rgba(255,255,255,0.03)', borderBottom: '1px solid var(--color-plumbing-steel)', color: 'var(--color-plumbing)' }}>
+                  {service.icon}
                 </div>
                 <h4 style={{ margin: 0, fontSize: 'calc(var(--font-size-h4) * 0.81)', fontWeight: 800, color: 'white', letterSpacing: '-0.01em', padding: '0 1rem', textTransform: 'none' }}>
                   {service.title}
