@@ -1,5 +1,5 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { Shield, Clock, CheckCircle, Award, MapPin } from 'lucide-react';
+import { Shield, Clock, CheckCircle, Award, MapPin, PhoneCall } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useRef } from 'react';
 import { useContent } from '../hooks/useContent';
