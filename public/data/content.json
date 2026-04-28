@@ -81,6 +81,15 @@
       "image": "images/building-acoustic.jpg",
       "category": "Small Projects",
       "pano": "https://pannellum.org/images/alma.jpg"
+    },
+    {
+      "id": "project-1777379137735",
+      "title": "Test",
+      "location": "Rhodes, NSW",
+      "description": "Custom suspended acoustic ceilings installed in a high-end commercial lobby for sound dampening and aesthetic edge.",
+      "image": "images/building-hero-1777379179040.jpg",
+      "category": "Small Projects",
+      "pano": ""
     }
   ]
 }
