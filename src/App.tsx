@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { HashRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Menu, X, MessageCircle, Send, Mail, Phone } from 'lucide-react';
@@ -235,15 +235,19 @@ const FloatingContact = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [sent, setSent] = useState(false);
+  const resetTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => { if (resetTimer.current) clearTimeout(resetTimer.current); };
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Open mailto with pre-filled info
     const subject = encodeURIComponent(`Enquiry from ${formData.name}`);
     const body = encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\n${formData.message}`);
-    window.location.href = `mailto:service@urbanproplumbing.com.au?subject=${subject}&body=${body}`;
+    window.open(`mailto:service@urbanproplumbing.com.au?subject=${subject}&body=${body}`);
     setSent(true);
-    setTimeout(() => { setSent(false); setIsOpen(false); setFormData({ name: '', email: '', message: '' }); }, 3000);
+    resetTimer.current = setTimeout(() => { setSent(false); setIsOpen(false); setFormData({ name: '', email: '', message: '' }); }, 3000);
   };
 
   return (

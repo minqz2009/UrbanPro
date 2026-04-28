@@ -11,11 +11,14 @@ function headers(token: string) {
   };
 }
 
-export async function verifyToken(token: string): Promise<boolean> {
+export async function verifyToken(token: string): Promise<boolean | 'readonly'> {
   const res = await fetch(`${API}/repos/${REPO_OWNER}/${REPO_NAME}`, {
     headers: headers(token),
   });
-  return res.ok;
+  if (!res.ok) return false;
+  const data = await res.json();
+  if (data.permissions && !data.permissions.push) return 'readonly';
+  return true;
 }
 
 export async function getFile(token: string, path: string): Promise<{ content: string; sha: string }> {

@@ -458,9 +458,11 @@ function LoginScreen({ onLogin }: LoginProps) {
     setError('');
     const ok = await verifyToken(token.trim());
     setLoading(false);
-    if (ok) {
+    if (ok === true) {
       saveToken(token.trim());
       onLogin(token.trim());
+    } else if (ok === 'readonly') {
+      setError('This token has read-only access. Please generate a new token with Contents set to Read and write.');
     } else {
       setError('That token didn\'t work. Please double-check it and try again.');
     }
