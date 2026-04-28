@@ -529,11 +529,12 @@ function LoginScreen({ onLogin }: LoginProps) {
                 <li>Open <strong style={{ color: '#60a5fa' }}>github.com</strong> and sign in to your account</li>
                 <li>Click your profile picture (top right) → <strong>Settings</strong></li>
                 <li>Scroll down to <strong>Developer settings</strong> (bottom of left sidebar)</li>
-                <li>Click <strong>Personal access tokens</strong> → <strong>Tokens (classic)</strong></li>
-                <li>Click <strong>Generate new token (classic)</strong></li>
+                <li>Click <strong>Personal access tokens</strong> → <strong>Fine-grained tokens</strong></li>
+                <li>Click <strong>Generate new token</strong></li>
                 <li>Give it any name (e.g. "UrbanPro Admin")</li>
                 <li>Under <strong>Expiration</strong>, choose how long you want it to work</li>
-                <li>Tick the <strong>repo</strong> checkbox</li>
+                <li>Under <strong>Repository access</strong>, select <strong>Only select repositories</strong> → choose <strong>UrbanPro</strong></li>
+                <li>Under <strong>Permissions → Repository permissions</strong>, set <strong>Contents</strong> to <strong>Read and write</strong></li>
                 <li>Click <strong>Generate token</strong> at the bottom</li>
                 <li>Copy the token that appears and paste it above</li>
               </ol>
