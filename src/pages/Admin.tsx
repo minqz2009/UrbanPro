@@ -120,6 +120,19 @@ const S = {
   } as React.CSSProperties,
 };
 
+// ─── Character Counter ────────────────────────────────────────────────────────
+
+function CharCount({ value, max }: { value: string; max: number }) {
+  const len = value.length;
+  const pct = len / max;
+  const color = pct >= 1 ? '#ef4444' : pct >= 0.85 ? '#f59e0b' : '#475569';
+  return (
+    <div style={{ textAlign: 'right', fontSize: '0.7rem', color, marginTop: '0.3rem', fontVariantNumeric: 'tabular-nums' }}>
+      {len} / {max}
+    </div>
+  );
+}
+
 // ─── Photo Uploader ────────────────────────────────────────────────────────────
 
 interface PhotoUploaderProps {
@@ -259,17 +272,20 @@ function TeamEditor({ members, onChange, onPhotoQueued, photoPreviews }: TeamEdi
                   <div style={{ flex: 1, minWidth: '200px', display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
                     <div>
                       <label style={S.label}>Full Name</label>
-                      <input style={S.input} value={m.name} onChange={e => update(m.id, 'name', e.target.value)} placeholder="e.g. John Zhao" />
+                      <input style={S.input} value={m.name} maxLength={40} onChange={e => update(m.id, 'name', e.target.value)} placeholder="e.g. John Zhao" />
+                      <CharCount value={m.name} max={40} />
                     </div>
                     <div>
                       <label style={S.label}>Job Title</label>
-                      <input style={S.input} value={m.role} onChange={e => update(m.id, 'role', e.target.value)} placeholder="e.g. Lead Plumber & Co-Founder" />
+                      <input style={S.input} value={m.role} maxLength={60} onChange={e => update(m.id, 'role', e.target.value)} placeholder="e.g. Lead Plumber & Co-Founder" />
+                      <CharCount value={m.role} max={60} />
                     </div>
                   </div>
                 </div>
                 <div>
                   <label style={S.label}>Short Description (shown on the website)</label>
-                  <textarea style={S.textarea} value={m.bio} onChange={e => update(m.id, 'bio', e.target.value)} rows={5} placeholder="Write a short bio..." />
+                  <textarea style={S.textarea} value={m.bio} maxLength={600} onChange={e => update(m.id, 'bio', e.target.value)} rows={5} placeholder="Write a short bio..." />
+                  <CharCount value={m.bio} max={600} />
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                   <button style={S.btnDanger} onClick={() => remove(m.id)}>
@@ -386,11 +402,13 @@ function ProjectsEditor({ projects, onChange, onPhotoQueued, photoPreviews }: Pr
                   <div style={{ flex: 1, minWidth: '200px', display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
                     <div>
                       <label style={S.label}>Project Title</label>
-                      <input style={S.input} value={p.title} onChange={e => update(p.id, 'title', e.target.value)} placeholder="e.g. The Glass House" />
+                      <input style={S.input} value={p.title} maxLength={60} onChange={e => update(p.id, 'title', e.target.value)} placeholder="e.g. The Glass House" />
+                      <CharCount value={p.title} max={60} />
                     </div>
                     <div>
                       <label style={S.label}>Location</label>
-                      <input style={S.input} value={p.location} onChange={e => update(p.id, 'location', e.target.value)} placeholder="e.g. Vaucluse, NSW" />
+                      <input style={S.input} value={p.location} maxLength={50} onChange={e => update(p.id, 'location', e.target.value)} placeholder="e.g. Vaucluse, NSW" />
+                      <CharCount value={p.location} max={50} />
                     </div>
                     <div>
                       <label style={S.label}>Category</label>
@@ -406,7 +424,8 @@ function ProjectsEditor({ projects, onChange, onPhotoQueued, photoPreviews }: Pr
                 </div>
                 <div>
                   <label style={S.label}>Project Description</label>
-                  <textarea style={S.textarea} value={p.description} onChange={e => update(p.id, 'description', e.target.value)} rows={3} placeholder="Describe the project..." />
+                  <textarea style={S.textarea} value={p.description} maxLength={200} onChange={e => update(p.id, 'description', e.target.value)} rows={3} placeholder="Describe the project..." />
+                  <CharCount value={p.description} max={200} />
                 </div>
                 <div>
                   <label style={S.label}>360° Tour Link (optional)</label>
