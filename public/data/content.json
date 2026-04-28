@@ -26,14 +26,6 @@
       "bio": "Ben is a highly accomplished construction leader with a proven track record of managing complex structural and building components across some of Australia’s most high-profile developments. With deep expertise gained at Tier-1 firms including Lendlease, CPB Contractors, and Arcadis, Ben brings elite project management, exacting quality assurance, and high-level structural knowledge to the building and renovation sector.",
       "photo": "images/team-ben.png",
       "imgStyle": null
-    },
-    {
-      "id": "member-1777378720731",
-      "name": "Yahnis Zheng",
-      "role": "Lead Electrician",
-      "bio": "With over 12 years of hands-on experience across residential, commercial, and industrial projects, our lead electrician brings precision, reliability, and deep technical expertise to every job. Licensed and fully insured, he has built a reputation across Greater Sydney for showing up on time, diagnosing problems fast, and delivering clean, lasting work — no shortcuts, no guesswork.\n",
-      "photo": "images/team-john2-1777378860614.jpg",
-      "imgStyle": null
     }
   ],
   "buildingProjects": [
@@ -81,15 +73,6 @@
       "image": "images/building-acoustic.jpg",
       "category": "Small Projects",
       "pano": "https://pannellum.org/images/alma.jpg"
-    },
-    {
-      "id": "project-1777379137735",
-      "title": "Test",
-      "location": "Rhodes, NSW",
-      "description": "Custom suspended acoustic ceilings installed in a high-end commercial lobby for sound dampening and aesthetic edge.",
-      "image": "images/building-hero-1777379179040.jpg",
-      "category": "Small Projects",
-      "pano": ""
     }
   ]
 }
