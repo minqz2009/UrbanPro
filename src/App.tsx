@@ -213,7 +213,6 @@ const AnimatedRoutes = () => {
         <Route path="/plumbing" element={<Plumbing />} />
         <Route path="/electrical" element={<Electrical />} />
         <Route path="/about" element={<About />} />
-        <Route path="/admin" element={<Admin />} />
       </Routes>
     </AnimatePresence>
   );
