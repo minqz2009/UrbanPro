@@ -6,7 +6,10 @@
       "role": "Lead Plumber & Co-Founder",
       "bio": "John is a seasoned plumbing professional with over 15 years of hands-on experience servicing residential and commercial properties across Sydney. As co-founder of UrbanPro, he leads every emergency call with precision and calm, drawing on deep expertise in burst pipe repair, hot water systems, gas fitting, and complex drainage diagnostics. John has built his reputation on transparent pricing, technical excellence, and an unwavering commitment to honest plumbing customers can count on, any hour of the day.",
       "photo": "images/team-john.jpeg",
-      "imgStyle": { "transform": "scale(1.0)", "transformOrigin": "center 55%" }
+      "imgStyle": {
+        "transform": "scale(1.0)",
+        "transformOrigin": "center 55%"
+      }
     },
     {
       "id": "leo",
@@ -22,6 +25,14 @@
       "role": "Construction Lead",
       "bio": "Ben is a highly accomplished construction leader with a proven track record of managing complex structural and building components across some of Australia’s most high-profile developments. With deep expertise gained at Tier-1 firms including Lendlease, CPB Contractors, and Arcadis, Ben brings elite project management, exacting quality assurance, and high-level structural knowledge to the building and renovation sector.",
       "photo": "images/team-ben.png",
+      "imgStyle": null
+    },
+    {
+      "id": "member-1777378720731",
+      "name": "Yahnis Zheng",
+      "role": "Lead Electrician",
+      "bio": "With over 12 years of hands-on experience across residential, commercial, and industrial projects, our lead electrician brings precision, reliability, and deep technical expertise to every job. Licensed and fully insured, he has built a reputation across Greater Sydney for showing up on time, diagnosing problems fast, and delivering clean, lasting work — no shortcuts, no guesswork.\n",
+      "photo": "images/team-john2-1777378860614.jpg",
       "imgStyle": null
     }
   ],
