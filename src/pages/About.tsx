@@ -1,10 +1,12 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { Shield, Clock, CheckCircle, Award, PhoneCall, MapPin } from 'lucide-react';
+import { Shield, Clock, CheckCircle, Award, MapPin } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useRef } from 'react';
+import { useContent } from '../hooks/useContent';
 
 const About = () => {
   const navigate = useNavigate();
+  const { content } = useContent();
 
   const teamSectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress: teamScroll } = useScroll({
@@ -34,33 +36,7 @@ const About = () => {
     { icon: <Award size={32} />, title: 'Integrity', desc: 'We treat every home like our own and stand behind every single job we complete.' },
   ];
 
-  const team = [
-    {
-      name: 'John Zhao',
-      role: 'Lead Plumber & Co-Founder',
-      phone: '',
-      href: '',
-      photo: 'images/team-john.jpeg',
-      imgStyle: { transform: 'scale(1.0)', transformOrigin: 'center 55%' },
-      bio: 'John is a seasoned plumbing professional with over 15 years of hands-on experience servicing residential and commercial properties across Sydney. As co-founder of UrbanPro, he leads every emergency call with precision and calm, drawing on deep expertise in burst pipe repair, hot water systems, gas fitting, and complex drainage diagnostics. John has built his reputation on transparent pricing, technical excellence, and an unwavering commitment to honest plumbing customers can count on, any hour of the day.',
-    },
-    {
-      name: 'Leo',
-      role: 'Senior Plumber',
-      phone: '',
-      href: '',
-      photo: 'images/team-leo.jpg',
-      bio: 'Leo is a senior plumbing specialist whose career spans high-stakes commercial installations, gas heating systems, and intricate residential plumbing across Sydney. Trained to the highest licensing standards, he brings meticulous attention to detail, deep knowledge of compliance and safety codes, and a methodical approach to the most complex jobs. Known for diagnosing problems other plumbers miss — and always leaving the worksite cleaner than he found it — Leo is the craftsman you want when the work has to be done right the first time.',
-    },
-    {
-      name: 'Ben Wong',
-      role: 'Construction Lead',
-      phone: '',
-      href: '',
-      photo: 'images/team-ben.png',
-      bio: 'Ben is a highly accomplished construction leader with a proven track record of managing complex structural and building components across some of Australia’s most high-profile developments. With deep expertise gained at Tier-1 firms including Lendlease, CPB Contractors, and Arcadis, Ben brings elite project management, exacting quality assurance, and high-level structural knowledge to the building and renovation sector.',
-    },
-  ];
+  const team = content.team;
 
   return (
     <motion.div
@@ -262,21 +238,6 @@ const About = () => {
 
                 <p style={{ color: 'rgba(255,255,255,0.65)', lineHeight: 1.55, marginBottom: '1.25rem', fontSize: 'var(--font-size-sm)', flexGrow: 1 }}>{member.bio}</p>
 
-                {member.phone && (
-                  <a href={member.href} style={{
-                    display: 'inline-flex', alignItems: 'center', gap: '0.6rem',
-                    color: 'var(--color-plumbing)', textDecoration: 'none', fontWeight: 700,
-                    fontSize: '0.95rem', letterSpacing: '0.02em',
-                    borderBottom: '2px solid var(--color-plumbing)',
-                    paddingBottom: '2px',
-                    transition: 'opacity 0.2s ease',
-                  }}
-                    onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.7')}
-                    onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
-                  >
-                    <PhoneCall size={16} /> {member.phone}
-                  </a>
-                )}
               </motion.div>
             ))}
           </div>

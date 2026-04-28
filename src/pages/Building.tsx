@@ -2,51 +2,10 @@ import { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion, useScroll, useTransform, AnimatePresence, useSpring } from 'framer-motion';
 import { X } from 'lucide-react';
+import { useContent } from '../hooks/useContent';
+import type { BuildingProject } from '../hooks/useContent';
 
-const casesData = [
-  {
-    title: "The Glass House",
-    location: "Vaucluse, NSW",
-    description: "A modern architectural masterpiece featuring floor-to-ceiling glass and minimalist steel framing. Seamlessly blending indoor and outdoor living.",
-    image: "images/building-glass-house.jpg",
-    category: "New Builds",
-    pano: "https://pannellum.org/images/alma.jpg"
-  },
-  {
-    title: "Coastal Retreat",
-    location: "Bondi Beach, NSW",
-    description: "Open-concept beachside home utilizing natural timber and raw concrete to create an organic, serene atmosphere.",
-    image: "images/building-coastal.jpg",
-    category: "New Builds",
-    pano: "https://pannellum.org/images/bma-1.jpg"
-  },
-  {
-    title: "Heritage Restoration",
-    location: "Paddington, NSW",
-    description: "Careful preservation of a 19th-century facade coupled with a stunningly modern interior extension and custom lightwell.",
-    image: "images/building-heritage.jpg",
-    category: "Renovations",
-    pano: "https://pannellum.org/images/jfk.jpg"
-  },
-  {
-    title: "Minimalist Extension",
-    location: "Surry Hills, NSW",
-    description: "A compact yet breathtaking geometric rear extension maximizing natural light in a dense urban plot.",
-    image: "images/building-extension.jpg",
-    category: "Renovations",
-    pano: "https://pannellum.org/images/cerro-toco.jpg"
-  },
-  {
-    title: "Acoustic Ceilings",
-    location: "Sydney CBD",
-    description: "Custom suspended acoustic ceilings installed in a high-end commercial lobby for sound dampening and aesthetic edge.",
-    image: "images/building-acoustic.jpg",
-    category: "Small Projects",
-    pano: "https://pannellum.org/images/alma.jpg"
-  }
-];
-
-const CaseItem = ({ project, setSelectedProject }: { project: any, index?: number, setSelectedProject: any }) => {
+const CaseItem = ({ project, setSelectedProject }: { project: BuildingProject, index?: number, setSelectedProject: (p: BuildingProject | null) => void }) => {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -113,14 +72,15 @@ const Building = () => {
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({ target: containerRef });
   const springScroll = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
-  
+
   const yHero = useTransform(springScroll, [0, 1], ["0%", "50%"]);
   const opacityHero = useTransform(springScroll, [0, 0.2], [1, 0]);
-  const [selectedProject, setSelectedProject] = useState<typeof casesData[0] | null>(null);
+  const [selectedProject, setSelectedProject] = useState<BuildingProject | null>(null);
   const [activeCategory, setActiveCategory] = useState("New Builds");
+  const { content } = useContent();
 
   const categories = ["New Builds", "Renovations", "Small Projects"];
-  const filteredCases = casesData.filter(c => c.category === activeCategory);
+  const filteredCases = content.buildingProjects.filter(c => c.category === activeCategory);
 
   useEffect(() => {
     const link = document.createElement('link');

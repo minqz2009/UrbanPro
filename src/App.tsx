@@ -9,6 +9,7 @@ import Building from './pages/Building';
 import Plumbing from './pages/Plumbing';
 import Electrical from './pages/Electrical';
 import About from './pages/About';
+import Admin from './pages/Admin';
 
 const Header = () => {
   const location = useLocation();
@@ -212,6 +213,7 @@ const AnimatedRoutes = () => {
         <Route path="/plumbing" element={<Plumbing />} />
         <Route path="/electrical" element={<Electrical />} />
         <Route path="/about" element={<About />} />
+        <Route path="/admin" element={<Admin />} />
       </Routes>
     </AnimatePresence>
   );
@@ -390,17 +392,26 @@ const FloatingContact = () => {
   );
 };
 
+const SiteLayout = () => {
+  const location = useLocation();
+  const isAdmin = location.pathname === '/admin';
+  if (isAdmin) return <Admin />;
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', backgroundColor: 'var(--color-bg)' }}>
+      <Header />
+      <main style={{ flex: 1 }}>
+        <AnimatedRoutes />
+      </main>
+      <Footer />
+      <FloatingContact />
+    </div>
+  );
+};
+
 function App() {
   return (
     <Router>
-      <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', backgroundColor: 'var(--color-bg)' }}>
-        <Header />
-        <main style={{ flex: 1 }}>
-          <AnimatedRoutes />
-        </main>
-        <Footer />
-        <FloatingContact />
-      </div>
+      <SiteLayout />
     </Router>
   );
 }
