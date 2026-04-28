@@ -236,7 +236,7 @@ const Building = () => {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '13.2vh' }}>
             <AnimatePresence mode="wait">
               {filteredCases.map((project, index) => (
-                <CaseItem key={project.title} project={project} index={index} setSelectedProject={setSelectedProject} />
+                <CaseItem key={project.id} project={project} index={index} setSelectedProject={setSelectedProject} />
               ))}
             </AnimatePresence>
           </div>

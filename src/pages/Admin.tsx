@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Plus, Trash2, Upload, LogOut, Save, Eye, EyeOff, ChevronDown, ChevronUp, GripVertical } from 'lucide-react';
 import {
   verifyToken,
@@ -8,6 +8,7 @@ import {
   readFileAsBase64,
   sanitiseFilename,
 } from '../services/github';
+import { bustContentCache } from '../hooks/useContent';
 import type { SiteContent, TeamMember, BuildingProject } from '../hooks/useContent';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -563,6 +564,12 @@ export default function Admin() {
   const [saveMsg, setSaveMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [loadError, setLoadError] = useState('');
 
+  // On hard refresh, token is in sessionStorage but content was never loaded
+  useEffect(() => {
+    const saved = loadToken();
+    if (saved && !content) loadContent(saved);
+  }, []);
+
   const handleLogin = async (tok: string) => {
     setToken(tok);
     setAuthed(true);
@@ -627,6 +634,9 @@ export default function Admin() {
       setContent(updatedContent);
       setPendingPhotos({});
       setPhotoPreviews({});
+
+      // Clear the in-memory cache so the Building/About pages refetch after deploy
+      bustContentCache();
 
       // Refresh SHA for next save
       const { sha } = await getFile(token, CONTENT_PATH);
