@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { Plus, Trash2, Upload, LogOut, Save, Eye, EyeOff, ChevronDown, ChevronUp, GripVertical, X } from 'lucide-react';
 import {
   verifyToken,
@@ -146,12 +146,13 @@ function GalleryManager({ projectId, photos, previews, onPhotoQueued, onRemoveEx
 
 // ─── Projects Editor ──────────────────────────────────────────────────────────
 
-function ProjectsEditor({ projects, onChange, onPhotoQueued, photoPreviews, onGalleryQueued, onRemoveGalleryExisting, onRemoveGalleryPending, pendingGalleryKeys }: {
+function ProjectsEditor({ projects, onChange, onPhotoQueued, photoPreviews, onGalleryQueued, onRemoveGalleryExisting, onRemoveGalleryPending, pendingGalleryKeys, dirtyCategories }: {
   projects: BuildingProject[]; onChange: (p: BuildingProject[]) => void;
   onPhotoQueued: (id: string, file: File, preview: string) => void; photoPreviews: Record<string, string>;
   onGalleryQueued: (key: string, file: File, preview: string) => void;
   onRemoveGalleryExisting: (projectId: string, idx: number) => void; onRemoveGalleryPending: (key: string) => void;
   pendingGalleryKeys: (projectId: string) => string[];
+  dirtyCategories: Set<string>;
 }) {
   const [activeCategory, setActiveCategory] = useState<string>(CATEGORIES[0]);
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
@@ -169,6 +170,7 @@ function ProjectsEditor({ projects, onChange, onPhotoQueued, photoPreviews, onGa
         {CATEGORIES.map(cat => (
           <button key={cat} onClick={() => setActiveCategory(cat)}
             style={{ padding: '0.5rem 1.1rem', borderRadius: '20px', border: 'none', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', fontFamily: 'inherit', backgroundColor: activeCategory === cat ? '#3b82f6' : '#1e293b', color: activeCategory === cat ? 'white' : '#94a3b8' }}>
+            {dirtyCategories.has(cat) && <span style={{ color: '#f59e0b', marginRight: '0.25rem', fontSize: '0.65rem' }}>●</span>}
             {cat} ({projects.filter(p => p.category === cat).length})
           </button>
         ))}
@@ -598,6 +600,7 @@ export default function Admin() {
   const [saving, setSaving] = useState(false);
   const [saveMsg, setSaveMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [loadError, setLoadError] = useState('');
+  const snapshotRef = useRef('');
 
   useEffect(() => {
     const saved = loadToken();
@@ -608,7 +611,9 @@ export default function Admin() {
     setLoadError('');
     try {
       const { content: raw, sha } = await getFile(tok, CONTENT_PATH);
-      setContent(merge(JSON.parse(raw)));
+      const merged = merge(JSON.parse(raw));
+      setContent(merged);
+      snapshotRef.current = JSON.stringify(merged);
       setContentSha(sha);
     } catch (e: any) {
       setLoadError('Could not load site content: ' + e.message);
@@ -629,6 +634,46 @@ export default function Admin() {
     setPhotoPreviews(p => { const n = { ...p }; delete n[key]; return n; });
   };
   const pendingGalleryKeys = (projectId: string) => Object.keys(pendingGallery).filter(k => k.startsWith(projectId + '-gallery-'));
+
+  const { dirtyTabs, dirtyBuildingCategories } = useMemo(() => {
+    const tabs = new Set<NavTab>();
+    const cats = new Set<string>();
+    if (!content || !snapshotRef.current) return { dirtyTabs: tabs, dirtyBuildingCategories: cats };
+    const snap = JSON.parse(snapshotRef.current) as SiteContent;
+
+    if (JSON.stringify(content.settings) !== JSON.stringify(snap.settings)) tabs.add('settings');
+    if (JSON.stringify(content.home) !== JSON.stringify(snap.home)) tabs.add('home');
+    if (JSON.stringify(content.plumbing) !== JSON.stringify(snap.plumbing)) tabs.add('plumbing');
+    if (JSON.stringify(content.electrical) !== JSON.stringify(snap.electrical)) tabs.add('electrical');
+    if (JSON.stringify(content.about) !== JSON.stringify(snap.about)
+        || JSON.stringify(content.team) !== JSON.stringify(snap.team)) tabs.add('about');
+
+    if (JSON.stringify(content.buildingProjects) !== JSON.stringify(snap.buildingProjects)) {
+      tabs.add('building');
+      const snapByCat = new Map<string, Set<string>>();
+      for (const p of snap.buildingProjects) {
+        if (!snapByCat.has(p.category)) snapByCat.set(p.category, new Set());
+        snapByCat.get(p.category)!.add(JSON.stringify(p));
+      }
+      for (const p of content.buildingProjects) {
+        const catSet = snapByCat.get(p.category);
+        if (!catSet) { cats.add(p.category); continue; }
+        if (!catSet.has(JSON.stringify(p))) cats.add(p.category);
+        else catSet.delete(JSON.stringify(p));
+      }
+      for (const [cat, remaining] of snapByCat) {
+        if (remaining.size > 0) cats.add(cat);
+      }
+    }
+
+    for (const id of Object.keys(pendingPhotos)) {
+      if (content.team.some(m => m.id === id)) tabs.add('about');
+      if (content.buildingProjects.some(p => p.id === id)) tabs.add('building');
+    }
+    if (Object.keys(pendingGallery).length > 0) tabs.add('building');
+
+    return { dirtyTabs: tabs, dirtyBuildingCategories: cats };
+  }, [content, pendingPhotos, pendingGallery]);
 
   const handleSave = async () => {
     if (!content) return;
@@ -656,6 +701,7 @@ export default function Admin() {
 
       await saveFile(token, CONTENT_PATH, JSON.stringify(updated, null, 2), contentSha, 'Admin: update site content');
       setContent(updated);
+      snapshotRef.current = JSON.stringify(updated);
       setPendingPhotos({}); setPhotoPreviews({}); setPendingGallery({});
       bustContentCache();
       const { sha } = await getFile(token, CONTENT_PATH);
@@ -671,6 +717,7 @@ export default function Admin() {
 
   if (!authed) return <LoginScreen onLogin={handleLogin} />;
   const hasPending = Object.keys(pendingPhotos).length + Object.keys(pendingGallery).length;
+  const hasAnyChanges = dirtyTabs.size > 0;
 
   return (
     <div style={S.page}>
@@ -682,7 +729,8 @@ export default function Admin() {
         </div>
         <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
           {hasPending > 0 && <span style={{ fontSize: '0.78rem', color: '#f59e0b', fontWeight: 600 }}>{hasPending} photo{hasPending > 1 ? 's' : ''} ready to upload</span>}
-          <button onClick={handleSave} disabled={saving || !content} style={{ ...S.btnPrimary, opacity: saving ? 0.6 : 1 }}>
+          <button onClick={handleSave} disabled={saving || !content || !hasAnyChanges}
+            style={{ ...S.btnPrimary, opacity: (saving || !hasAnyChanges) ? 0.45 : 1, cursor: (!hasAnyChanges) ? 'not-allowed' : 'pointer' }}>
             <Save size={16} />{saving ? 'Saving...' : 'Save All Changes'}
           </button>
           <button onClick={handleLogout} style={S.btnGhost}><LogOut size={15} /> Sign Out</button>
@@ -702,6 +750,7 @@ export default function Admin() {
           {NAV_TABS.map(tab => (
             <button key={tab.id} onClick={() => setActiveTab(tab.id)}
               style={{ padding: '1rem 1.4rem', background: 'none', border: 'none', borderBottom: activeTab === tab.id ? '2px solid #3b82f6' : '2px solid transparent', color: activeTab === tab.id ? '#60a5fa' : '#64748b', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer', fontFamily: 'inherit', textTransform: 'uppercase', letterSpacing: '0.1em', whiteSpace: 'nowrap', marginBottom: '-1px', transition: 'color 0.2s' }}>
+              {dirtyTabs.has(tab.id) && <span style={{ color: '#f59e0b', marginRight: '0.3rem', fontSize: '0.65rem' }}>●</span>}
               {tab.label}
             </button>
           ))}
@@ -734,18 +783,9 @@ export default function Admin() {
               onRemoveGalleryExisting={removeGalleryExisting}
               onRemoveGalleryPending={removeGalleryPending}
               pendingGalleryKeys={pendingGalleryKeys}
+              dirtyCategories={dirtyBuildingCategories}
             />
           )}
-
-          <div style={{ marginTop: '2rem', paddingTop: '1.5rem', borderTop: '1px solid #1e293b', display: 'flex', justifyContent: 'flex-end' }}>
-            <button onClick={handleSave} disabled={saving || !content} style={{ ...S.btnPrimary, opacity: saving ? 0.6 : 1, padding: '0.85rem 2.5rem' }}>
-              <Save size={16} />{saving ? 'Saving...' : 'Save All Changes'}
-            </button>
-          </div>
-          <p style={{ textAlign: 'center', marginTop: '1rem', fontSize: '0.78rem', color: '#334155', lineHeight: 1.6 }}>
-            Changes are saved to GitHub and appear on the website within 1–2 minutes.<br />
-            Your session is private to this browser tab and clears when you close it.
-          </p>
         </div>
       )}
     </div>
