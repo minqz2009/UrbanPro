@@ -95,10 +95,10 @@ const About = () => {
               </p>
               <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                 <div style={{ padding: '0.5rem 1.25rem', backgroundColor: 'rgba(96,165,250,0.08)', border: '1px solid rgba(96,165,250,0.25)', color: 'var(--color-plumbing)', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-                  ABN: 48 694 251 888
+                  ABN: {content.settings.abn}
                 </div>
                 <div style={{ padding: '0.5rem 1.25rem', backgroundColor: 'rgba(96,165,250,0.08)', border: '1px solid rgba(96,165,250,0.25)', color: 'var(--color-plumbing)', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-                  Licence: 280492C
+                  Licence: {content.settings.licence}
                 </div>
               </div>
             </motion.div>

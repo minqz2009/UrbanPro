@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { HashRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Menu, X, MessageCircle, Send, Mail, Phone } from 'lucide-react';
+import { useContent } from './hooks/useContent';
 
 // Pages
 import Home from './pages/Home';
@@ -140,6 +141,7 @@ const Header = () => {
 const Footer = () => {
   const location = useLocation();
   const path = location.pathname;
+  const { content } = useContent();
   
   let urbanColor = 'var(--color-text)';
   let proColor = 'var(--color-accent)';
@@ -165,8 +167,8 @@ const Footer = () => {
             Your trusted architectural, plumbing, and electrical master craftsmen across Greater Sydney.
           </p>
           <div style={{ marginTop: '1.5rem', color: 'var(--color-text-muted)', fontSize: '0.85rem', lineHeight: 2 }}>
-            <div>ABN: 48 694 251 888</div>
-            <div>Contractor Licence NO: 280492C</div>
+            <div>ABN: {content.settings.abn}</div>
+            <div>Contractor Licence NO: {content.settings.licence}</div>
           </div>
         </div>
         <div style={{ flex: '1 1 200px' }}>
@@ -182,15 +184,15 @@ const Footer = () => {
           <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '1rem', color: 'var(--color-text-muted)', padding: 0 }}>
             <li style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
               <Phone size={16} style={{ flexShrink: 0, color: (path === '/plumbing' || path === '/about') ? 'var(--color-plumbing)' : 'var(--color-accent)' }} />
-              <a href="tel:+61412242997" style={{ color: 'inherit', textDecoration: 'none' }}>+61 412 242 997 (John)</a>
+              <a href={`tel:${content.settings.phone1}`} style={{ color: 'inherit', textDecoration: 'none' }}>{content.settings.phone1} (John)</a>
             </li>
             <li style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
               <Phone size={16} style={{ flexShrink: 0, color: (path === '/plumbing' || path === '/about') ? 'var(--color-plumbing)' : 'var(--color-accent)' }} />
-              <a href="tel:+61426051275" style={{ color: 'inherit', textDecoration: 'none' }}>+61 426 051 275 (Leo)</a>
+              <a href={`tel:${content.settings.phone2}`} style={{ color: 'inherit', textDecoration: 'none' }}>{content.settings.phone2} (Leo)</a>
             </li>
             <li style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
               <Mail size={16} style={{ flexShrink: 0, color: (path === '/plumbing' || path === '/about') ? 'var(--color-plumbing)' : 'var(--color-accent)' }} />
-              <a href="mailto:service@urbanproplumbing.com.au" style={{ color: 'inherit', textDecoration: 'none' }}>service@urbanproplumbing.com.au</a>
+              <a href={`mailto:${content.settings.email}`} style={{ color: 'inherit', textDecoration: 'none' }}>{content.settings.email}</a>
             </li>
           </ul>
         </div>
@@ -221,6 +223,7 @@ const AnimatedRoutes = () => {
 const FloatingContact = () => {
   const location = useLocation();
   const path = location.pathname;
+  const { content } = useContent();
 
   // Page-aware theming
   const getTheme = () => {
@@ -245,7 +248,7 @@ const FloatingContact = () => {
     e.preventDefault();
     const subject = encodeURIComponent(`Enquiry from ${formData.name}`);
     const body = encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\n${formData.message}`);
-    window.open(`mailto:service@urbanproplumbing.com.au?subject=${subject}&body=${body}`);
+    window.open(`mailto:${content.settings.email}?subject=${subject}&body=${body}`);
     setSent(true);
     resetTimer.current = setTimeout(() => { setSent(false); setIsOpen(false); setFormData({ name: '', email: '', message: '' }); }, 3000);
   };
