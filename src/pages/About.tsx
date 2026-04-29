@@ -308,10 +308,10 @@ const About = () => {
             </p>
             <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '1.5rem' }}>
               <a href={`tel:${content.settings.phone1}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', padding: '1.25rem 2.5rem', backgroundColor: 'var(--color-plumbing)', color: 'var(--color-bg)', textDecoration: 'none', fontSize: '1.125rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-                <PhoneCall size={22} /> Call John
+                <PhoneCall size={22} /> Call {content.settings.phone1Name}
               </a>
               <a href={`tel:${content.settings.phone2}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', padding: '1.25rem 2.5rem', backgroundColor: 'var(--color-plumbing)', color: 'var(--color-bg)', textDecoration: 'none', fontSize: '1.125rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-                <PhoneCall size={22} /> Call Leo
+                <PhoneCall size={22} /> Call {content.settings.phone2Name}
               </a>
               <button onClick={goToCapabilities} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', padding: '1.25rem 2.5rem', backgroundColor: 'transparent', color: 'var(--color-text)', fontSize: '1.125rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', border: '2px solid rgba(255,255,255,0.25)', cursor: 'pointer', fontFamily: 'inherit' }}>
                 Our Capabilities →

@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react';
 
 export interface SiteSettings {
   phone1: string;
+  phone1Name: string;
   phone2: string;
+  phone2Name: string;
   email: string;
   abn: string;
   licence: string;
@@ -67,7 +69,9 @@ export interface SiteContent {
 const DEFAULT: SiteContent = {
   settings: {
     phone1: '+61412242997',
+    phone1Name: 'John',
     phone2: '+61426051275',
+    phone2Name: 'Leo',
     email: 'service@urbanproplumbing.com.au',
     abn: '48 694 251 888',
     licence: '280492C',

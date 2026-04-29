@@ -184,11 +184,11 @@ const Footer = () => {
           <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '1rem', color: 'var(--color-text-muted)', padding: 0 }}>
             <li style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
               <Phone size={16} style={{ flexShrink: 0, color: (path === '/plumbing' || path === '/about') ? 'var(--color-plumbing)' : 'var(--color-accent)' }} />
-              <a href={`tel:${content.settings.phone1}`} style={{ color: 'inherit', textDecoration: 'none' }}>{content.settings.phone1} (John)</a>
+              <a href={`tel:${content.settings.phone1}`} style={{ color: 'inherit', textDecoration: 'none' }}>{content.settings.phone1} ({content.settings.phone1Name})</a>
             </li>
             <li style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
               <Phone size={16} style={{ flexShrink: 0, color: (path === '/plumbing' || path === '/about') ? 'var(--color-plumbing)' : 'var(--color-accent)' }} />
-              <a href={`tel:${content.settings.phone2}`} style={{ color: 'inherit', textDecoration: 'none' }}>{content.settings.phone2} (Leo)</a>
+              <a href={`tel:${content.settings.phone2}`} style={{ color: 'inherit', textDecoration: 'none' }}>{content.settings.phone2} ({content.settings.phone2Name})</a>
             </li>
             <li style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
               <Mail size={16} style={{ flexShrink: 0, color: (path === '/plumbing' || path === '/about') ? 'var(--color-plumbing)' : 'var(--color-accent)' }} />

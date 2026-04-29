@@ -310,11 +310,19 @@ function SettingsEditor({ content, onChange }: { content: SiteContent; onChange:
       <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '1.5rem', lineHeight: 1.6 }}>Business contact details used across all pages — phone numbers, email, ABN, and licence number.</p>
       <SectionHeading>Contact Information</SectionHeading>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-        <Field label="Phone 1 (John)">
+        <Field label="Phone 1 — Number">
           <input style={S.input} value={s.phone1} onChange={e => set('phone1', e.target.value)} placeholder="+61412242997" />
         </Field>
-        <Field label="Phone 2 (Leo)">
+        <Field label="Phone 1 — Display Name">
+          <input style={S.input} value={s.phone1Name} maxLength={30} onChange={e => set('phone1Name', e.target.value)} placeholder="John" />
+          <CharCount value={s.phone1Name} max={30} />
+        </Field>
+        <Field label="Phone 2 — Number">
           <input style={S.input} value={s.phone2} onChange={e => set('phone2', e.target.value)} placeholder="+61426051275" />
+        </Field>
+        <Field label="Phone 2 — Display Name">
+          <input style={S.input} value={s.phone2Name} maxLength={30} onChange={e => set('phone2Name', e.target.value)} placeholder="Leo" />
+          <CharCount value={s.phone2Name} max={30} />
         </Field>
       </div>
       <Field label="Email Address">

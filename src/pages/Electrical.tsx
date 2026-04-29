@@ -322,8 +322,8 @@ const Electrical = () => {
 
             <div className="elec-cmd-buttons" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
               {[
-                { href: `tel:${content.settings.phone1}`, label: 'Call John', sub: content.settings.phone1.replace('+61', '+61 ').replace(/(\d{3})(\d{3})(\d{3})$/, '$1 $2 $3'), icon: <PhoneCall size={17} className="link-icon-elec" /> },
-                { href: `tel:${content.settings.phone2}`, label: 'Call Leo', sub: content.settings.phone2.replace('+61', '+61 ').replace(/(\d{3})(\d{3})(\d{3})$/, '$1 $2 $3'), icon: <PhoneCall size={17} className="link-icon-elec" /> },
+                { href: `tel:${content.settings.phone1}`, label: `Call ${content.settings.phone1Name}`, sub: content.settings.phone1.replace('+61', '+61 ').replace(/(\d{3})(\d{3})(\d{3})$/, '$1 $2 $3'), icon: <PhoneCall size={17} className="link-icon-elec" /> },
+                { href: `tel:${content.settings.phone2}`, label: `Call ${content.settings.phone2Name}`, sub: content.settings.phone2.replace('+61', '+61 ').replace(/(\d{3})(\d{3})(\d{3})$/, '$1 $2 $3'), icon: <PhoneCall size={17} className="link-icon-elec" /> },
                 { href: `mailto:${content.settings.email}`, label: 'Email Us', sub: 'Instant Response', icon: <Mail size={17} className="link-icon-elec" /> }
               ].map((item) => (
                 <a key={item.href} href={item.href} className="access-link-elec">
@@ -454,10 +454,10 @@ const Electrical = () => {
             </p>
             <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '1.5rem', marginBottom: '3rem' }}>
               <a href={`tel:${content.settings.phone1}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', padding: '1.25rem 2.5rem', backgroundColor: 'var(--color-electrical)', color: 'var(--color-bg)', textDecoration: 'none', fontSize: '1.125rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-                <PhoneCall size={22} /> Call John
+                <PhoneCall size={22} /> Call {content.settings.phone1Name}
               </a>
               <a href={`tel:${content.settings.phone2}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', padding: '1.25rem 2.5rem', backgroundColor: 'var(--color-electrical)', color: 'var(--color-bg)', textDecoration: 'none', fontSize: '1.125rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-                <PhoneCall size={22} /> Call Leo
+                <PhoneCall size={22} /> Call {content.settings.phone2Name}
               </a>
               <a href={`mailto:${content.settings.email}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', padding: '1.25rem 2.5rem', backgroundColor: 'transparent', color: 'var(--color-text)', textDecoration: 'none', fontSize: '1.125rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', border: '2px solid var(--color-text-muted)' }}>
                 ✉ Email Us
