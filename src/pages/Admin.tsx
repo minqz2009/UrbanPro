@@ -29,7 +29,7 @@ function validatePhoto(file: File): string | null {
   return null;
 }
 
-type NavTab = 'settings' | 'home' | 'plumbing' | 'electrical' | 'about' | 'building' | 'team';
+type NavTab = 'settings' | 'home' | 'plumbing' | 'electrical' | 'about' | 'building';
 
 // ─── Shared styles ────────────────────────────────────────────────────────────
 
@@ -144,68 +144,6 @@ function GalleryManager({ projectId, photos, previews, onPhotoQueued, onRemoveEx
   );
 }
 
-// ─── Team Editor ──────────────────────────────────────────────────────────────
-
-function TeamEditor({ members, onChange, onPhotoQueued, photoPreviews }: {
-  members: TeamMember[]; onChange: (m: TeamMember[]) => void;
-  onPhotoQueued: (id: string, file: File, preview: string) => void; photoPreviews: Record<string, string>;
-}) {
-  const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
-  const [photoErr, setPhotoErr] = useState<Record<string, string>>({});
-  const update = (id: string, field: keyof TeamMember, value: string) => onChange(members.map(m => m.id === id ? { ...m, [field]: value } : m));
-  const remove = (id: string) => { if (!confirm('Remove this team member?')) return; onChange(members.filter(m => m.id !== id)); };
-  const add = () => { const id = `member-${Date.now()}`; onChange([...members, { id, name: 'New Member', role: 'Role', bio: '', photo: '', imgStyle: null }]); };
-
-  return (
-    <div>
-      <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '1.5rem', lineHeight: 1.6 }}>Manage the Meet the Team section on the About page.</p>
-      {members.map(m => {
-        const open = !collapsed[m.id];
-        return (
-          <div key={m.id} style={S.card}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', cursor: 'pointer' }} onClick={() => setCollapsed(c => ({ ...c, [m.id]: !c[m.id] }))}>
-              <div style={{ width: '44px', height: '44px', borderRadius: '50%', overflow: 'hidden', border: '2px solid #1e3a5f', flexShrink: 0, backgroundColor: '#1e293b' }}>
-                {(photoPreviews[m.id] || m.photo) && <img src={photoPreviews[m.id] || m.photo} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />}
-              </div>
-              <div style={{ flex: 1 }}><div style={{ fontWeight: 700, color: 'white' }}>{m.name || 'Unnamed'}</div><div style={{ fontSize: '0.8rem', color: '#64748b' }}>{m.role || 'No role set'}</div></div>
-              <GripVertical size={16} color="#475569" />
-              {open ? <ChevronUp size={18} color="#475569" /> : <ChevronDown size={18} color="#475569" />}
-            </div>
-            {open && (
-              <div style={{ marginTop: '1.25rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                <div style={{ display: 'flex', gap: '1.25rem', flexWrap: 'wrap' }}>
-                  <PhotoUploader currentSrc={m.photo} previewDataUrl={photoPreviews[m.id] || null} label="Photo"
-                    onFileSelected={(file, preview) => { setPhotoErr(e => ({ ...e, [m.id]: '' })); onPhotoQueued(m.id, file, preview); }}
-                    onError={msg => setPhotoErr(e => ({ ...e, [m.id]: msg }))} />
-                  <div style={{ flex: 1, minWidth: '200px', display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
-                    {photoErr[m.id] && <p style={{ color: '#f87171', fontSize: '0.8rem', margin: 0 }}>{photoErr[m.id]}</p>}
-                    <Field label="Full Name">
-                      <input style={S.input} value={m.name} maxLength={40} onChange={e => update(m.id, 'name', e.target.value)} placeholder="e.g. John Zhao" />
-                      <CharCount value={m.name} max={40} />
-                    </Field>
-                    <Field label="Job Title">
-                      <input style={S.input} value={m.role} maxLength={60} onChange={e => update(m.id, 'role', e.target.value)} placeholder="e.g. Lead Plumber & Co-Founder" />
-                      <CharCount value={m.role} max={60} />
-                    </Field>
-                  </div>
-                </div>
-                <Field label="Short Bio (shown on the website)">
-                  <textarea style={S.textarea} value={m.bio} maxLength={600} onChange={e => update(m.id, 'bio', e.target.value)} rows={5} placeholder="Write a short bio..." />
-                  <CharCount value={m.bio} max={600} />
-                </Field>
-                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                  <button style={S.btnDanger} onClick={() => remove(m.id)}><Trash2 size={14} /> Remove</button>
-                </div>
-              </div>
-            )}
-          </div>
-        );
-      })}
-      <button style={{ ...S.btnGhost, width: '100%', justifyContent: 'center', padding: '0.85rem' }} onClick={add}><Plus size={16} /> Add Team Member</button>
-    </div>
-  );
-}
-
 // ─── Projects Editor ──────────────────────────────────────────────────────────
 
 function ProjectsEditor({ projects, onChange, onPhotoQueued, photoPreviews, onGalleryQueued, onRemoveGalleryExisting, onRemoveGalleryPending, pendingGalleryKeys }: {
@@ -307,7 +245,7 @@ function SettingsEditor({ content, onChange }: { content: SiteContent; onChange:
   const set = (field: keyof typeof s, value: string) => onChange({ ...content, settings: { ...s, [field]: value } });
   return (
     <div>
-      <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '1.5rem', lineHeight: 1.6 }}>Business contact details used across all pages — phone numbers, email, ABN, and licence number.</p>
+      <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '1.5rem', lineHeight: 1.6 }}>Business contact details shown in the website footer (the very bottom of every page). Phone numbers here are also the defaults for per-page contact buttons — each page can override them with different numbers.</p>
       <SectionHeading>Contact Information</SectionHeading>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
         <Field label="Phone 1 — Number">
@@ -435,7 +373,69 @@ function ElectricalEditor({ content, onChange }: { content: SiteContent; onChang
 
 // ─── About Editor ─────────────────────────────────────────────────────────────
 
-function AboutEditor({ content, onChange }: { content: SiteContent; onChange: (c: SiteContent) => void }) {
+function TeamMemberCards({ members, onChange, onPhotoQueued, photoPreviews }: {
+  members: TeamMember[]; onChange: (m: TeamMember[]) => void;
+  onPhotoQueued: (id: string, file: File, preview: string) => void; photoPreviews: Record<string, string>;
+}) {
+  const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
+  const [photoErr, setPhotoErr] = useState<Record<string, string>>({});
+  const update = (id: string, field: keyof TeamMember, value: string) => onChange(members.map(m => m.id === id ? { ...m, [field]: value } : m));
+  const remove = (id: string) => { if (!confirm('Remove this team member?')) return; onChange(members.filter(m => m.id !== id)); };
+  const add = () => { const id = `member-${Date.now()}`; onChange([...members, { id, name: 'New Member', role: 'Role', bio: '', photo: '', imgStyle: null }]); };
+
+  return (
+    <div>
+      {members.map(m => {
+        const open = !collapsed[m.id];
+        return (
+          <div key={m.id} style={S.card}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', cursor: 'pointer' }} onClick={() => setCollapsed(c => ({ ...c, [m.id]: !c[m.id] }))}>
+              <div style={{ width: '44px', height: '44px', borderRadius: '50%', overflow: 'hidden', border: '2px solid #1e3a5f', flexShrink: 0, backgroundColor: '#1e293b' }}>
+                {(photoPreviews[m.id] || m.photo) && <img src={photoPreviews[m.id] || m.photo} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />}
+              </div>
+              <div style={{ flex: 1 }}><div style={{ fontWeight: 700, color: 'white' }}>{m.name || 'Unnamed'}</div><div style={{ fontSize: '0.8rem', color: '#64748b' }}>{m.role || 'No role set'}</div></div>
+              <GripVertical size={16} color="#475569" />
+              {open ? <ChevronUp size={18} color="#475569" /> : <ChevronDown size={18} color="#475569" />}
+            </div>
+            {open && (
+              <div style={{ marginTop: '1.25rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <div style={{ display: 'flex', gap: '1.25rem', flexWrap: 'wrap' }}>
+                  <PhotoUploader currentSrc={m.photo} previewDataUrl={photoPreviews[m.id] || null} label="Photo"
+                    onFileSelected={(file, preview) => { setPhotoErr(e => ({ ...e, [m.id]: '' })); onPhotoQueued(m.id, file, preview); }}
+                    onError={msg => setPhotoErr(e => ({ ...e, [m.id]: msg }))} />
+                  <div style={{ flex: 1, minWidth: '200px', display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
+                    {photoErr[m.id] && <p style={{ color: '#f87171', fontSize: '0.8rem', margin: 0 }}>{photoErr[m.id]}</p>}
+                    <Field label="Full Name">
+                      <input style={S.input} value={m.name} maxLength={40} onChange={e => update(m.id, 'name', e.target.value)} placeholder="e.g. John Zhao" />
+                      <CharCount value={m.name} max={40} />
+                    </Field>
+                    <Field label="Job Title">
+                      <input style={S.input} value={m.role} maxLength={60} onChange={e => update(m.id, 'role', e.target.value)} placeholder="e.g. Lead Plumber & Co-Founder" />
+                      <CharCount value={m.role} max={60} />
+                    </Field>
+                  </div>
+                </div>
+                <Field label="Short Bio (shown on the website)">
+                  <textarea style={S.textarea} value={m.bio} maxLength={600} onChange={e => update(m.id, 'bio', e.target.value)} rows={5} placeholder="Write a short bio..." />
+                  <CharCount value={m.bio} max={600} />
+                </Field>
+                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  <button style={S.btnDanger} onClick={() => remove(m.id)}><Trash2 size={14} /> Remove</button>
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      })}
+      <button style={{ ...S.btnGhost, width: '100%', justifyContent: 'center', padding: '0.85rem' }} onClick={add}><Plus size={16} /> Add Team Member</button>
+    </div>
+  );
+}
+
+function AboutEditor({ content, onChange, onPhotoQueued, photoPreviews }: {
+  content: SiteContent; onChange: (c: SiteContent) => void;
+  onPhotoQueued: (id: string, file: File, preview: string) => void; photoPreviews: Record<string, string>;
+}) {
   const a = content.about;
   const set = (field: keyof typeof a, value: any) => onChange({ ...content, about: { ...a, [field]: value } });
   const setStat = (idx: number, field: 'value' | 'label', val: string) => {
@@ -444,7 +444,7 @@ function AboutEditor({ content, onChange }: { content: SiteContent; onChange: (c
   };
   return (
     <div>
-      <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '1.5rem', lineHeight: 1.6 }}>Edit the text, contact buttons, stats, and team heading shown on the About page.</p>
+      <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '1.5rem', lineHeight: 1.6 }}>Edit the story, contact buttons, stats, team heading, and team members shown on the About page.</p>
       <SectionHeading>Our Story Section</SectionHeading>
       <Field label="Section Heading">
         <input style={S.input} value={a.storyHeading} maxLength={60} onChange={e => set('storyHeading', e.target.value)} />
@@ -486,7 +486,7 @@ function AboutEditor({ content, onChange }: { content: SiteContent; onChange: (c
         ))}
       </div>
       <div style={{ height: '1.25rem' }} />
-      <SectionHeading>Team Section</SectionHeading>
+      <SectionHeading>Team Section Header</SectionHeading>
       <Field label="Section Heading">
         <input style={S.input} value={a.teamHeading} maxLength={40} onChange={e => set('teamHeading', e.target.value)} />
         <CharCount value={a.teamHeading} max={40} />
@@ -495,6 +495,14 @@ function AboutEditor({ content, onChange }: { content: SiteContent; onChange: (c
         <input style={S.input} value={a.teamSubheading} maxLength={100} onChange={e => set('teamSubheading', e.target.value)} />
         <CharCount value={a.teamSubheading} max={100} />
       </Field>
+      <div style={{ height: '1.25rem' }} />
+      <SectionHeading>Team Members</SectionHeading>
+      <TeamMemberCards
+        members={content.team}
+        onChange={team => onChange({ ...content, team })}
+        onPhotoQueued={onPhotoQueued}
+        photoPreviews={photoPreviews}
+      />
     </div>
   );
 }
@@ -575,7 +583,6 @@ const NAV_TABS: { id: NavTab; label: string }[] = [
   { id: 'plumbing', label: 'Plumbing' },
   { id: 'electrical', label: 'Electrical' },
   { id: 'about', label: 'About' },
-  { id: 'team', label: 'Team' },
 ];
 
 export default function Admin() {
@@ -716,7 +723,7 @@ export default function Admin() {
           {activeTab === 'home' && <HomeEditor content={content} onChange={setContent} />}
           {activeTab === 'plumbing' && <PlumbingEditor content={content} onChange={setContent} />}
           {activeTab === 'electrical' && <ElectricalEditor content={content} onChange={setContent} />}
-          {activeTab === 'about' && <AboutEditor content={content} onChange={setContent} />}
+          {activeTab === 'about' && <AboutEditor content={content} onChange={setContent} onPhotoQueued={queuePhoto} photoPreviews={photoPreviews} />}
           {activeTab === 'building' && (
             <ProjectsEditor
               projects={content.buildingProjects}
@@ -727,14 +734,6 @@ export default function Admin() {
               onRemoveGalleryExisting={removeGalleryExisting}
               onRemoveGalleryPending={removeGalleryPending}
               pendingGalleryKeys={pendingGalleryKeys}
-            />
-          )}
-          {activeTab === 'team' && (
-            <TeamEditor
-              members={content.team}
-              onChange={team => setContent(c => c ? { ...c, team } : c)}
-              onPhotoQueued={queuePhoto}
-              photoPreviews={photoPreviews}
             />
           )}
 
