@@ -13,6 +13,10 @@
     "servicesHeading": "Our Capabilities"
   },
   "about": {
+    "phone1": "+61412242997",
+    "phone1Name": "John",
+    "phone2": "+61426051275",
+    "phone2Name": "Leo",
     "storyHeading": "Serving Greater Sydney Since 2015",
     "storyPara1": "Urban Pro Plumbing was founded with a straightforward mission: give Sydney homeowners and businesses access to reliable, honest plumbing without the runaround.",
     "storyPara2": "Led by John Zhao and Leo, our team brings decades of combined experience to every job — from emergency burst pipes at midnight to full bathroom renovations. We show up on time, price fairly, and never leave until the work is done right.",
@@ -26,10 +30,18 @@
     "teamSubheading": "Three experienced tradespeople. One shared commitment to doing the job right."
   },
   "plumbing": {
+    "phone1": "+61412242997",
+    "phone1Name": "John",
+    "phone2": "+61426051275",
+    "phone2Name": "Leo",
     "heroHeading": "Expert Plumbing Solutions",
     "heroSubtitle": "Fast, reliable, and upfront pricing. From emergency blockages to full renovations, we solve your plumbing problems without the guesswork."
   },
   "electrical": {
+    "phone1": "+61412242997",
+    "phone1Name": "John",
+    "phone2": "+61426051275",
+    "phone2Name": "Leo",
     "heroHeading": "Expert Electrical Solutions",
     "heroSubtitle": "Safe, efficient, and innovative electrical services. From rapid fault-finding to complete smart home installations, we keep the lights on."
   },

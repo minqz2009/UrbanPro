@@ -17,7 +17,14 @@ export interface HomeContent {
   servicesHeading: string;
 }
 
-export interface AboutContent {
+export interface PagePhones {
+  phone1: string;
+  phone1Name: string;
+  phone2: string;
+  phone2Name: string;
+}
+
+export interface AboutContent extends PagePhones {
   storyHeading: string;
   storyPara1: string;
   storyPara2: string;
@@ -26,12 +33,12 @@ export interface AboutContent {
   teamSubheading: string;
 }
 
-export interface PlumbingContent {
+export interface PlumbingContent extends PagePhones {
   heroHeading: string;
   heroSubtitle: string;
 }
 
-export interface ElectricalContent {
+export interface ElectricalContent extends PagePhones {
   heroHeading: string;
   heroSubtitle: string;
 }
@@ -66,21 +73,27 @@ export interface SiteContent {
   buildingProjects: BuildingProject[];
 }
 
+const DEFAULT_SETTINGS: SiteSettings = {
+  phone1: '+61412242997',
+  phone1Name: 'John',
+  phone2: '+61426051275',
+  phone2Name: 'Leo',
+  email: 'service@urbanproplumbing.com.au',
+  abn: '48 694 251 888',
+  licence: '280492C',
+};
+
 const DEFAULT: SiteContent = {
-  settings: {
-    phone1: '+61412242997',
-    phone1Name: 'John',
-    phone2: '+61426051275',
-    phone2Name: 'Leo',
-    email: 'service@urbanproplumbing.com.au',
-    abn: '48 694 251 888',
-    licence: '280492C',
-  },
+  settings: DEFAULT_SETTINGS,
   home: {
     heroSubtitle: "Sydney's all-in-one property specialists — architecture, plumbing & electrical under one uncompromising standard.",
     servicesHeading: 'Our Capabilities',
   },
   about: {
+    phone1: DEFAULT_SETTINGS.phone1,
+    phone1Name: DEFAULT_SETTINGS.phone1Name,
+    phone2: DEFAULT_SETTINGS.phone2,
+    phone2Name: DEFAULT_SETTINGS.phone2Name,
     storyHeading: 'Serving Greater Sydney Since 2015',
     storyPara1: 'Urban Pro Plumbing was founded with a straightforward mission: give Sydney homeowners and businesses access to reliable, honest plumbing without the runaround.',
     storyPara2: 'Led by John Zhao and Leo, our team brings decades of combined experience to every job — from emergency burst pipes at midnight to full bathroom renovations. We show up on time, price fairly, and never leave until the work is done right.',
@@ -94,10 +107,18 @@ const DEFAULT: SiteContent = {
     teamSubheading: 'Three experienced tradespeople. One shared commitment to doing the job right.',
   },
   plumbing: {
+    phone1: DEFAULT_SETTINGS.phone1,
+    phone1Name: DEFAULT_SETTINGS.phone1Name,
+    phone2: DEFAULT_SETTINGS.phone2,
+    phone2Name: DEFAULT_SETTINGS.phone2Name,
     heroHeading: 'Expert Plumbing Solutions',
     heroSubtitle: 'Fast, reliable, and upfront pricing. From emergency blockages to full renovations, we solve your plumbing problems without the guesswork.',
   },
   electrical: {
+    phone1: DEFAULT_SETTINGS.phone1,
+    phone1Name: DEFAULT_SETTINGS.phone1Name,
+    phone2: DEFAULT_SETTINGS.phone2,
+    phone2Name: DEFAULT_SETTINGS.phone2Name,
     heroHeading: 'Expert Electrical Solutions',
     heroSubtitle: 'Safe, efficient, and innovative electrical services. From rapid fault-finding to complete smart home installations, we keep the lights on.',
   },
@@ -113,16 +134,35 @@ export function bustContentCache() {
 }
 
 export function merge(data: Partial<SiteContent>): SiteContent {
+  // Resolve settings first so per-page phones can fall back to them
+  const settings: SiteSettings = { ...DEFAULT_SETTINGS, ...(data.settings || {}) };
+
+  const pagePhoneDefaults: PagePhones = {
+    phone1: settings.phone1,
+    phone1Name: settings.phone1Name,
+    phone2: settings.phone2,
+    phone2Name: settings.phone2Name,
+  };
+
   return {
-    settings: { ...DEFAULT.settings, ...(data.settings || {}) },
+    settings,
     home: { ...DEFAULT.home, ...(data.home || {}) },
     about: {
       ...DEFAULT.about,
+      ...pagePhoneDefaults,
       ...(data.about || {}),
       stats: data.about?.stats ?? DEFAULT.about.stats,
     },
-    plumbing: { ...DEFAULT.plumbing, ...(data.plumbing || {}) },
-    electrical: { ...DEFAULT.electrical, ...(data.electrical || {}) },
+    plumbing: {
+      ...DEFAULT.plumbing,
+      ...pagePhoneDefaults,
+      ...(data.plumbing || {}),
+    },
+    electrical: {
+      ...DEFAULT.electrical,
+      ...pagePhoneDefaults,
+      ...(data.electrical || {}),
+    },
     team: data.team ?? DEFAULT.team,
     buildingProjects: (data.buildingProjects ?? DEFAULT.buildingProjects).map(p => ({
       ...p,

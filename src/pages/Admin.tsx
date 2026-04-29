@@ -370,7 +370,7 @@ function PlumbingEditor({ content, onChange }: { content: SiteContent; onChange:
   const set = (field: keyof typeof p, value: string) => onChange({ ...content, plumbing: { ...p, [field]: value } });
   return (
     <div>
-      <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '1.5rem', lineHeight: 1.6 }}>Edit the hero text shown at the top of the Plumbing page.</p>
+      <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '1.5rem', lineHeight: 1.6 }}>Edit the hero text and contact buttons shown on the Plumbing page.</p>
       <SectionHeading>Hero Section</SectionHeading>
       <Field label="Main Heading">
         <input style={S.input} value={p.heroHeading} maxLength={60} onChange={e => set('heroHeading', e.target.value)} />
@@ -380,6 +380,20 @@ function PlumbingEditor({ content, onChange }: { content: SiteContent; onChange:
         <textarea style={S.textarea} value={p.heroSubtitle} maxLength={220} onChange={e => set('heroSubtitle', e.target.value)} rows={3} />
         <CharCount value={p.heroSubtitle} max={220} />
       </Field>
+      <SectionHeading>Contact Buttons</SectionHeading>
+      <p style={{ color: '#475569', fontSize: '0.8rem', marginBottom: '1rem', marginTop: '-0.75rem' }}>These override the global phone settings for this page only.</p>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+        <Field label="Button 1 — Number"><input style={S.input} value={p.phone1} onChange={e => set('phone1', e.target.value)} placeholder="+61412242997" /></Field>
+        <Field label="Button 1 — Display Name">
+          <input style={S.input} value={p.phone1Name} maxLength={30} onChange={e => set('phone1Name', e.target.value)} placeholder="John" />
+          <CharCount value={p.phone1Name} max={30} />
+        </Field>
+        <Field label="Button 2 — Number"><input style={S.input} value={p.phone2} onChange={e => set('phone2', e.target.value)} placeholder="+61426051275" /></Field>
+        <Field label="Button 2 — Display Name">
+          <input style={S.input} value={p.phone2Name} maxLength={30} onChange={e => set('phone2Name', e.target.value)} placeholder="Leo" />
+          <CharCount value={p.phone2Name} max={30} />
+        </Field>
+      </div>
     </div>
   );
 }
@@ -391,7 +405,7 @@ function ElectricalEditor({ content, onChange }: { content: SiteContent; onChang
   const set = (field: keyof typeof e, value: string) => onChange({ ...content, electrical: { ...e, [field]: value } });
   return (
     <div>
-      <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '1.5rem', lineHeight: 1.6 }}>Edit the hero text shown at the top of the Electrical page.</p>
+      <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '1.5rem', lineHeight: 1.6 }}>Edit the hero text and contact buttons shown on the Electrical page.</p>
       <SectionHeading>Hero Section</SectionHeading>
       <Field label="Main Heading">
         <input style={S.input} value={e.heroHeading} maxLength={60} onChange={e2 => set('heroHeading', e2.target.value)} />
@@ -401,6 +415,20 @@ function ElectricalEditor({ content, onChange }: { content: SiteContent; onChang
         <textarea style={S.textarea} value={e.heroSubtitle} maxLength={220} onChange={e2 => set('heroSubtitle', e2.target.value)} rows={3} />
         <CharCount value={e.heroSubtitle} max={220} />
       </Field>
+      <SectionHeading>Contact Buttons</SectionHeading>
+      <p style={{ color: '#475569', fontSize: '0.8rem', marginBottom: '1rem', marginTop: '-0.75rem' }}>These override the global phone settings for this page only.</p>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+        <Field label="Button 1 — Number"><input style={S.input} value={e.phone1} onChange={e2 => set('phone1', e2.target.value)} placeholder="+61412242997" /></Field>
+        <Field label="Button 1 — Display Name">
+          <input style={S.input} value={e.phone1Name} maxLength={30} onChange={e2 => set('phone1Name', e2.target.value)} placeholder="John" />
+          <CharCount value={e.phone1Name} max={30} />
+        </Field>
+        <Field label="Button 2 — Number"><input style={S.input} value={e.phone2} onChange={e2 => set('phone2', e2.target.value)} placeholder="+61426051275" /></Field>
+        <Field label="Button 2 — Display Name">
+          <input style={S.input} value={e.phone2Name} maxLength={30} onChange={e2 => set('phone2Name', e2.target.value)} placeholder="Leo" />
+          <CharCount value={e.phone2Name} max={30} />
+        </Field>
+      </div>
     </div>
   );
 }
@@ -416,7 +444,7 @@ function AboutEditor({ content, onChange }: { content: SiteContent; onChange: (c
   };
   return (
     <div>
-      <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '1.5rem', lineHeight: 1.6 }}>Edit the text shown on the About page — story section, stats, and team heading.</p>
+      <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '1.5rem', lineHeight: 1.6 }}>Edit the text, contact buttons, stats, and team heading shown on the About page.</p>
       <SectionHeading>Our Story Section</SectionHeading>
       <Field label="Section Heading">
         <input style={S.input} value={a.storyHeading} maxLength={60} onChange={e => set('storyHeading', e.target.value)} />
@@ -430,6 +458,20 @@ function AboutEditor({ content, onChange }: { content: SiteContent; onChange: (c
         <textarea style={S.textarea} value={a.storyPara2} maxLength={300} onChange={e => set('storyPara2', e.target.value)} rows={4} />
         <CharCount value={a.storyPara2} max={300} />
       </Field>
+      <SectionHeading>Contact Buttons</SectionHeading>
+      <p style={{ color: '#475569', fontSize: '0.8rem', marginBottom: '1rem', marginTop: '-0.75rem' }}>These override the global phone settings for this page only.</p>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+        <Field label="Button 1 — Number"><input style={S.input} value={a.phone1} onChange={e => set('phone1', e.target.value)} placeholder="+61412242997" /></Field>
+        <Field label="Button 1 — Display Name">
+          <input style={S.input} value={a.phone1Name} maxLength={30} onChange={e => set('phone1Name', e.target.value)} placeholder="John" />
+          <CharCount value={a.phone1Name} max={30} />
+        </Field>
+        <Field label="Button 2 — Number"><input style={S.input} value={a.phone2} onChange={e => set('phone2', e.target.value)} placeholder="+61426051275" /></Field>
+        <Field label="Button 2 — Display Name">
+          <input style={S.input} value={a.phone2Name} maxLength={30} onChange={e => set('phone2Name', e.target.value)} placeholder="Leo" />
+          <CharCount value={a.phone2Name} max={30} />
+        </Field>
+      </div>
       <SectionHeading>Stats</SectionHeading>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
         {a.stats.map((stat, idx) => (
