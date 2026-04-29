@@ -22,12 +22,7 @@ const About = () => {
     navigate('/');
   };
 
-  const stats = [
-    { value: '10+', label: 'Years in Sydney' },
-    { value: '500+', label: 'Happy Customers' },
-    { value: '24/7', label: 'Emergency Service' },
-    { value: '100%', label: 'Licensed & Insured' },
-  ];
+  const stats = content.about.stats;
 
   const values = [
     { icon: <Shield size={32} />, title: 'Transparency', desc: 'Upfront pricing with no hidden fees. What we quote is what you pay — always.' },
@@ -90,13 +85,13 @@ const About = () => {
                 Our Story
               </div>
               <h2 style={{ fontSize: 'var(--font-size-h2)', fontWeight: 800, color: 'var(--color-text)', marginBottom: '2rem', lineHeight: 1.2 }}>
-                Serving Greater Sydney Since 2015
+                {content.about.storyHeading}
               </h2>
               <p style={{ color: 'var(--color-text-muted)', lineHeight: 1.8, marginBottom: '1.5rem', fontSize: 'var(--font-size-body)' }}>
-                Urban Pro Plumbing was founded with a straightforward mission: give Sydney homeowners and businesses access to reliable, honest plumbing without the runaround.
+                {content.about.storyPara1}
               </p>
               <p style={{ color: 'var(--color-text-muted)', lineHeight: 1.8, marginBottom: '2.5rem', fontSize: '1.05rem' }}>
-                Led by John Zhao and Leo, our team brings decades of combined experience to every job — from emergency burst pipes at midnight to full bathroom renovations. We show up on time, price fairly, and never leave until the work is done right.
+                {content.about.storyPara2}
               </p>
               <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                 <div style={{ padding: '0.5rem 1.25rem', backgroundColor: 'rgba(96,165,250,0.08)', border: '1px solid rgba(96,165,250,0.25)', color: 'var(--color-plumbing)', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
@@ -182,9 +177,9 @@ const About = () => {
               The People Behind the Work
               <div style={{ width: '24px', height: '2px', backgroundColor: 'var(--color-plumbing)' }} />
             </div>
-            <h2 style={{ fontSize: 'var(--font-size-h2)', fontWeight: 800, color: 'white', margin: '0 0 1.5rem' }}>Meet the Team</h2>
+            <h2 style={{ fontSize: 'var(--font-size-h2)', fontWeight: 800, color: 'white', margin: '0 0 1.5rem' }}>{content.about.teamHeading}</h2>
             <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 'clamp(0.95rem, 2vw, 1.1rem)', maxWidth: '520px', margin: '0 auto' }}>
-              Three experienced tradespeople. One shared commitment to doing the job right.
+              {content.about.teamSubheading}
             </p>
           </motion.div>
 
@@ -312,10 +307,10 @@ const About = () => {
               Contact Sydney's most trusted plumbing team today.
             </p>
             <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '1.5rem' }}>
-              <a href="tel:+61412242997" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', padding: '1.25rem 2.5rem', backgroundColor: 'var(--color-plumbing)', color: 'var(--color-bg)', textDecoration: 'none', fontSize: '1.125rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+              <a href={`tel:${content.settings.phone1}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', padding: '1.25rem 2.5rem', backgroundColor: 'var(--color-plumbing)', color: 'var(--color-bg)', textDecoration: 'none', fontSize: '1.125rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
                 <PhoneCall size={22} /> Call John
               </a>
-              <a href="tel:+61426051275" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', padding: '1.25rem 2.5rem', backgroundColor: 'var(--color-plumbing)', color: 'var(--color-bg)', textDecoration: 'none', fontSize: '1.125rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+              <a href={`tel:${content.settings.phone2}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', padding: '1.25rem 2.5rem', backgroundColor: 'var(--color-plumbing)', color: 'var(--color-bg)', textDecoration: 'none', fontSize: '1.125rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
                 <PhoneCall size={22} /> Call Leo
               </a>
               <button onClick={goToCapabilities} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', padding: '1.25rem 2.5rem', backgroundColor: 'transparent', color: 'var(--color-text)', fontSize: '1.125rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', border: '2px solid rgba(255,255,255,0.25)', cursor: 'pointer', fontFamily: 'inherit' }}>

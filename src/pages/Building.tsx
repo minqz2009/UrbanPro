@@ -1,9 +1,137 @@
 import { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion, useScroll, useTransform, AnimatePresence, useSpring } from 'framer-motion';
-import { X } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, Maximize2 } from 'lucide-react';
 import { useContent } from '../hooks/useContent';
 import type { BuildingProject } from '../hooks/useContent';
+
+// ─── Project Detail Modal ──────────────────────────────────────────────────────
+
+function ProjectModal({ project, onClose, galleryFont }: { project: BuildingProject; onClose: () => void; galleryFont: string }) {
+  const allPhotos = project.photos?.length > 0 ? project.photos : [project.image];
+  const [idx, setIdx] = useState(0);
+  const [showPano, setShowPano] = useState(false);
+  const hasPano = !!project.pano;
+
+  const prev = () => setIdx(i => (i - 1 + allPhotos.length) % allPhotos.length);
+  const next = () => setIdx(i => (i + 1) % allPhotos.length);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+      if (e.key === 'ArrowLeft') prev();
+      if (e.key === 'ArrowRight') next();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+      style={{ position: 'fixed', inset: 0, backgroundColor: '#080e1a', zIndex: 1000, display: 'flex', flexDirection: 'column', overflow: 'hidden', fontFamily: galleryFont }}
+    >
+      {/* Close */}
+      <button onClick={onClose} style={{ position: 'absolute', top: '1.5rem', right: '2rem', backgroundColor: 'transparent', color: 'rgba(255,255,255,0.7)', border: 'none', display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', zIndex: 1001, fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.15em', fontFamily: galleryFont }}>
+        Close <X size={22} />
+      </button>
+
+      <motion.div
+        initial={{ y: 40, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.15, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+        style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '4.5rem 0 0', overflow: 'hidden' }}
+      >
+        {!showPano ? (
+          <>
+            {/* Photo viewer */}
+            <div style={{ flex: 1, position: 'relative', overflow: 'hidden', minHeight: 0 }}>
+              <AnimatePresence mode="wait">
+                <motion.img
+                  key={idx}
+                  src={allPhotos[idx]}
+                  alt={project.title}
+                  initial={{ opacity: 0, scale: 1.03 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.98 }}
+                  transition={{ duration: 0.5, ease: 'easeInOut' }}
+                  style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block', userSelect: 'none' }}
+                />
+              </AnimatePresence>
+
+              {/* Arrows (only if multiple photos) */}
+              {allPhotos.length > 1 && (
+                <>
+                  <button onClick={prev} style={{ position: 'absolute', left: '1.5rem', top: '50%', transform: 'translateY(-50%)', backgroundColor: 'rgba(0,0,0,0.4)', border: 'none', color: 'white', width: '48px', height: '48px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', borderRadius: '50%', backdropFilter: 'blur(4px)' }}>
+                    <ChevronLeft size={24} />
+                  </button>
+                  <button onClick={next} style={{ position: 'absolute', right: '1.5rem', top: '50%', transform: 'translateY(-50%)', backgroundColor: 'rgba(0,0,0,0.4)', border: 'none', color: 'white', width: '48px', height: '48px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', borderRadius: '50%', backdropFilter: 'blur(4px)' }}>
+                    <ChevronRight size={24} />
+                  </button>
+                </>
+              )}
+
+              {/* Photo counter */}
+              {allPhotos.length > 1 && (
+                <div style={{ position: 'absolute', bottom: '1rem', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: '6px' }}>
+                  {allPhotos.map((_, i) => (
+                    <button key={i} onClick={() => setIdx(i)} style={{ width: i === idx ? '20px' : '6px', height: '6px', borderRadius: '3px', backgroundColor: i === idx ? 'white' : 'rgba(255,255,255,0.3)', border: 'none', cursor: 'pointer', padding: 0, transition: 'all 0.3s ease' }} />
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Info bar */}
+            <div style={{ padding: '1.5rem 4vw 2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', borderTop: '1px solid rgba(255,255,255,0.06)', flexShrink: 0 }}>
+              <div>
+                <h3 style={{ fontSize: 'clamp(1.1rem, 3vw, 1.75rem)', fontWeight: 800, letterSpacing: '-0.03em', margin: '0 0 0.3rem', color: 'white', textTransform: 'uppercase' }}>{project.title}</h3>
+                <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.78rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.12em', margin: 0 }}>{project.location}</p>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+                <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem', lineHeight: 1.6, maxWidth: '380px', margin: 0 }}>{project.description}</p>
+                {hasPano && (
+                  <button onClick={() => setShowPano(true)} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.6rem', padding: '0.75rem 1.5rem', backgroundColor: 'transparent', color: 'white', border: '1px solid rgba(255,255,255,0.25)', fontSize: '0.78rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', cursor: 'pointer', fontFamily: galleryFont, flexShrink: 0, whiteSpace: 'nowrap', transition: 'border-color 0.2s' }}>
+                    <Maximize2 size={15} /> 360° Panorama
+                  </button>
+                )}
+              </div>
+            </div>
+          </>
+        ) : (
+          /* Panorama view */
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+            <div style={{ flex: 1, position: 'relative', overflow: 'hidden' }}>
+              <iframe
+                width="100%"
+                height="100%"
+                frameBorder="0"
+                title="360 Panorama Viewer"
+                allowFullScreen
+                src={`https://cdn.pannellum.org/2.5/pannellum.htm#panorama=${project.pano}&autoLoad=true`}
+                style={{ position: 'absolute', inset: 0 }}
+              />
+              <div style={{ position: 'absolute', top: '1rem', left: '1rem', backgroundColor: 'rgba(0,0,0,0.55)', padding: '0.4rem 0.9rem', color: 'white', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em', pointerEvents: 'none', backdropFilter: 'blur(4px)' }}>
+                Interactive 360° View — drag to look around
+              </div>
+            </div>
+            <div style={{ padding: '1.25rem 4vw', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid rgba(255,255,255,0.06)', flexShrink: 0 }}>
+              <div>
+                <h3 style={{ fontSize: 'clamp(1rem, 2.5vw, 1.5rem)', fontWeight: 800, letterSpacing: '-0.03em', margin: '0 0 0.2rem', color: 'white', textTransform: 'uppercase' }}>{project.title}</h3>
+                <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.12em', margin: 0 }}>{project.location}</p>
+              </div>
+              <button onClick={() => setShowPano(false)} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', padding: '0.65rem 1.25rem', backgroundColor: 'transparent', color: 'rgba(255,255,255,0.7)', border: '1px solid rgba(255,255,255,0.15)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', cursor: 'pointer', fontFamily: galleryFont }}>
+                ← Back to Photos
+              </button>
+            </div>
+          </div>
+        )}
+      </motion.div>
+    </motion.div>
+  );
+}
+
+// ─── Case Item ─────────────────────────────────────────────────────────────────
 
 const CaseItem = ({ project, setSelectedProject }: { project: BuildingProject, index?: number, setSelectedProject: (p: BuildingProject | null) => void }) => {
   return (
@@ -331,80 +459,10 @@ const Building = () => {
         </div>
       </section>
 
-      {/* Minimalist 360 Pano Modal */}
+      {/* Project Detail Modal */}
       <AnimatePresence>
         {selectedProject && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            style={{
-              position: 'fixed',
-              inset: 0,
-              backgroundColor: 'var(--color-bg)',
-              zIndex: 1000,
-              display: 'flex',
-              flexDirection: 'column',
-              overflow: 'hidden'
-            }}
-          >
-            <button 
-              onClick={() => setSelectedProject(null)}
-              style={{
-                position: 'absolute',
-                top: '2rem',
-                right: '4vw',
-                backgroundColor: 'transparent',
-                color: 'var(--color-text)',
-                border: 'none',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '1rem',
-                cursor: 'pointer',
-                zIndex: 1001,
-                fontSize: '1rem',
-                textTransform: 'uppercase',
-                letterSpacing: '0.1em',
-                fontFamily: galleryFont
-              }}
-            >
-              Close <X size={32} />
-            </button>
-
-            <motion.div 
-              initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.3, duration: 1, ease: [0.16, 1, 0.3, 1] }}
-              style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '10vh 4vw 4vw' }}
-            >
-              <div style={{ flex: 1, position: 'relative', overflow: 'hidden', backgroundColor: 'black' }}>
-                {/* Embedded 360 Panorama Iframe */}
-                <iframe 
-                  width="100%" 
-                  height="100%" 
-                  frameBorder="0" 
-                  title="360 Panorama Viewer"
-                  allowFullScreen
-                  src={`https://cdn.pannellum.org/2.5/pannellum.htm#panorama=${selectedProject.pano}&autoLoad=true`}
-                  style={{ position: 'absolute', inset: 0 }}
-                />
-                <div style={{ position: 'absolute', top: '1rem', left: '1rem', backgroundColor: 'rgba(0,0,0,0.6)', padding: '0.5rem 1rem', color: 'white', fontSize: '0.875rem', textTransform: 'uppercase', letterSpacing: '0.1em', pointerEvents: 'none' }}>
-                  Interactive 360° View
-                </div>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginTop: '2rem', flexWrap: 'wrap', gap: '2rem' }}>
-                <div>
-                  <h3 style={{ fontSize: 'var(--font-size-h2)', fontWeight: 800, letterSpacing: '-0.04em', margin: 0, textTransform: 'uppercase' }}>
-                    {selectedProject.title}
-                  </h3>
-                </div>
-                <div style={{ maxWidth: '400px' }}>
-                  <p style={{ color: 'var(--color-text-muted)', fontSize: 'var(--font-size-body)', lineHeight: 1.6 }}>
-                    {selectedProject.description}
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
+          <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} galleryFont={galleryFont} />
         )}
       </AnimatePresence>
     </motion.div>

@@ -1,8 +1,10 @@
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { Zap, Lightbulb, Activity, Shield, AlertTriangle, PhoneCall, Mail, CheckCircle, ChevronDown, BatteryCharging, Power } from 'lucide-react';
+import { useContent } from '../hooks/useContent';
 
 const Electrical = () => {
+  const { content } = useContent();
   function BadgeIcon() {
     return <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>;
   }
@@ -76,10 +78,10 @@ const Electrical = () => {
                transition={{ duration: 0.8 }}
             >
               <h1 className="hero-title" style={{ fontSize: 'calc(var(--font-size-h1) * 0.85)', fontWeight: 800, marginBottom: '1rem', color: 'white', letterSpacing: '-0.02em' }}>
-                Expert Electrical Solutions
+                {content.electrical.heroHeading}
               </h1>
               <p className="hero-desc" style={{ fontSize: 'calc(var(--font-size-body) * 0.85)', color: 'rgba(255,255,255,0.9)', maxWidth: '600px', margin: '0 auto 2.5rem', lineHeight: 1.6 }}>
-                Safe, efficient, and innovative electrical services. From rapid fault-finding to complete smart home installations, we keep the lights on.
+                {content.electrical.heroSubtitle}
               </p>
             </motion.div>
 
@@ -320,9 +322,9 @@ const Electrical = () => {
 
             <div className="elec-cmd-buttons" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
               {[
-                { href: 'tel:+61412242997', label: 'Call John', sub: '+61 412 242 997', icon: <PhoneCall size={17} className="link-icon-elec" /> },
-                { href: 'tel:+61426051275', label: 'Call Leo', sub: '+61 426 051 275', icon: <PhoneCall size={17} className="link-icon-elec" /> },
-                { href: 'mailto:service@urbanproplumbing.com.au', label: 'Email Us', sub: 'Instant Response', icon: <Mail size={17} className="link-icon-elec" /> }
+                { href: `tel:${content.settings.phone1}`, label: 'Call John', sub: content.settings.phone1.replace('+61', '+61 ').replace(/(\d{3})(\d{3})(\d{3})$/, '$1 $2 $3'), icon: <PhoneCall size={17} className="link-icon-elec" /> },
+                { href: `tel:${content.settings.phone2}`, label: 'Call Leo', sub: content.settings.phone2.replace('+61', '+61 ').replace(/(\d{3})(\d{3})(\d{3})$/, '$1 $2 $3'), icon: <PhoneCall size={17} className="link-icon-elec" /> },
+                { href: `mailto:${content.settings.email}`, label: 'Email Us', sub: 'Instant Response', icon: <Mail size={17} className="link-icon-elec" /> }
               ].map((item) => (
                 <a key={item.href} href={item.href} className="access-link-elec">
                   {item.icon}
@@ -451,22 +453,22 @@ const Electrical = () => {
               Call us now for fast, upfront service — or send us an email anytime.
             </p>
             <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '1.5rem', marginBottom: '3rem' }}>
-              <a href="tel:+61412242997" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', padding: '1.25rem 2.5rem', backgroundColor: 'var(--color-electrical)', color: 'var(--color-bg)', textDecoration: 'none', fontSize: '1.125rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+              <a href={`tel:${content.settings.phone1}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', padding: '1.25rem 2.5rem', backgroundColor: 'var(--color-electrical)', color: 'var(--color-bg)', textDecoration: 'none', fontSize: '1.125rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
                 <PhoneCall size={22} /> Call John
               </a>
-              <a href="tel:+61426051275" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', padding: '1.25rem 2.5rem', backgroundColor: 'var(--color-electrical)', color: 'var(--color-bg)', textDecoration: 'none', fontSize: '1.125rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+              <a href={`tel:${content.settings.phone2}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', padding: '1.25rem 2.5rem', backgroundColor: 'var(--color-electrical)', color: 'var(--color-bg)', textDecoration: 'none', fontSize: '1.125rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
                 <PhoneCall size={22} /> Call Leo
               </a>
-              <a href="mailto:service@urbanproplumbing.com.au" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', padding: '1.25rem 2.5rem', backgroundColor: 'transparent', color: 'var(--color-text)', textDecoration: 'none', fontSize: '1.125rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', border: '2px solid var(--color-text-muted)' }}>
+              <a href={`mailto:${content.settings.email}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', padding: '1.25rem 2.5rem', backgroundColor: 'transparent', color: 'var(--color-text)', textDecoration: 'none', fontSize: '1.125rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', border: '2px solid var(--color-text-muted)' }}>
                 ✉ Email Us
               </a>
             </div>
             <div style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem', lineHeight: 2 }}>
-              <span>ABN: 48 694 251 888</span>
+              <span>ABN: {content.settings.abn}</span>
               <span style={{ margin: '0 1.5rem', opacity: 0.3 }}>|</span>
-              <span>Contractor Licence NO: 280492C</span>
+              <span>Contractor Licence NO: {content.settings.licence}</span>
               <span style={{ margin: '0 1.5rem', opacity: 0.3 }}>|</span>
-              <span>service@urbanproplumbing.com.au</span>
+              <span>{content.settings.email}</span>
             </div>
           </motion.div>
         </div>

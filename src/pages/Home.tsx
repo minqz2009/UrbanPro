@@ -3,8 +3,10 @@ import { Helmet } from 'react-helmet-async';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Hammer, Droplets, Zap, ArrowRight, CheckCircle2, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useContent } from '../hooks/useContent';
 
 const Home = () => {
+  const { content } = useContent();
   const heroRef = useRef(null);
   const { scrollYProgress: heroScroll } = useScroll({
     target: heroRef,
@@ -167,7 +169,7 @@ const Home = () => {
             </motion.div>
             <motion.div variants={itemVariants}>
               <p style={{ fontSize: 'var(--font-size-body)', color: 'rgba(255,255,255,0.85)', maxWidth: '600px', margin: '0 auto 2.5rem', lineHeight: 1.7, fontWeight: 400 }}>
-                Sydney's all-in-one property specialists — architecture, plumbing & electrical under one uncompromising standard.
+                {content.home.heroSubtitle}
               </p>
             </motion.div>
 
@@ -175,7 +177,7 @@ const Home = () => {
               <a href="#services" onClick={(e) => { e.preventDefault(); const el = document.getElementById('services'); if (el) { const top = el.getBoundingClientRect().top + window.scrollY - 80; window.scrollTo({ top, behavior: 'smooth' }); } }} style={{ padding: '1.1rem 3rem', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.15em', fontWeight: 700, backgroundColor: 'white', color: '#0f172a', textDecoration: 'none', transition: 'all 0.3s ease', cursor: 'pointer' }}>
                 Explore Services
               </a>
-              <a href="mailto:service@urbanproplumbing.com.au" style={{ padding: '1.1rem 3rem', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.15em', fontWeight: 700, backgroundColor: 'transparent', color: 'white', textDecoration: 'none', border: '1px solid rgba(255,255,255,0.3)', transition: 'all 0.3s ease' }}>
+              <a href={`mailto:${content.settings.email}`} style={{ padding: '1.1rem 3rem', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.15em', fontWeight: 700, backgroundColor: 'transparent', color: 'white', textDecoration: 'none', border: '1px solid rgba(255,255,255,0.3)', transition: 'all 0.3s ease' }}>
                 Get in Touch
               </a>
             </motion.div>
@@ -204,7 +206,7 @@ const Home = () => {
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             style={{ textAlign: 'center', marginBottom: '4rem', y: servicesHeadingY }}
           >
-            <h2 style={{ fontSize: 'var(--font-size-h2)', marginBottom: '1.5rem', color: 'var(--color-text)', fontWeight: 800, letterSpacing: '-0.04em' }}>Our Capabilities</h2>
+            <h2 style={{ fontSize: 'var(--font-size-h2)', marginBottom: '1.5rem', color: 'var(--color-text)', fontWeight: 800, letterSpacing: '-0.04em' }}>{content.home.servicesHeading}</h2>
             <div style={{ width: '100px', height: '2px', backgroundColor: 'var(--color-text-muted)', margin: '0 auto' }} />
           </motion.div>
 

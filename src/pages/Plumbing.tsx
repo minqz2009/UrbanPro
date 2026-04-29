@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { ShieldCheck, BadgeDollarSign, Wrench, AlertTriangle, CheckCircle, PhoneCall, Mail, ChevronDown, Star, ShowerHead, Flame, Waves, Droplets } from 'lucide-react';
+import { useContent } from '../hooks/useContent';
 
 const MAPS_URL = 'https://www.google.com/maps/place/UrbanPro+Plumbing+Sydney/@-33.8461026,150.3081854,10z/data=!4m15!1m8!3m7!1s0xaa99133edb90a697:0xe93f25ae63342f5d!2sUrbanPro+Plumbing+Sydney!8m2!3d-33.8482439!4d150.9319747!10e1!16s%2Fg%2F11n4td_svt!3m5!1s0xaa99133edb90a697:0xe93f25ae63342f5d!8m2!3d-33.8482439!4d150.9319747!16s%2Fg%2F11n4td_svt?entry=ttu&g_ep=EgoyMDI2MDQxNS4wIKXMDSoASAFQAw%3D%3D';
 
@@ -17,6 +18,7 @@ const reviews = [
 ];
 
 const Plumbing = () => {
+  const { content } = useContent();
   const guarantees = [
     { text: "NO CALL OUT FEE", subtext: "Transparent honest pricing", icon: <BadgeDollarSign size={28} /> },
     { text: "$250 FIXED RATE", subtext: "Drain cleaning special", icon: <Wrench size={28} /> },
@@ -82,10 +84,10 @@ const Plumbing = () => {
                transition={{ duration: 0.8 }}
             >
               <h1 className="hero-title" style={{ fontSize: 'calc(var(--font-size-h1) * 0.85)', fontWeight: 800, marginBottom: '1rem', color: 'white', letterSpacing: '-0.02em' }}>
-                Expert Plumbing Solutions
+                {content.plumbing.heroHeading}
               </h1>
               <p className="hero-desc" style={{ fontSize: 'calc(var(--font-size-body) * 0.85)', color: 'rgba(255,255,255,0.9)', maxWidth: '600px', margin: '0 auto 2.5rem', lineHeight: 1.6 }}>
-                Fast, reliable, and upfront pricing. From emergency blockages to full renovations, we solve your plumbing problems without the guesswork.
+                {content.plumbing.heroSubtitle}
               </p>
             </motion.div>
 
@@ -334,9 +336,9 @@ const Plumbing = () => {
 
             <div className="hero-cmd-buttons" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
               {[
-                { href: 'tel:+61412242997', label: 'Call John', sub: '+61 412 242 997', icon: <PhoneCall size={17} className="link-icon" /> },
-                { href: 'tel:+61426051275', label: 'Call Leo', sub: '+61 426 051 275', icon: <PhoneCall size={17} className="link-icon" /> },
-                { href: 'mailto:service@urbanproplumbing.com.au', label: 'Email Us', sub: 'Instant Response', icon: <Mail size={17} className="link-icon" /> }
+                { href: `tel:${content.settings.phone1}`, label: 'Call John', sub: content.settings.phone1.replace('+61', '+61 ').replace(/(\d{3})(\d{3})(\d{3})$/, '$1 $2 $3'), icon: <PhoneCall size={17} className="link-icon" /> },
+                { href: `tel:${content.settings.phone2}`, label: 'Call Leo', sub: content.settings.phone2.replace('+61', '+61 ').replace(/(\d{3})(\d{3})(\d{3})$/, '$1 $2 $3'), icon: <PhoneCall size={17} className="link-icon" /> },
+                { href: `mailto:${content.settings.email}`, label: 'Email Us', sub: 'Instant Response', icon: <Mail size={17} className="link-icon" /> }
               ].map((item) => (
                 <a key={item.href} href={item.href} className="access-link">
                   {item.icon}
@@ -599,22 +601,22 @@ const Plumbing = () => {
               Call us now for fast, upfront service — or send us an email anytime.
             </p>
             <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '1.5rem', marginBottom: '3rem' }}>
-              <a href="tel:+61412242997" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', padding: '1.25rem 2.5rem', backgroundColor: 'var(--color-plumbing)', color: 'var(--color-bg)', textDecoration: 'none', fontSize: '1.125rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+              <a href={`tel:${content.settings.phone1}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', padding: '1.25rem 2.5rem', backgroundColor: 'var(--color-plumbing)', color: 'var(--color-bg)', textDecoration: 'none', fontSize: '1.125rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
                 <PhoneCall size={22} /> Call John
               </a>
-              <a href="tel:+61426051275" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', padding: '1.25rem 2.5rem', backgroundColor: 'var(--color-plumbing)', color: 'var(--color-bg)', textDecoration: 'none', fontSize: '1.125rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+              <a href={`tel:${content.settings.phone2}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', padding: '1.25rem 2.5rem', backgroundColor: 'var(--color-plumbing)', color: 'var(--color-bg)', textDecoration: 'none', fontSize: '1.125rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
                 <PhoneCall size={22} /> Call Leo
               </a>
-              <a href="mailto:service@urbanproplumbing.com.au" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', padding: '1.25rem 2.5rem', backgroundColor: 'transparent', color: 'var(--color-text)', textDecoration: 'none', fontSize: '1.125rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', border: '2px solid var(--color-text-muted)' }}>
+              <a href={`mailto:${content.settings.email}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', padding: '1.25rem 2.5rem', backgroundColor: 'transparent', color: 'var(--color-text)', textDecoration: 'none', fontSize: '1.125rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', border: '2px solid var(--color-text-muted)' }}>
                 ✉ Email Us
               </a>
             </div>
             <div style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem', lineHeight: 2 }}>
-              <span>ABN: 48 694 251 888</span>
+              <span>ABN: {content.settings.abn}</span>
               <span style={{ margin: '0 1.5rem', opacity: 0.3 }}>|</span>
-              <span>Contractor Licence NO: 280492C</span>
+              <span>Contractor Licence NO: {content.settings.licence}</span>
               <span style={{ margin: '0 1.5rem', opacity: 0.3 }}>|</span>
-              <span>service@urbanproplumbing.com.au</span>
+              <span>{content.settings.email}</span>
             </div>
           </motion.div>
         </div>
