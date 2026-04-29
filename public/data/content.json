@@ -1,4 +1,36 @@
 {
+  "settings": {
+    "phone1": "+61412242997",
+    "phone2": "+61426051275",
+    "email": "service@urbanproplumbing.com.au",
+    "abn": "48 694 251 888",
+    "licence": "280492C"
+  },
+  "home": {
+    "heroSubtitle": "Sydney's all-in-one property specialists — architecture, plumbing & electrical under one uncompromising standard.",
+    "servicesHeading": "Our Capabilities"
+  },
+  "about": {
+    "storyHeading": "Serving Greater Sydney Since 2015",
+    "storyPara1": "Urban Pro Plumbing was founded with a straightforward mission: give Sydney homeowners and businesses access to reliable, honest plumbing without the runaround.",
+    "storyPara2": "Led by John Zhao and Leo, our team brings decades of combined experience to every job — from emergency burst pipes at midnight to full bathroom renovations. We show up on time, price fairly, and never leave until the work is done right.",
+    "stats": [
+      { "value": "10+", "label": "Years in Sydney" },
+      { "value": "500+", "label": "Happy Customers" },
+      { "value": "24/7", "label": "Emergency Service" },
+      { "value": "100%", "label": "Licensed & Insured" }
+    ],
+    "teamHeading": "Meet the Team",
+    "teamSubheading": "Three experienced tradespeople. One shared commitment to doing the job right."
+  },
+  "plumbing": {
+    "heroHeading": "Expert Plumbing Solutions",
+    "heroSubtitle": "Fast, reliable, and upfront pricing. From emergency blockages to full renovations, we solve your plumbing problems without the guesswork."
+  },
+  "electrical": {
+    "heroHeading": "Expert Electrical Solutions",
+    "heroSubtitle": "Safe, efficient, and innovative electrical services. From rapid fault-finding to complete smart home installations, we keep the lights on."
+  },
   "team": [
     {
       "id": "john",
@@ -6,10 +38,7 @@
       "role": "Lead Plumber & Co-Founder",
       "bio": "John is a seasoned plumbing professional with over 15 years of hands-on experience servicing residential and commercial properties across Sydney. As co-founder of UrbanPro, he leads every emergency call with precision and calm, drawing on deep expertise in burst pipe repair, hot water systems, gas fitting, and complex drainage diagnostics. John has built his reputation on transparent pricing, technical excellence, and an unwavering commitment to honest plumbing customers can count on, any hour of the day.",
       "photo": "images/team-john.jpeg",
-      "imgStyle": {
-        "transform": "scale(1.0)",
-        "transformOrigin": "center 55%"
-      }
+      "imgStyle": { "transform": "scale(1.0)", "transformOrigin": "center 55%" }
     },
     {
       "id": "leo",
@@ -23,7 +52,7 @@
       "id": "ben",
       "name": "Ben Wong",
       "role": "Construction Lead",
-      "bio": "Ben is a highly accomplished construction leader with a proven track record of managing complex structural and building components across some of Australia’s most high-profile developments. With deep expertise gained at Tier-1 firms including Lendlease, CPB Contractors, and Arcadis, Ben brings elite project management, exacting quality assurance, and high-level structural knowledge to the building and renovation sector.",
+      "bio": "Ben is a highly accomplished construction leader with a proven track record of managing complex structural and building components across some of Australia's most high-profile developments. With deep expertise gained at Tier-1 firms including Lendlease, CPB Contractors, and Arcadis, Ben brings elite project management, exacting quality assurance, and high-level structural knowledge to the building and renovation sector.",
       "photo": "images/team-ben.png",
       "imgStyle": null
     }
@@ -35,6 +64,12 @@
       "location": "Vaucluse, NSW",
       "description": "A modern architectural masterpiece featuring floor-to-ceiling glass and minimalist steel framing. Seamlessly blending indoor and outdoor living.",
       "image": "images/building-glass-house.jpg",
+      "photos": [
+        "images/building-glass-house.jpg",
+        "images/building-coastal.jpg",
+        "images/building-heritage.jpg",
+        "images/building-extension.jpg"
+      ],
       "category": "New Builds",
       "pano": "https://pannellum.org/images/alma.jpg"
     },
@@ -44,6 +79,11 @@
       "location": "Bondi Beach, NSW",
       "description": "Open-concept beachside home utilizing natural timber and raw concrete to create an organic, serene atmosphere.",
       "image": "images/building-coastal.jpg",
+      "photos": [
+        "images/building-coastal.jpg",
+        "images/building-glass-house.jpg",
+        "images/building-acoustic.jpg"
+      ],
       "category": "New Builds",
       "pano": "https://pannellum.org/images/bma-1.jpg"
     },
@@ -53,6 +93,10 @@
       "location": "Paddington, NSW",
       "description": "Careful preservation of a 19th-century facade coupled with a stunningly modern interior extension and custom lightwell.",
       "image": "images/building-heritage.jpg",
+      "photos": [
+        "images/building-heritage.jpg",
+        "images/building-extension.jpg"
+      ],
       "category": "Renovations",
       "pano": "https://pannellum.org/images/jfk.jpg"
     },
@@ -62,6 +106,11 @@
       "location": "Revesby Heights, NSW",
       "description": "A compact yet breathtaking geometric rear extension maximizing natural light in a dense urban plot.",
       "image": "images/building-extension.jpg",
+      "photos": [
+        "images/building-extension.jpg",
+        "images/building-heritage.jpg",
+        "images/building-coastal.jpg"
+      ],
       "category": "Renovations",
       "pano": "https://pannellum.org/images/cerro-toco.jpg"
     },
@@ -71,6 +120,10 @@
       "location": "Sydney CBD",
       "description": "Custom suspended acoustic ceilings installed in a high-end commercial lobby for sound dampening and aesthetic edge.",
       "image": "images/building-acoustic.jpg",
+      "photos": [
+        "images/building-acoustic.jpg",
+        "images/building-glass-house.jpg"
+      ],
       "category": "Small Projects",
       "pano": "https://pannellum.org/images/alma.jpg"
     }

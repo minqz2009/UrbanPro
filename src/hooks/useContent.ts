@@ -108,7 +108,7 @@ export function bustContentCache() {
   _cache = null;
 }
 
-function merge(data: Partial<SiteContent>): SiteContent {
+export function merge(data: Partial<SiteContent>): SiteContent {
   return {
     settings: { ...DEFAULT.settings, ...(data.settings || {}) },
     home: { ...DEFAULT.home, ...(data.home || {}) },

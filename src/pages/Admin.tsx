@@ -8,7 +8,7 @@ import {
   readFileAsBase64,
   sanitiseFilename,
 } from '../services/github';
-import { bustContentCache } from '../hooks/useContent';
+import { bustContentCache, merge } from '../hooks/useContent';
 import type { SiteContent, TeamMember, BuildingProject } from '../hooks/useContent';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -551,7 +551,7 @@ export default function Admin() {
     setLoadError('');
     try {
       const { content: raw, sha } = await getFile(tok, CONTENT_PATH);
-      setContent(JSON.parse(raw));
+      setContent(merge(JSON.parse(raw)));
       setContentSha(sha);
     } catch (e: any) {
       setLoadError('Could not load site content: ' + e.message);

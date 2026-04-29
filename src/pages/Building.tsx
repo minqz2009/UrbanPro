@@ -187,7 +187,7 @@ const CaseItem = ({ project, setSelectedProject }: { project: BuildingProject, i
             }}
             className="exhibition-btn"
           >
-            ENTER 360° TOUR
+            {project.pano ? 'ENTER 360° TOUR' : 'VIEW GALLERY'}
             <motion.div className="btn-line" style={{ height: '2px', backgroundColor: 'var(--color-text)', width: '0%', transition: 'width 0.6s cubic-bezier(0.16, 1, 0.3, 1)' }} />
           </button>
         </div>
