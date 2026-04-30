@@ -107,7 +107,7 @@ export async function batchCommit(
   token: string,
   files: Array<{ path: string; content: string }>,
   message: string
-): Promise<void> {
+): Promise<string> {
   const h = headers(token);
 
   // 1. Get current HEAD ref
@@ -185,6 +185,33 @@ export async function batchCommit(
     const err = await updateRefRes.json().catch(() => ({}));
     throw new Error(err.message || `Failed to update ref: ${updateRefRes.status}`);
   }
+  return newCommitSha;
+}
+
+// waitForDeploy polls the GitHub Actions API for the workflow run triggered by commitSha.
+// Returns 'success' if the deploy completed, 'failure' if it failed, 'timeout' if it didn't
+// finish within 5 minutes.
+export async function waitForDeploy(token: string, commitSha: string): Promise<'success' | 'failure' | 'timeout'> {
+  const h = headers(token);
+  for (let i = 0; i < 60; i++) {
+    await new Promise(r => setTimeout(r, 5000));
+    try {
+      const res = await fetch(
+        `${API}/repos/${REPO_OWNER}/${REPO_NAME}/actions/runs?branch=${BRANCH}&event=push&per_page=5`,
+        { headers: h }
+      );
+      if (!res.ok) continue;
+      const data = await res.json();
+      const run = data.workflow_runs?.find((r: any) => r.head_sha === commitSha);
+      if (!run) continue;
+      if (run.status === 'completed') {
+        return run.conclusion === 'success' ? 'success' : 'failure';
+      }
+    } catch {
+      // Network error — keep polling
+    }
+  }
+  return 'timeout';
 }
 
 export function readFileAsBase64(file: File): Promise<string> {

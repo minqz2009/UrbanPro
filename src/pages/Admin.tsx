@@ -4,6 +4,7 @@ import {
   verifyToken,
   getFile,
   batchCommit,
+  waitForDeploy,
   readFileAsBase64,
   sanitiseFilename,
 } from '../services/github';
@@ -620,6 +621,7 @@ export default function Admin() {
   // gallery: key = `${projectId}-gallery-${timestamp}`, value = File
   const [pendingGallery, setPendingGallery] = useState<Record<string, File>>({});
   const [saving, setSaving] = useState(false);
+  const [deploying, setDeploying] = useState(false);
   const [saveMsg, setSaveMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [loadError, setLoadError] = useState('');
   const snapshotRef = useRef('');
@@ -698,7 +700,7 @@ export default function Admin() {
 
   const handleSave = async () => {
     if (!content) return;
-    setSaving(true); setSaveMsg(null);
+    setSaving(true); setDeploying(false); setSaveMsg(null);
     try {
       const updated = JSON.parse(JSON.stringify(content)) as SiteContent;
       const files: Array<{ path: string; content: string }> = [];
@@ -727,25 +729,45 @@ export default function Admin() {
       // Add content.json as the last file
       files.push({ path: CONTENT_PATH, content: JSON.stringify(updated, null, 2) });
 
-      // Single atomic commit — all or nothing
-      await batchCommit(token, files, 'Admin: update site content');
+      // Single atomic commit
+      const commitSha = await batchCommit(token, files, 'Admin: update site content');
+      setSaving(false);
 
-      setContent(updated);
-      snapshotRef.current = JSON.stringify(updated);
-      setPendingPhotos({}); setPhotoPreviews({}); setPendingGallery({});
-      bustContentCache();
-      setSaveMsg({ type: 'success', text: '✓ Saved! Your website will update in 1–2 minutes.' });
+      // Wait for deploy to complete
+      setDeploying(true);
+      const result = await waitForDeploy(token, commitSha);
+      setDeploying(false);
+
+      if (result === 'success') {
+        setContent(updated);
+        snapshotRef.current = JSON.stringify(updated);
+        setPendingPhotos({}); setPhotoPreviews({}); setPendingGallery({});
+        bustContentCache();
+        setSaveMsg({ type: 'success', text: '✓ Saved and deployed successfully.' });
+      } else if (result === 'failure') {
+        setSaveMsg({ type: 'error', text: '✗ Deploy failed. Changes committed but site not updated — check GitHub Actions.' });
+      } else {
+        // timeout — assume success but warn
+        setContent(updated);
+        snapshotRef.current = JSON.stringify(updated);
+        setPendingPhotos({}); setPhotoPreviews({}); setPendingGallery({});
+        bustContentCache();
+        setSaveMsg({ type: 'success', text: '✓ Changes saved. Site will update shortly.' });
+      }
     } catch (e: any) {
       setSaveMsg({ type: 'error', text: 'Something went wrong: ' + e.message });
     } finally {
       setSaving(false);
-      setTimeout(() => setSaveMsg(null), 10000);
+      setDeploying(false);
+      setTimeout(() => setSaveMsg(null), 15000);
     }
   };
 
   if (!authed) return <LoginScreen onLogin={handleLogin} />;
   const hasPending = Object.keys(pendingPhotos).length + Object.keys(pendingGallery).length;
   const hasAnyChanges = dirtyTabs.size > 0;
+  const isSaving = saving || deploying;
+  const saveLabel = saving ? 'Saving...' : deploying ? 'Deploying...' : 'Save All Changes';
 
   return (
     <div style={S.page}>
@@ -757,9 +779,9 @@ export default function Admin() {
         </div>
         <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
           {hasPending > 0 && <span style={{ fontSize: '0.78rem', color: '#f59e0b', fontWeight: 600 }}>{hasPending} photo{hasPending > 1 ? 's' : ''} ready to upload</span>}
-          <button onClick={handleSave} disabled={saving || !content || !hasAnyChanges}
-            style={{ ...S.btnPrimary, opacity: (saving || !hasAnyChanges) ? 0.45 : 1, cursor: (!hasAnyChanges) ? 'not-allowed' : 'pointer' }}>
-            <Save size={16} />{saving ? 'Saving...' : 'Save All Changes'}
+          <button onClick={handleSave} disabled={isSaving || !content || (!hasAnyChanges && !deploying)}
+            style={{ ...S.btnPrimary, opacity: (isSaving || (!hasAnyChanges && !deploying)) ? 0.45 : 1, cursor: (!hasAnyChanges && !deploying) ? 'not-allowed' : 'pointer' }}>
+            <Save size={16} />{saveLabel}
           </button>
           <button onClick={handleLogout} style={S.btnGhost}><LogOut size={15} /> Sign Out</button>
         </div>
