@@ -170,7 +170,10 @@ const projects = content.buildingProjects;
 assert(Array.isArray(projects) && projects.length >= 5, 'buildingProjects has at least 5 projects');
 
 assert(Array.isArray(content.buildingCategories) && content.buildingCategories.length === 3, 'buildingCategories exists with 3 entries');
-assert(JSON.stringify(content.buildingCategories) === JSON.stringify(['New Builds', 'Renovations', 'Small Projects']), 'buildingCategories has correct defaults');
+const expectedCats = ['New Builds', 'Renovations', 'Small Projects'];
+assert(expectedCats.every(c => content.buildingCategories.includes(c)), 'buildingCategories contains all expected categories');
+// Each project's category should be in the buildingCategories list
+assert(projects.every(p => content.buildingCategories.includes(p.category)), 'all project categories are valid');
 for (const cat of content.buildingCategories) {
   assert(projects.some(p => p.category === cat), `projects include category: ${cat}`);
 }

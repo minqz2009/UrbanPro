@@ -3,8 +3,7 @@ import { Plus, Trash2, Upload, LogOut, Save, Eye, EyeOff, ChevronDown, ChevronUp
 import {
   verifyToken,
   getFile,
-  saveFile,
-  uploadImage,
+  batchCommit,
   readFileAsBase64,
   sanitiseFilename,
 } from '../services/github';
@@ -615,7 +614,6 @@ export default function Admin() {
   const [token, setToken] = useState(loadToken);
   const [authed, setAuthed] = useState(!!loadToken());
   const [content, setContent] = useState<SiteContent | null>(null);
-  const [contentSha, setContentSha] = useState('');
   const [activeTab, setActiveTab] = useState<NavTab>('settings');
   const [pendingPhotos, setPendingPhotos] = useState<Record<string, File>>({});
   const [photoPreviews, setPhotoPreviews] = useState<Record<string, string>>({});
@@ -634,11 +632,10 @@ export default function Admin() {
   const loadContent = async (tok: string) => {
     setLoadError('');
     try {
-      const { content: raw, sha } = await getFile(tok, CONTENT_PATH);
+      const { content: raw } = await getFile(tok, CONTENT_PATH);
       const merged = merge(JSON.parse(raw));
       setContent(merged);
       snapshotRef.current = JSON.stringify(merged);
-      setContentSha(sha);
     } catch (e: any) {
       setLoadError('Could not load site content: ' + e.message);
     }
@@ -704,32 +701,39 @@ export default function Admin() {
     setSaving(true); setSaveMsg(null);
     try {
       const updated = JSON.parse(JSON.stringify(content)) as SiteContent;
+      const files: Array<{ path: string; content: string }> = [];
 
-      // Upload cover photos (team + project)
+      // Prepare cover photo uploads
       for (const [id, file] of Object.entries(pendingPhotos)) {
         const base64 = await readFileAsBase64(file);
-        const imagePath = await uploadImage(token, sanitiseFilename(file.name), base64);
+        const fname = sanitiseFilename(file.name);
+        const imagePath = `images/${fname}`;
+        files.push({ path: `public/images/${fname}`, content: base64 });
         updated.team = updated.team.map(m => m.id === id ? { ...m, photo: imagePath } : m);
         updated.buildingProjects = updated.buildingProjects.map(p => p.id === id ? { ...p, image: imagePath } : p);
       }
 
-      // Upload gallery photos
+      // Prepare gallery photo uploads
       for (const [key, file] of Object.entries(pendingGallery)) {
         const projectId = key.split('-gallery-')[0];
         const base64 = await readFileAsBase64(file);
-        const imagePath = await uploadImage(token, sanitiseFilename(file.name), base64);
+        const fname = sanitiseFilename(file.name);
+        files.push({ path: `public/images/${fname}`, content: base64 });
         updated.buildingProjects = updated.buildingProjects.map(p =>
-          p.id === projectId ? { ...p, photos: [...(p.photos || []), imagePath] } : p
+          p.id === projectId ? { ...p, photos: [...(p.photos || []), `images/${fname}`] } : p
         );
       }
 
-      await saveFile(token, CONTENT_PATH, JSON.stringify(updated, null, 2), contentSha, 'Admin: update site content');
+      // Add content.json as the last file
+      files.push({ path: CONTENT_PATH, content: JSON.stringify(updated, null, 2) });
+
+      // Single atomic commit — all or nothing
+      await batchCommit(token, files, 'Admin: update site content');
+
       setContent(updated);
       snapshotRef.current = JSON.stringify(updated);
       setPendingPhotos({}); setPhotoPreviews({}); setPendingGallery({});
       bustContentCache();
-      const { sha } = await getFile(token, CONTENT_PATH);
-      setContentSha(sha);
       setSaveMsg({ type: 'success', text: '✓ Saved! Your website will update in 1–2 minutes.' });
     } catch (e: any) {
       setSaveMsg({ type: 'error', text: 'Something went wrong: ' + e.message });
