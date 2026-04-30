@@ -141,5 +141,6 @@
       "category": "Small Projects",
       "pano": "https://pannellum.org/images/alma.jpg"
     }
-  ]
+  ],
+  "buildingCategories": ["New Builds", "Renovations", "Small Projects"]
 }

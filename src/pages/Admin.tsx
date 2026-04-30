@@ -15,7 +15,6 @@ import type { SiteContent, TeamMember, BuildingProject } from '../hooks/useConte
 
 const SESSION_KEY = 'urbanpro_admin_token';
 const CONTENT_PATH = 'public/data/content.json';
-const CATEGORIES = ['New Builds', 'Renovations', 'Small Projects'] as const;
 const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/avif', 'image/gif'];
 const MAX_MB = 25;
 
@@ -146,30 +145,55 @@ function GalleryManager({ projectId, photos, previews, onPhotoQueued, onRemoveEx
 
 // ─── Projects Editor ──────────────────────────────────────────────────────────
 
-function ProjectsEditor({ projects, onChange, onPhotoQueued, photoPreviews, onGalleryQueued, onRemoveGalleryExisting, onRemoveGalleryPending, pendingGalleryKeys, dirtyCategories }: {
+function ProjectsEditor({ projects, onChange, onPhotoQueued, photoPreviews, onGalleryQueued, onRemoveGalleryExisting, onRemoveGalleryPending, pendingGalleryKeys, dirtyCategories, buildingCategories, onCategoriesChange }: {
   projects: BuildingProject[]; onChange: (p: BuildingProject[]) => void;
   onPhotoQueued: (id: string, file: File, preview: string) => void; photoPreviews: Record<string, string>;
   onGalleryQueued: (key: string, file: File, preview: string) => void;
   onRemoveGalleryExisting: (projectId: string, idx: number) => void; onRemoveGalleryPending: (key: string) => void;
   pendingGalleryKeys: (projectId: string) => string[];
   dirtyCategories: Set<string>;
+  buildingCategories: string[]; onCategoriesChange: (cats: string[]) => void;
 }) {
-  const [activeCategory, setActiveCategory] = useState<string>(CATEGORIES[0]);
+  const [activeCategory, setActiveCategory] = useState<string>(buildingCategories[0] || 'New Builds');
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
   const [photoErr, setPhotoErr] = useState<Record<string, string>>({});
+  const [dragCat, setDragCat] = useState<string | null>(null);
 
   const update = (id: string, field: keyof BuildingProject, value: string) => onChange(projects.map(p => p.id === id ? { ...p, [field]: value } : p));
   const remove = (id: string) => { if (!confirm('Remove this project?')) return; onChange(projects.filter(p => p.id !== id)); };
   const add = () => { const id = `project-${Date.now()}`; onChange([...projects, { id, title: 'New Project', location: '', description: '', image: '', photos: [], category: activeCategory, pano: '' }]); };
   const visible = projects.filter(p => p.category === activeCategory);
 
+  const handleDragStart = (e: React.DragEvent, cat: string) => {
+    setDragCat(cat);
+    e.dataTransfer.setData('text/plain', cat);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+  const handleDragOver = (e: React.DragEvent) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; };
+  const handleDragEnd = () => { setDragCat(null); };
+  const handleDrop = (e: React.DragEvent, targetCat: string) => {
+    e.preventDefault();
+    const draggedCat = e.dataTransfer.getData('text/plain');
+    if (!draggedCat || draggedCat === targetCat) { setDragCat(null); return; }
+    const cats = [...buildingCategories];
+    const fromIdx = cats.indexOf(draggedCat);
+    const toIdx = cats.indexOf(targetCat);
+    if (fromIdx === -1 || toIdx === -1) { setDragCat(null); return; }
+    cats.splice(fromIdx, 1);
+    cats.splice(toIdx, 0, draggedCat);
+    onCategoriesChange(cats);
+    setDragCat(null);
+  };
+
   return (
     <div>
       <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '1.5rem', lineHeight: 1.6 }}>Manage the exhibition gallery on the Building page. Each project can have a cover photo, multiple gallery photos, and an optional 360° panorama link.</p>
       <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
-        {CATEGORIES.map(cat => (
+        {buildingCategories.map(cat => (
           <button key={cat} onClick={() => setActiveCategory(cat)}
-            style={{ padding: '0.5rem 1.1rem', borderRadius: '20px', border: 'none', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', fontFamily: 'inherit', backgroundColor: activeCategory === cat ? '#3b82f6' : '#1e293b', color: activeCategory === cat ? 'white' : '#94a3b8' }}>
+            draggable onDragStart={e => handleDragStart(e, cat)} onDragOver={handleDragOver} onDragEnd={handleDragEnd} onDrop={e => handleDrop(e, cat)}
+            style={{ padding: '0.5rem 1.1rem', borderRadius: '20px', border: 'none', fontWeight: 600, fontSize: '0.82rem', cursor: 'grab', fontFamily: 'inherit', backgroundColor: activeCategory === cat ? '#3b82f6' : '#1e293b', color: activeCategory === cat ? 'white' : '#94a3b8', display: 'inline-flex', alignItems: 'center', gap: '0.3rem', opacity: dragCat === cat ? 0.5 : 1, transition: 'opacity 0.15s' }}>
+            <GripVertical size={12} color={activeCategory === cat ? 'rgba(255,255,255,0.5)' : '#475569'} style={{ flexShrink: 0, cursor: 'grab' }} />
             {dirtyCategories.has(cat) && <span style={{ color: '#f59e0b', marginRight: '0.25rem', fontSize: '0.65rem' }}>●</span>}
             {cat} ({projects.filter(p => p.category === cat).length})
           </button>
@@ -205,7 +229,7 @@ function ProjectsEditor({ projects, onChange, onPhotoQueued, photoPreviews, onGa
                     </Field>
                     <Field label="Category">
                       <select style={{ ...S.input, cursor: 'pointer' }} value={p.category} onChange={e => update(p.id, 'category', e.target.value)}>
-                        {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
+                        {buildingCategories.map(c => <option key={c} value={c}>{c}</option>)}
                       </select>
                     </Field>
                   </div>
@@ -784,6 +808,8 @@ export default function Admin() {
               onRemoveGalleryPending={removeGalleryPending}
               pendingGalleryKeys={pendingGalleryKeys}
               dirtyCategories={dirtyBuildingCategories}
+              buildingCategories={content.buildingCategories}
+              onCategoriesChange={cats => setContent(c => c ? { ...c, buildingCategories: cats } : c)}
             />
           )}
         </div>

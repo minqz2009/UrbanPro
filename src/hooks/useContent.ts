@@ -71,6 +71,7 @@ export interface SiteContent {
   electrical: ElectricalContent;
   team: TeamMember[];
   buildingProjects: BuildingProject[];
+  buildingCategories: string[];
 }
 
 const DEFAULT_SETTINGS: SiteSettings = {
@@ -124,6 +125,7 @@ const DEFAULT: SiteContent = {
   },
   team: [],
   buildingProjects: [],
+  buildingCategories: ['New Builds', 'Renovations', 'Small Projects'],
 };
 
 // Module-level cache so components sharing the hook don't double-fetch
@@ -168,6 +170,7 @@ export function merge(data: Partial<SiteContent>): SiteContent {
       ...p,
       photos: p.photos ?? [],
     })),
+    buildingCategories: data.buildingCategories ?? DEFAULT.buildingCategories,
   };
 }
 

@@ -169,8 +169,9 @@ console.log('\n=== 6. Building Editor ===');
 const projects = content.buildingProjects;
 assert(Array.isArray(projects) && projects.length >= 5, 'buildingProjects has at least 5 projects');
 
-const categories = ['New Builds', 'Renovations', 'Small Projects'];
-for (const cat of categories) {
+assert(Array.isArray(content.buildingCategories) && content.buildingCategories.length === 3, 'buildingCategories exists with 3 entries');
+assert(JSON.stringify(content.buildingCategories) === JSON.stringify(['New Builds', 'Renovations', 'Small Projects']), 'buildingCategories has correct defaults');
+for (const cat of content.buildingCategories) {
   assert(projects.some(p => p.category === cat), `projects include category: ${cat}`);
 }
 assert(projects.every(p => p.id && p.title && p.location), 'all projects have id, title, location');
@@ -267,6 +268,7 @@ assert(topKeys.includes('plumbing'), 'content.json has plumbing');
 assert(topKeys.includes('electrical'), 'content.json has electrical');
 assert(topKeys.includes('team'), 'content.json has team');
 assert(topKeys.includes('buildingProjects'), 'content.json has buildingProjects');
+assert(topKeys.includes('buildingCategories'), 'content.json has buildingCategories');
 
 // About has all required sub-fields
 const aboutKeys = Object.keys(content.about);
@@ -323,6 +325,61 @@ for (const [field, max] of Object.entries(limits)) {
   const maxStr = `maxLength={${max}}`;
   assert(adminTsx.includes(maxStr), `${field}: maxLength ${max} present in Admin.tsx`);
 }
+
+// =======================================================================
+// 12. CATEGORY DRAG-AND-DROP REORDERING
+// =======================================================================
+console.log('\n=== 12. Category Drag-and-Drop Reordering ===');
+
+// Admin.tsx no longer has hardcoded CATEGORIES constant
+assert(!adminTsx.includes('CATEGORIES = ['), 'no hardcoded CATEGORIES constant in Admin.tsx');
+assert(!adminTsx.includes("'New Builds', 'Renovations', 'Small Projects'] as const"), 'no hardcoded category tuple in Admin.tsx');
+
+// Admin.tsx uses buildingCategories prop
+assert(adminTsx.includes('buildingCategories'), 'Admin.tsx uses buildingCategories');
+assert(adminTsx.includes('onCategoriesChange'), 'Admin.tsx uses onCategoriesChange');
+
+// Drag handlers exist
+assert(adminTsx.includes('handleDragStart'), 'handleDragStart exists');
+assert(adminTsx.includes('handleDragOver'), 'handleDragOver exists');
+assert(adminTsx.includes('handleDragEnd'), 'handleDragEnd exists');
+assert(adminTsx.includes('handleDrop'), 'handleDrop exists');
+assert(adminTsx.includes('onDragStart'), 'onDragStart used in JSX');
+assert(adminTsx.includes('onDragOver'), 'onDragOver used in JSX');
+assert(adminTsx.includes('onDrop'), 'onDrop used in JSX');
+assert(adminTsx.includes('draggable'), 'draggable attribute present');
+
+// GripVertical icon on category buttons
+assert(adminTsx.includes('GripVertical'), 'GripVertical icon present on category buttons');
+
+// Building.tsx uses data-driven categories
+assert(buildingTsx.includes('content.buildingCategories'), 'Building.tsx uses content.buildingCategories');
+assert(!buildingTsx.includes('"New Builds", "Renovations", "Small Projects"]'), 'Building.tsx no longer hardcodes category list');
+assert(buildingTsx.includes("content.buildingCategories?.[0]"), 'Building.tsx uses content.buildingCategories[0] as default');
+
+// useContent.ts interface includes buildingCategories
+assert(useContentTs.includes('buildingCategories: string[]'), 'useContent.ts SiteContent has buildingCategories');
+assert(useContentTs.includes("buildingCategories: ['New Builds', 'Renovations', 'Small Projects']"), 'useContent.ts DEFAULT has buildingCategories');
+assert(useContentTs.includes('buildingCategories: data.buildingCategories ?? DEFAULT.buildingCategories'), 'useContent.ts merge handles buildingCategories');
+
+// Simulate reorder logic
+function simReorder(cats, fromCat, toCat) {
+  const arr = [...cats];
+  const fromIdx = arr.indexOf(fromCat);
+  const toIdx = arr.indexOf(toCat);
+  if (fromIdx === -1 || toIdx === -1) return arr;
+  arr.splice(fromIdx, 1);
+  arr.splice(toIdx, 0, fromCat);
+  return arr;
+}
+const reorder1 = simReorder(['New Builds', 'Renovations', 'Small Projects'], 'New Builds', 'Renovations');
+assert(JSON.stringify(reorder1) === JSON.stringify(['Renovations', 'New Builds', 'Small Projects']), 'reorder: move New Builds after Renovations');
+
+const reorder2 = simReorder(['New Builds', 'Renovations', 'Small Projects'], 'Small Projects', 'New Builds');
+assert(JSON.stringify(reorder2) === JSON.stringify(['Small Projects', 'New Builds', 'Renovations']), 'reorder: move Small Projects before New Builds');
+
+const reorder3 = simReorder(['New Builds', 'Renovations', 'Small Projects'], 'New Builds', 'Small Projects');
+assert(JSON.stringify(reorder3) === JSON.stringify(['Renovations', 'Small Projects', 'New Builds']), 'reorder: move New Builds after Small Projects');
 
 // =======================================================================
 // SUMMARY

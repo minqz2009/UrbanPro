@@ -203,11 +203,11 @@ const Building = () => {
 
   const yHero = useTransform(springScroll, [0, 1], ["0%", "50%"]);
   const opacityHero = useTransform(springScroll, [0, 0.2], [1, 0]);
-  const [selectedProject, setSelectedProject] = useState<BuildingProject | null>(null);
-  const [activeCategory, setActiveCategory] = useState("New Builds");
   const { content } = useContent();
+  const [selectedProject, setSelectedProject] = useState<BuildingProject | null>(null);
+  const [activeCategory, setActiveCategory] = useState(content.buildingCategories?.[0] || "New Builds");
 
-  const categories = ["New Builds", "Renovations", "Small Projects"];
+  const categories = content.buildingCategories;
   const filteredCases = content.buildingProjects.filter(c => c.category === activeCategory);
 
   useEffect(() => {
