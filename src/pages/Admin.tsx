@@ -92,11 +92,12 @@ function PhotoUploader({ currentSrc, previewDataUrl, onFileSelected, label = 'Ph
 
 // ─── Gallery Photo Manager ────────────────────────────────────────────────────
 
-function GalleryManager({ projectId, photos, previews, onPhotoQueued, onRemoveExisting, onRemovePending, pendingKeys, onPhotosReordered, label }: {
+function GalleryManager({ projectId, photos, previews, onPhotoQueued, onRemoveExisting, onRemovePending, pendingKeys, onPhotosReordered, label, galleryPrefix }: {
   projectId: string; photos: string[]; previews: Record<string, string>; onPhotoQueued: (key: string, file: File, preview: string) => void;
   onRemoveExisting: (idx: number) => void; onRemovePending: (key: string) => void; pendingKeys: string[];
-  onPhotosReordered: (newOrder: string[]) => void; label?: string;
+  onPhotosReordered: (newOrder: string[]) => void; label?: string; galleryPrefix?: string;
 }) {
+  const prefix = galleryPrefix || 'gallery';
   const inputRef = useRef<HTMLInputElement>(null);
   const [err, setErr] = useState('');
   const [dragPhotoIdx, setDragPhotoIdx] = useState<number | null>(null);
@@ -106,7 +107,7 @@ function GalleryManager({ projectId, photos, previews, onPhotoQueued, onRemoveEx
     Array.from(files).forEach(file => {
       const e = validatePhoto(file);
       if (e) { setErr(e); return; }
-      const key = `${projectId}-gallery-${Date.now()}-${Math.random()}`;
+      const key = `${projectId}-${prefix}-${Date.now()}-${Math.random()}`;
       const reader = new FileReader();
       reader.onload = ev => onPhotoQueued(key, file, ev.target?.result as string);
       reader.readAsDataURL(file);
@@ -178,7 +179,7 @@ function ProjectsEditor({ projects, onChange, onPhotoQueued, photoPreviews, onGa
   onPhotoQueued: (id: string, file: File, preview: string) => void; photoPreviews: Record<string, string>;
   onGalleryQueued: (key: string, file: File, preview: string) => void;
   onRemoveGalleryExisting: (projectId: string, idx: number) => void; onRemoveGalleryPending: (key: string) => void;
-  pendingGalleryKeys: (projectId: string) => string[];
+  pendingGalleryKeys: (projectId: string, prefix?: string) => string[];
   dirtyCategories: Set<string>;
   buildingCategories: string[]; onCategoriesChange: (cats: string[]) => void;
 }) {
@@ -298,9 +299,10 @@ function ProjectsEditor({ projects, onChange, onPhotoQueued, photoPreviews, onGa
                   onPhotoQueued={onGalleryQueued}
                   onRemoveExisting={idx => onRemoveGalleryExisting(p.id, idx)}
                   onRemovePending={onRemoveGalleryPending}
-                  pendingKeys={pendingGalleryKeys(p.id)}
+                  pendingKeys={pendingGalleryKeys(p.id, 'gallery')}
                   onPhotosReordered={newOrder => onChange(projects.map(pr => pr.id === p.id ? { ...pr, photos: newOrder } : pr))}
                   label="After Photos (shown first)"
+                  galleryPrefix="gallery"
                 />
                 <GalleryManager
                   projectId={p.id}
@@ -309,9 +311,10 @@ function ProjectsEditor({ projects, onChange, onPhotoQueued, photoPreviews, onGa
                   onPhotoQueued={onGalleryQueued}
                   onRemoveExisting={idx => onChange(projects.map(pr => pr.id === p.id ? { ...pr, beforePhotos: pr.beforePhotos.filter((_, i) => i !== idx) } : pr))}
                   onRemovePending={onRemoveGalleryPending}
-                  pendingKeys={pendingGalleryKeys(p.id)}
+                  pendingKeys={pendingGalleryKeys(p.id, 'beforegal')}
                   onPhotosReordered={newOrder => onChange(projects.map(pr => pr.id === p.id ? { ...pr, beforePhotos: newOrder } : pr))}
                   label="Before Photos"
+                  galleryPrefix="beforegal"
                 />
                 <SectionHeading>Floor Plans (optional)</SectionHeading>
                 <p style={{ color: '#475569', fontSize: '0.8rem', marginBottom: '1rem', marginTop: '-0.75rem' }}>Upload before and after floor plan images. Leave empty to hide the floor plan button.</p>
@@ -721,7 +724,7 @@ export default function Admin() {
     setPendingGallery(g => { const n = { ...g }; delete n[key]; return n; });
     setPhotoPreviews(p => { const n = { ...p }; delete n[key]; return n; });
   };
-  const pendingGalleryKeys = (projectId: string) => Object.keys(pendingGallery).filter(k => k.startsWith(projectId + '-gallery-'));
+  const pendingGalleryKeys = (projectId: string, prefix = 'gallery') => Object.keys(pendingGallery).filter(k => k.startsWith(projectId + '-' + prefix + '-'));
 
   const { dirtyTabs, dirtyBuildingCategories } = useMemo(() => {
     const tabs = new Set<NavTab>();
@@ -757,6 +760,7 @@ export default function Admin() {
     for (const id of Object.keys(pendingPhotos)) {
       if (content.team.some(m => m.id === id)) tabs.add('about');
       if (content.buildingProjects.some(p => p.id === id)) tabs.add('building');
+      if (id.startsWith('fp-after-') || id.startsWith('fp-before-')) tabs.add('building');
     }
     if (Object.keys(pendingGallery).length > 0) tabs.add('building');
 
@@ -803,13 +807,20 @@ export default function Admin() {
 
       // Prepare gallery photo uploads
       for (const [key, file] of Object.entries(pendingGallery)) {
-        const projectId = key.split('-gallery-')[0];
         const base64 = await readFileAsBase64(file);
         const fname = sanitiseFilename(file.name);
         files.push({ path: `public/images/${fname}`, content: base64 });
-        updated.buildingProjects = updated.buildingProjects.map(p =>
-          p.id === projectId ? { ...p, photos: [...(p.photos || []), `images/${fname}`] } : p
-        );
+        if (key.includes('-beforegal-')) {
+          const projectId = key.split('-beforegal-')[0];
+          updated.buildingProjects = updated.buildingProjects.map(p =>
+            p.id === projectId ? { ...p, beforePhotos: [...(p.beforePhotos || []), `images/${fname}`] } : p
+          );
+        } else {
+          const projectId = key.split('-gallery-')[0];
+          updated.buildingProjects = updated.buildingProjects.map(p =>
+            p.id === projectId ? { ...p, photos: [...(p.photos || []), `images/${fname}`] } : p
+          );
+        }
       }
 
       // Add content.json as the last file

@@ -107,18 +107,16 @@ function ProjectModal({ project, onClose, galleryFont }: { project: BuildingProj
           </div>
         ) : !showPano ? (
           <>
-            {/* Before/After toggle */}
-            {(hasBefore || hasAfter) && (
+            {/* Before/After toggle — only when both sides have photos */}
+            {(hasBefore && hasAfter) && (
               <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem' }}>
                 <button
-                  onClick={() => { const canSwitch = showBefore ? hasAfter : hasBefore; if (canSwitch) switchSet(!showBefore); }}
+                  onClick={() => switchSet(!showBefore)}
                   style={{
                     display: 'inline-flex', alignItems: 'center', padding: '0.5rem 1.2rem', borderRadius: '2rem',
                     border: '1px solid rgba(255,255,255,0.2)', backgroundColor: 'transparent',
                     fontSize: '0.78rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em',
-                    cursor: (showBefore ? hasAfter : hasBefore) ? 'pointer' : 'default',
-                    fontFamily: galleryFont, transition: 'all 0.3s ease',
-                    opacity: (showBefore ? hasAfter : hasBefore) ? 1 : 0.35,
+                    cursor: 'pointer', fontFamily: galleryFont, transition: 'all 0.3s ease',
                   }}
                 >
                   <span style={{ color: showBefore ? 'rgba(255,255,255,0.3)' : 'white', transition: 'color 0.3s' }}>After</span>
