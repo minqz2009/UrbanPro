@@ -895,7 +895,11 @@ export default function Admin() {
       }
     } catch (e: any) {
       if (e.message?.startsWith('CONCURRENT_EDIT:')) {
-        setSaveMsg({ type: 'error', text: e.message.slice('CONCURRENT_EDIT: '.length) });
+        // Auto-reload latest content — someone else pushed while we were editing
+        await loadContent(token);
+        setPendingPhotos({}); setPhotoPreviews({}); setPendingGallery({});
+        setPendingDeletes(new Set());
+        setSaveMsg({ type: 'error', text: 'Someone else made changes while you were editing. Content has been reloaded with the latest version — your unsaved edits were discarded. Please re-apply your changes.' });
       } else {
         setSaveMsg({ type: 'error', text: 'Save failed: ' + e.message + '. Please contact Daniel Chen for technical support if this persists.' });
       }
