@@ -188,7 +188,7 @@ export async function batchCommit(
   return newCommitSha;
 }
 
-export type DeployPhase = 'queued' | 'building' | 'done';
+export type DeployPhase = 'queued' | 'building' | 'done' | 'failed';
 
 // waitForDeploy polls the GitHub Actions API for the workflow run triggered by commitSha.
 // Calls onProgress with the current phase as it transitions.
@@ -215,14 +215,20 @@ export async function waitForDeploy(
       const run = data.workflow_runs?.find((r: any) => r.head_sha === commitSha);
       if (!run) continue;
 
-      const phase: DeployPhase = run.status === 'completed' ? 'done' : 'building';
+      // Determine phase — use string to avoid over-narrowing
+      const phase: string = run.status === 'completed' ? 'done' : 'building';
       if (phase !== lastPhase) {
-        lastPhase = phase;
-        onProgress?.(phase);
+        lastPhase = phase as DeployPhase;
+        onProgress?.(phase as DeployPhase);
       }
 
       if (run.status === 'completed') {
-        return run.conclusion === 'success' ? 'success' : 'failure';
+        if (run.conclusion !== 'success') {
+          if (lastPhase !== 'failed') { lastPhase = 'failed'; onProgress?.('failed'); }
+          return 'failure';
+        }
+        if (lastPhase !== 'done') { lastPhase = 'done'; onProgress?.('done'); }
+        return 'success';
       }
     } catch {
       // Network error — keep polling

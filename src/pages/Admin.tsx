@@ -754,12 +754,17 @@ export default function Admin() {
     return { dirtyTabs: tabs, dirtyBuildingCategories: cats };
   }, [content, pendingPhotos, pendingGallery]);
 
-  // Warn before leaving if there are unsaved changes
+  // Warn before leaving if there are unsaved changes (uses ref to avoid re-registering on every keystroke)
+  const hasUnsavedRef = useRef(false);
   useEffect(() => {
-    if (dirtyTabs.size === 0 && Object.keys(pendingPhotos).length === 0 && Object.keys(pendingGallery).length === 0) return;
-    const handler = (e: BeforeUnloadEvent) => { e.preventDefault(); };
-    window.addEventListener('beforeunload', handler);
-    return () => window.removeEventListener('beforeunload', handler);
+    const needsWarn = dirtyTabs.size > 0 || Object.keys(pendingPhotos).length > 0 || Object.keys(pendingGallery).length > 0;
+    if (needsWarn === hasUnsavedRef.current) return;
+    hasUnsavedRef.current = needsWarn;
+    if (needsWarn) {
+      const handler = (e: BeforeUnloadEvent) => { e.preventDefault(); };
+      window.addEventListener('beforeunload', handler);
+      return () => window.removeEventListener('beforeunload', handler);
+    }
   }, [dirtyTabs, pendingPhotos, pendingGallery]);
 
   const handleSave = async () => {
@@ -867,21 +872,22 @@ export default function Admin() {
         <div style={{ padding: '1rem 1.5rem', backgroundColor: '#0f1a2e', borderBottom: '1px solid #1e3a5f' }}>
           <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', marginBottom: '0.6rem', flexWrap: 'wrap' }}>
             {[
-              { label: 'Committed', done: true },
-              { label: 'Building & Testing', done: deployPhase === 'building' || deployPhase === 'done', active: deployPhase === 'queued' || deployPhase === 'building' },
-              { label: 'Deploying to Site', done: deployPhase === 'done', active: deployPhase === 'building' || deployPhase === 'done' },
+              { label: 'Committed', done: deployPhase !== 'failed', failed: false },
+              { label: 'Building & Testing', done: deployPhase === 'done', active: deployPhase === 'queued' || deployPhase === 'building', failed: deployPhase === 'failed' },
+              { label: 'Deploying to Site', done: deployPhase === 'done', active: deployPhase === 'building', failed: deployPhase === 'failed' },
             ].map((step) => (
-              <div key={step.label} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.82rem', color: step.done ? '#4ade80' : step.active ? '#60a5fa' : '#475569', fontWeight: 600 }}>
-                <span>{step.done ? '✓' : step.active ? '◐' : '○'}</span>
+              <div key={step.label} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.82rem', color: step.failed ? '#f87171' : step.done ? '#4ade80' : step.active ? '#60a5fa' : '#475569', fontWeight: 600 }}>
+                <span>{step.failed ? '✗' : step.done ? '✓' : step.active ? '◐' : '○'}</span>
                 <span>{step.label}</span>
               </div>
             ))}
           </div>
           <div style={{ maxWidth: '500px', margin: '0 auto', height: '4px', backgroundColor: '#1e293b', borderRadius: '2px', overflow: 'hidden' }}>
             <div style={{
-              height: '100%', backgroundColor: '#3b82f6', borderRadius: '2px',
-              width: deployPhase === 'done' ? '100%' : deployPhase === 'building' ? '60%' : '20%',
-              transition: 'width 0.5s ease',
+              height: '100%', borderRadius: '2px',
+              backgroundColor: deployPhase === 'failed' ? '#ef4444' : '#3b82f6',
+              width: deployPhase === 'failed' ? '100%' : deployPhase === 'done' ? '100%' : deployPhase === 'building' ? '60%' : '20%',
+              transition: 'width 0.5s ease, background-color 0.3s ease',
             }} />
           </div>
           <p style={{ textAlign: 'center', margin: '0.5rem 0 0', fontSize: '0.72rem', color: '#475569' }}>

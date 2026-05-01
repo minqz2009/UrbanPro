@@ -443,6 +443,9 @@ assert(JSON.stringify(photoR1) === JSON.stringify(['b.jpg', 'c.jpg', 'd.jpg', 'a
 const photoR2 = simPhotoReorder(photoArr, 3, 0);
 assert(JSON.stringify(photoR2) === JSON.stringify(['d.jpg', 'a.jpg', 'b.jpg', 'c.jpg']), 'photo reorder: drag idx 3 onto idx 0 → last to first');
 
+// beforeunload uses ref to prevent over-registration
+assert(adminTsx.includes('hasUnsavedRef'), 'beforeunload uses ref to prevent over-registration');
+
 // Daniel Chen error message
 assert(adminTsx.includes('contact Daniel Chen for technical support'), 'error message mentions Daniel Chen');
 
@@ -480,9 +483,13 @@ assert(adminTsx.includes('phase => setDeployPhase(phase)'), 'waitForDeploy calle
 // github.ts exports DeployPhase type and waitForDeploy with progress
 const githubTs = readFileSync(join(root, 'src/services/github.ts'), 'utf-8');
 assert(githubTs.includes('export type DeployPhase'), 'github.ts exports DeployPhase type');
+assert(githubTs.includes("'failed'"), "DeployPhase includes 'failed' for deploy failures");
 assert(githubTs.includes('onProgress'), 'waitForDeploy has onProgress param');
 assert(githubTs.includes("lastPhase: DeployPhase = 'queued'"), 'waitForDeploy starts with queued phase');
 assert(githubTs.includes('phase !== lastPhase'), 'waitForDeploy only reports on phase changes');
+
+// progress bar handles failed deploy state
+assert(adminTsx.includes("deployPhase === 'failed'"), 'progress bar shows failed state');
 
 // =======================================================================
 // SUMMARY
