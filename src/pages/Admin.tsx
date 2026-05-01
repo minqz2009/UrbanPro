@@ -3,6 +3,7 @@ import { Plus, Trash2, Upload, LogOut, Save, Eye, EyeOff, ChevronDown, ChevronUp
 import {
   verifyToken,
   getFile,
+  getHeadSha,
   batchCommit,
   waitForDeploy,
   readFileAsBase64,
@@ -701,6 +702,7 @@ export default function Admin() {
   const [loadError, setLoadError] = useState('');
   const [pendingDeletes, setPendingDeletes] = useState<Set<string>>(new Set());
   const snapshotRef = useRef(sessionStorage.getItem('urbanpro_snapshot') || '');
+  const headShaRef = useRef('');
 
   useEffect(() => {
     const saved = loadToken();
@@ -715,6 +717,7 @@ export default function Admin() {
       setContent(merged);
       snapshotRef.current = JSON.stringify(merged);
       sessionStorage.setItem('urbanpro_snapshot', snapshotRef.current);
+      headShaRef.current = await getHeadSha(tok);
     } catch (e: any) {
       setLoadError('Could not load site content: ' + e.message);
     }
@@ -858,7 +861,7 @@ export default function Admin() {
       const safeDeletes = [...pendingDeletes].filter(dp => !allRefs.has(dp));
 
       // Single atomic commit with deletions
-      const commitSha = await batchCommit(token, files, 'Admin: update site content', safeDeletes);
+      const commitSha = await batchCommit(token, files, 'Admin: update site content', { deletePaths: safeDeletes, expectedBaseSha: headShaRef.current });
       setPendingDeletes(new Set());
       setSaving(false);
 
@@ -872,6 +875,7 @@ export default function Admin() {
         setContent(updated);
         snapshotRef.current = JSON.stringify(updated);
         sessionStorage.setItem('urbanpro_snapshot', snapshotRef.current);
+        headShaRef.current = commitSha;
         setPendingPhotos({}); setPhotoPreviews({}); setPendingGallery({});
         bustContentCache();
         setSaveMsg({ type: 'success', text: '✓ Saved and deployed successfully.' });
@@ -882,12 +886,17 @@ export default function Admin() {
         setContent(updated);
         snapshotRef.current = JSON.stringify(updated);
         sessionStorage.setItem('urbanpro_snapshot', snapshotRef.current);
+        headShaRef.current = commitSha;
         setPendingPhotos({}); setPhotoPreviews({}); setPendingGallery({});
         bustContentCache();
         setSaveMsg({ type: 'success', text: '✓ Changes saved. Site will update shortly.' });
       }
     } catch (e: any) {
-      setSaveMsg({ type: 'error', text: 'Save failed: ' + e.message + '. Please contact Daniel Chen for technical support if this persists.' });
+      if (e.message?.startsWith('CONCURRENT_EDIT:')) {
+        setSaveMsg({ type: 'error', text: e.message.slice('CONCURRENT_EDIT: '.length) });
+      } else {
+        setSaveMsg({ type: 'error', text: 'Save failed: ' + e.message + '. Please contact Daniel Chen for technical support if this persists.' });
+      }
     } finally {
       setSaving(false);
       setDeploying(false);

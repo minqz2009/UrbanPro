@@ -101,15 +101,27 @@ export async function uploadImage(
   return `images/${filename}`;
 }
 
+// getHeadSha returns the current HEAD commit SHA for the branch.
+export async function getHeadSha(token: string): Promise<string> {
+  const res = await fetch(`${API}/repos/${REPO_OWNER}/${REPO_NAME}/git/ref/heads/${BRANCH}`, {
+    headers: headers(token),
+  });
+  if (!res.ok) throw new Error(`Failed to get HEAD: ${res.status}`);
+  const data = await res.json();
+  return data.object.sha;
+}
+
 // batchCommit atomically commits multiple files in a single git commit using the Git Data API.
 // Each file entry: { path: string; content: string } — content is raw base64 for images, UTF-8 text for JSON.
+// If expectedBaseSha is provided, the commit is rejected if HEAD has moved since load (concurrent edit safety).
 export async function batchCommit(
   token: string,
   files: Array<{ path: string; content: string }>,
   message: string,
-  deletePaths?: string[]
+  options?: { deletePaths?: string[]; expectedBaseSha?: string }
 ): Promise<string> {
   const h = headers(token);
+  const deletePaths = options?.deletePaths;
 
   // 1. Get current HEAD ref
   const refRes = await fetch(`${API}/repos/${REPO_OWNER}/${REPO_NAME}/git/ref/heads/${BRANCH}`, { headers: h });
@@ -119,6 +131,11 @@ export async function batchCommit(
   }
   const refData = await refRes.json();
   const baseCommitSha: string = refData.object.sha;
+
+  // Concurrency check: if expectedBaseSha provided and HEAD moved, reject
+  if (options?.expectedBaseSha && options.expectedBaseSha !== baseCommitSha) {
+    throw new Error('CONCURRENT_EDIT: Someone else has made changes since you loaded this page. Please refresh and try again.');
+  }
 
   // 2. Get the commit to find tree SHA
   const commitRes = await fetch(`${API}/repos/${REPO_OWNER}/${REPO_NAME}/git/commits/${baseCommitSha}`, { headers: h });
