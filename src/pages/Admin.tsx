@@ -174,7 +174,7 @@ function GalleryManager({ projectId, photos, previews, onPhotoQueued, onRemoveEx
 
 // ─── Projects Editor ──────────────────────────────────────────────────────────
 
-function ProjectsEditor({ projects, onChange, onPhotoQueued, photoPreviews, onGalleryQueued, onRemoveGalleryExisting, onRemoveGalleryPending, pendingGalleryKeys, dirtyCategories, buildingCategories, onCategoriesChange }: {
+function ProjectsEditor({ projects, onChange, onPhotoQueued, photoPreviews, onGalleryQueued, onRemoveGalleryExisting, onRemoveGalleryPending, pendingGalleryKeys, dirtyCategories, buildingCategories, onCategoriesChange, onClearPending }: {
   projects: BuildingProject[]; onChange: (p: BuildingProject[]) => void;
   onPhotoQueued: (id: string, file: File, preview: string) => void; photoPreviews: Record<string, string>;
   onGalleryQueued: (key: string, file: File, preview: string) => void;
@@ -182,6 +182,7 @@ function ProjectsEditor({ projects, onChange, onPhotoQueued, photoPreviews, onGa
   pendingGalleryKeys: (projectId: string, prefix?: string) => string[];
   dirtyCategories: Set<string>;
   buildingCategories: string[]; onCategoriesChange: (cats: string[]) => void;
+  onClearPending: (id: string) => void;
 }) {
   const [activeCategory, setActiveCategory] = useState<string>(buildingCategories[0] || 'New Builds');
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
@@ -313,18 +314,32 @@ function ProjectsEditor({ projects, onChange, onPhotoQueued, photoPreviews, onGa
                   onRemovePending={onRemoveGalleryPending}
                   pendingKeys={pendingGalleryKeys(p.id, 'beforegal')}
                   onPhotosReordered={newOrder => onChange(projects.map(pr => pr.id === p.id ? { ...pr, beforePhotos: newOrder } : pr))}
-                  label="Before Photos"
+                  label="Before Photos (optional)"
                   galleryPrefix="beforegal"
                 />
                 <SectionHeading>Floor Plans (optional)</SectionHeading>
                 <p style={{ color: '#475569', fontSize: '0.8rem', marginBottom: '1rem', marginTop: '-0.75rem' }}>Upload before and after floor plan images. Leave empty to hide the floor plan button.</p>
                 <div style={{ display: 'flex', gap: '1.25rem', flexWrap: 'wrap' }}>
-                  <PhotoUploader currentSrc={p.floorPlanAfter || ''} previewDataUrl={photoPreviews['fp-after-' + p.id] || null} label="After Floor Plan"
-                    onFileSelected={(file, preview) => onPhotoQueued('fp-after-' + p.id, file, preview)}
-                    onError={msg => setPhotoErr(e => ({ ...e, [p.id]: msg }))} />
-                  <PhotoUploader currentSrc={p.floorPlanBefore || ''} previewDataUrl={photoPreviews['fp-before-' + p.id] || null} label="Before Floor Plan"
-                    onFileSelected={(file, preview) => onPhotoQueued('fp-before-' + p.id, file, preview)}
-                    onError={msg => setPhotoErr(e => ({ ...e, [p.id]: msg }))} />
+                  {(['After', 'Before'] as const).map(side => {
+                    const fpId = 'fp-' + (side === 'After' ? 'after' : 'before') + '-' + p.id;
+                    const currentVal = side === 'After' ? p.floorPlanAfter : p.floorPlanBefore;
+                    const hasFp = !!(currentVal || photoPreviews[fpId]);
+                    return (
+                      <div key={side} style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                        <PhotoUploader currentSrc={currentVal || ''} previewDataUrl={photoPreviews[fpId] || null} label={side + ' Floor Plan'}
+                          onFileSelected={(file, preview) => onPhotoQueued(fpId, file, preview)}
+                          onError={msg => setPhotoErr(e => ({ ...e, [p.id]: msg }))} />
+                        {hasFp && (
+                          <button onClick={() => {
+                            onClearPending(fpId);
+                            onChange(projects.map(pr => pr.id === p.id ? { ...pr, [side === 'After' ? 'floorPlanAfter' : 'floorPlanBefore']: '' } : pr));
+                          }} style={{ ...S.btnDanger, alignSelf: 'flex-start', padding: '0.25rem 0.6rem', fontSize: '0.7rem' }}>
+                            <X size={11} /> Remove
+                          </button>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
                 <Field label="360° Panorama Link (optional)">
                   <input style={S.input} value={p.pano} onChange={e => update(p.id, 'pano', e.target.value)} placeholder="https://..." />
@@ -724,6 +739,10 @@ export default function Admin() {
     setPendingGallery(g => { const n = { ...g }; delete n[key]; return n; });
     setPhotoPreviews(p => { const n = { ...p }; delete n[key]; return n; });
   };
+  const clearPendingPhoto = (id: string) => {
+    setPendingPhotos(p => { const n = { ...p }; delete n[id]; return n; });
+    setPhotoPreviews(p => { const n = { ...p }; delete n[id]; return n; });
+  };
   const pendingGalleryKeys = (projectId: string, prefix = 'gallery') => Object.keys(pendingGallery).filter(k => k.startsWith(projectId + '-' + prefix + '-'));
 
   const { dirtyTabs, dirtyBuildingCategories } = useMemo(() => {
@@ -979,6 +998,7 @@ export default function Admin() {
               dirtyCategories={dirtyBuildingCategories}
               buildingCategories={content.buildingCategories}
               onCategoriesChange={cats => setContent(c => c ? { ...c, buildingCategories: cats } : c)}
+              onClearPending={clearPendingPhoto}
             />
           )}
         </div>

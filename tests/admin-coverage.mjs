@@ -463,7 +463,7 @@ const projWithFields = content.buildingProjects.every(p => 'beforePhotos' in p &
 assert(projWithFields, 'all projects have beforePhotos/floorPlanBefore/floorPlanAfter');
 
 // Admin: Before Photos GalleryManager
-assert(adminTsx.includes('label="Before Photos"'), 'Admin has Before Photos GalleryManager');
+assert(adminTsx.includes('label="Before Photos (optional)"'), 'Admin has Before Photos GalleryManager');
 assert(adminTsx.includes('label="After Photos (shown first)"'), 'Admin has After Photos label');
 assert(adminTsx.includes('p.beforePhotos'), 'Admin references beforePhotos');
 
