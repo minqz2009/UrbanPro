@@ -1,30 +1,49 @@
 import { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion, useScroll, useTransform, AnimatePresence, useSpring } from 'framer-motion';
-import { X, ChevronLeft, ChevronRight, Maximize2 } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, Maximize2, Layout } from 'lucide-react';
 import { useContent } from '../hooks/useContent';
 import type { BuildingProject } from '../hooks/useContent';
 
 // ─── Project Detail Modal ──────────────────────────────────────────────────────
 
 function ProjectModal({ project, onClose, galleryFont }: { project: BuildingProject; onClose: () => void; galleryFont: string }) {
-  const allPhotos = project.photos?.length > 0 ? project.photos : [project.image];
+  const [showBefore, setShowBefore] = useState(false);
+  const [showFloorPlan, setShowFloorPlan] = useState(false);
+  const [showFloorBefore, setShowFloorBefore] = useState(false);
+  const afterPhotos = project.photos?.length > 0 ? project.photos : [project.image];
+  const beforePhotos = project.beforePhotos?.length > 0 ? project.beforePhotos : [];
+  const currentPhotos = showBefore ? beforePhotos : afterPhotos;
+  const hasBefore = beforePhotos.length > 0;
+  const hasAfter = afterPhotos.length > 0;
+  const hasFloorPlan = !!(project.floorPlanAfter || project.floorPlanBefore);
   const [idx, setIdx] = useState(0);
   const [showPano, setShowPano] = useState(false);
   const hasPano = !!project.pano;
 
-  const prev = () => setIdx(i => (i - 1 + allPhotos.length) % allPhotos.length);
-  const next = () => setIdx(i => (i + 1) % allPhotos.length);
+  const prev = () => setIdx(i => (i - 1 + currentPhotos.length) % currentPhotos.length);
+  const next = () => setIdx(i => (i + 1) % currentPhotos.length);
+
+  // Reset idx when switching before/after if out of bounds
+  const switchSet = (before: boolean) => {
+    setShowBefore(before);
+    const target = before ? beforePhotos : afterPhotos;
+    if (idx >= target.length) setIdx(Math.max(0, target.length - 1));
+  };
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-      if (e.key === 'ArrowLeft') prev();
-      if (e.key === 'ArrowRight') next();
+      if (e.key === 'Escape') { if (showFloorPlan) setShowFloorPlan(false); else onClose(); }
+      if (!showFloorPlan) { if (e.key === 'ArrowLeft') prev(); if (e.key === 'ArrowRight') next(); }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, []);
+  }, [idx, currentPhotos.length, showFloorPlan]);
+
+  // floor plan images
+  const fpCurrent = showFloorBefore && project.floorPlanBefore ? project.floorPlanBefore : project.floorPlanAfter;
+  const hasFpBefore = !!project.floorPlanBefore;
+  const hasFpAfter = !!project.floorPlanAfter;
 
   return (
     <motion.div
@@ -43,41 +62,104 @@ function ProjectModal({ project, onClose, galleryFont }: { project: BuildingProj
         initial={{ y: 40, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.15, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
         style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '4.5rem 0 0', overflow: 'hidden' }}
       >
-        {!showPano ? (
-          <>
-            {/* Photo viewer */}
-            <div style={{ flex: 1, position: 'relative', overflow: 'hidden', minHeight: 0 }}>
+        {showFloorPlan ? (
+          /* Floor Plan view */
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+            <div style={{ flex: 1, position: 'relative', overflow: 'hidden' }}>
               <AnimatePresence mode="wait">
                 <motion.img
-                  key={idx}
-                  src={allPhotos[idx]}
-                  alt={project.title}
+                  key={(showFloorBefore ? 'before' : 'after')}
+                  src={fpCurrent}
+                  alt="Floor Plan"
                   initial={{ opacity: 0, scale: 1.03 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.98 }}
                   transition={{ duration: 0.5, ease: 'easeInOut' }}
-                  style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block', userSelect: 'none' }}
+                  style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
                 />
               </AnimatePresence>
-
-              {/* Arrows (only if multiple photos) */}
-              {allPhotos.length > 1 && (
-                <>
-                  <button onClick={prev} style={{ position: 'absolute', left: '1.5rem', top: '50%', transform: 'translateY(-50%)', backgroundColor: 'rgba(0,0,0,0.4)', border: 'none', color: 'white', width: '48px', height: '48px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', borderRadius: '50%', backdropFilter: 'blur(4px)' }}>
-                    <ChevronLeft size={24} />
-                  </button>
-                  <button onClick={next} style={{ position: 'absolute', right: '1.5rem', top: '50%', transform: 'translateY(-50%)', backgroundColor: 'rgba(0,0,0,0.4)', border: 'none', color: 'white', width: '48px', height: '48px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', borderRadius: '50%', backdropFilter: 'blur(4px)' }}>
-                    <ChevronRight size={24} />
-                  </button>
-                </>
+              {(hasFpBefore && hasFpAfter) && (
+                <div style={{ position: 'absolute', bottom: '2rem', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: '0.5rem' }}>
+                  <button onClick={() => setShowFloorBefore(false)} style={{
+                    padding: '0.6rem 1.5rem', border: `1px solid ${!showFloorBefore ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.1)'}`,
+                    backgroundColor: !showFloorBefore ? 'rgba(255,255,255,0.1)' : 'transparent', color: !showFloorBefore ? 'white' : 'rgba(255,255,255,0.35)',
+                    fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', cursor: !showFloorBefore ? 'default' : 'pointer', fontFamily: galleryFont
+                  }}>After</button>
+                  <button onClick={() => setShowFloorBefore(true)} style={{
+                    padding: '0.6rem 1.5rem', border: `1px solid ${showFloorBefore ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.1)'}`,
+                    backgroundColor: showFloorBefore ? 'rgba(255,255,255,0.1)' : 'transparent', color: showFloorBefore ? 'white' : 'rgba(255,255,255,0.35)',
+                    fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', cursor: showFloorBefore ? 'default' : 'pointer', fontFamily: galleryFont
+                  }}>Before</button>
+                </div>
               )}
+            </div>
+            <div style={{ padding: '1.25rem 4vw', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid rgba(255,255,255,0.06)', flexShrink: 0 }}>
+              <div>
+                <h3 style={{ fontSize: 'clamp(1rem, 2.5vw, 1.5rem)', fontWeight: 800, letterSpacing: '-0.03em', margin: '0 0 0.2rem', color: 'white', textTransform: 'uppercase' }}>{project.title}</h3>
+                <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.12em', margin: 0 }}>Floor Plan</p>
+              </div>
+              <button onClick={() => setShowFloorPlan(false)} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', padding: '0.65rem 1.25rem', backgroundColor: 'transparent', color: 'rgba(255,255,255,0.7)', border: '1px solid rgba(255,255,255,0.15)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', cursor: 'pointer', fontFamily: galleryFont }}>
+                ← Back to Photos
+              </button>
+            </div>
+          </div>
+        ) : !showPano ? (
+          <>
+            {/* Before/After toggle */}
+            {(hasBefore || hasAfter) && (
+              <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
+                <button onClick={() => switchSet(false)} style={{
+                  padding: '0.55rem 1.6rem', border: `1px solid ${!showBefore ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.08)'}`,
+                  backgroundColor: !showBefore ? 'rgba(255,255,255,0.08)' : 'transparent', color: !showBefore ? 'white' : 'rgba(255,255,255,0.25)',
+                  fontSize: '0.78rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', cursor: !showBefore ? 'default' : (hasAfter ? 'pointer' : 'default'), fontFamily: galleryFont, transition: 'all 0.3s ease'
+                }}>After{hasAfter ? '' : ' (none)'}</button>
+                <button onClick={() => switchSet(true)} style={{
+                  padding: '0.55rem 1.6rem', border: `1px solid ${showBefore ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.08)'}`,
+                  backgroundColor: showBefore ? 'rgba(255,255,255,0.08)' : 'transparent', color: showBefore ? 'white' : 'rgba(255,255,255,0.25)',
+                  fontSize: '0.78rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', cursor: showBefore ? 'default' : (hasBefore ? 'pointer' : 'default'), fontFamily: galleryFont, transition: 'all 0.3s ease'
+                }}>Before{hasBefore ? '' : ' (none)'}</button>
+              </div>
+            )}
 
-              {/* Photo counter */}
-              {allPhotos.length > 1 && (
-                <div style={{ position: 'absolute', bottom: '1rem', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: '6px' }}>
-                  {allPhotos.map((_, i) => (
-                    <button key={i} onClick={() => setIdx(i)} style={{ width: i === idx ? '20px' : '6px', height: '6px', borderRadius: '3px', backgroundColor: i === idx ? 'white' : 'rgba(255,255,255,0.3)', border: 'none', cursor: 'pointer', padding: 0, transition: 'all 0.3s ease' }} />
-                  ))}
+            {/* Photo viewer */}
+            <div style={{ flex: 1, position: 'relative', overflow: 'hidden', minHeight: 0 }}>
+              {currentPhotos.length > 0 ? (
+                <>
+                  <AnimatePresence mode="wait">
+                    <motion.img
+                      key={`${showBefore ? 'before' : 'after'}-${idx}`}
+                      src={currentPhotos[idx]}
+                      alt={project.title}
+                      initial={{ opacity: 0, scale: 1.03 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.98 }}
+                      transition={{ duration: 0.5, ease: 'easeInOut' }}
+                      style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block', userSelect: 'none' }}
+                    />
+                  </AnimatePresence>
+
+                  {currentPhotos.length > 1 && (
+                    <>
+                      <button onClick={prev} style={{ position: 'absolute', left: '1.5rem', top: '50%', transform: 'translateY(-50%)', backgroundColor: 'rgba(0,0,0,0.4)', border: 'none', color: 'white', width: '48px', height: '48px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', borderRadius: '50%', backdropFilter: 'blur(4px)' }}>
+                        <ChevronLeft size={24} />
+                      </button>
+                      <button onClick={next} style={{ position: 'absolute', right: '1.5rem', top: '50%', transform: 'translateY(-50%)', backgroundColor: 'rgba(0,0,0,0.4)', border: 'none', color: 'white', width: '48px', height: '48px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', borderRadius: '50%', backdropFilter: 'blur(4px)' }}>
+                        <ChevronRight size={24} />
+                      </button>
+                    </>
+                  )}
+
+                  {currentPhotos.length > 1 && (
+                    <div style={{ position: 'absolute', bottom: '1rem', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: '6px' }}>
+                      {currentPhotos.map((_, i) => (
+                        <button key={i} onClick={() => setIdx(i)} style={{ width: i === idx ? '20px' : '6px', height: '6px', borderRadius: '3px', backgroundColor: i === idx ? 'white' : 'rgba(255,255,255,0.3)', border: 'none', cursor: 'pointer', padding: 0, transition: 'all 0.3s ease' }} />
+                      ))}
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'rgba(255,255,255,0.2)', fontSize: '1rem', textTransform: 'uppercase', letterSpacing: '0.15em' }}>
+                  No {showBefore ? 'before' : 'after'} photos
                 </div>
               )}
             </div>
@@ -90,6 +172,11 @@ function ProjectModal({ project, onClose, galleryFont }: { project: BuildingProj
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
                 <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem', lineHeight: 1.6, maxWidth: '380px', margin: 0 }}>{project.description}</p>
+                {hasFloorPlan && (
+                  <button onClick={() => setShowFloorPlan(true)} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', padding: '0.65rem 1.25rem', backgroundColor: 'transparent', color: 'white', border: '1px solid rgba(255,255,255,0.25)', fontSize: '0.78rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', cursor: 'pointer', fontFamily: galleryFont, flexShrink: 0, whiteSpace: 'nowrap', transition: 'border-color 0.2s' }}>
+                    <Layout size={15} /> View Floor Plan
+                  </button>
+                )}
                 {hasPano && (
                   <button onClick={() => setShowPano(true)} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.6rem', padding: '0.75rem 1.5rem', backgroundColor: 'transparent', color: 'white', border: '1px solid rgba(255,255,255,0.25)', fontSize: '0.78rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', cursor: 'pointer', fontFamily: galleryFont, flexShrink: 0, whiteSpace: 'nowrap', transition: 'border-color 0.2s' }}>
                     <Maximize2 size={15} /> 360° Panorama

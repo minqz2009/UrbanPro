@@ -92,10 +92,10 @@ function PhotoUploader({ currentSrc, previewDataUrl, onFileSelected, label = 'Ph
 
 // ─── Gallery Photo Manager ────────────────────────────────────────────────────
 
-function GalleryManager({ projectId, photos, previews, onPhotoQueued, onRemoveExisting, onRemovePending, pendingKeys, onPhotosReordered }: {
+function GalleryManager({ projectId, photos, previews, onPhotoQueued, onRemoveExisting, onRemovePending, pendingKeys, onPhotosReordered, label }: {
   projectId: string; photos: string[]; previews: Record<string, string>; onPhotoQueued: (key: string, file: File, preview: string) => void;
   onRemoveExisting: (idx: number) => void; onRemovePending: (key: string) => void; pendingKeys: string[];
-  onPhotosReordered: (newOrder: string[]) => void;
+  onPhotosReordered: (newOrder: string[]) => void; label?: string;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [err, setErr] = useState('');
@@ -138,7 +138,7 @@ function GalleryManager({ projectId, photos, previews, onPhotoQueued, onRemoveEx
 
   return (
     <div>
-      <label style={S.label}>Gallery Photos (shown when visitors click this project)</label>
+      <label style={S.label}>{label || 'Gallery Photos'}</label>
       <p style={{ fontSize: '0.78rem', color: '#475569', marginBottom: '0.75rem' }}>
         Max {MAX_MB} MB · JPG, PNG, WEBP, AVIF. Drag to reorder.
       </p>
@@ -190,7 +190,7 @@ function ProjectsEditor({ projects, onChange, onPhotoQueued, photoPreviews, onGa
 
   const update = (id: string, field: keyof BuildingProject, value: string) => onChange(projects.map(p => p.id === id ? { ...p, [field]: value } : p));
   const remove = (id: string) => { if (!confirm('Remove this project?')) return; onChange(projects.filter(p => p.id !== id)); };
-  const add = () => { const id = `project-${Date.now()}`; onChange([...projects, { id, title: 'New Project', location: '', description: '', image: '', photos: [], category: activeCategory, pano: '' }]); };
+  const add = () => { const id = `project-${Date.now()}`; onChange([...projects, { id, title: 'New Project', location: '', description: '', image: '', photos: [], beforePhotos: [], floorPlanBefore: '', floorPlanAfter: '', category: activeCategory, pano: '' }]); };
   const visible = projects.filter(p => p.category === activeCategory);
 
   const handleDragStart = (e: React.DragEvent, cat: string) => {
@@ -300,7 +300,29 @@ function ProjectsEditor({ projects, onChange, onPhotoQueued, photoPreviews, onGa
                   onRemovePending={onRemoveGalleryPending}
                   pendingKeys={pendingGalleryKeys(p.id)}
                   onPhotosReordered={newOrder => onChange(projects.map(pr => pr.id === p.id ? { ...pr, photos: newOrder } : pr))}
+                  label="After Photos (shown first)"
                 />
+                <GalleryManager
+                  projectId={p.id}
+                  photos={p.beforePhotos || []}
+                  previews={photoPreviews}
+                  onPhotoQueued={onGalleryQueued}
+                  onRemoveExisting={idx => onChange(projects.map(pr => pr.id === p.id ? { ...pr, beforePhotos: pr.beforePhotos.filter((_, i) => i !== idx) } : pr))}
+                  onRemovePending={onRemoveGalleryPending}
+                  pendingKeys={pendingGalleryKeys(p.id)}
+                  onPhotosReordered={newOrder => onChange(projects.map(pr => pr.id === p.id ? { ...pr, beforePhotos: newOrder } : pr))}
+                  label="Before Photos"
+                />
+                <SectionHeading>Floor Plans (optional)</SectionHeading>
+                <p style={{ color: '#475569', fontSize: '0.8rem', marginBottom: '1rem', marginTop: '-0.75rem' }}>Upload before and after floor plan images. Leave empty to hide the floor plan button.</p>
+                <div style={{ display: 'flex', gap: '1.25rem', flexWrap: 'wrap' }}>
+                  <PhotoUploader currentSrc={p.floorPlanAfter || ''} previewDataUrl={photoPreviews['fp-after-' + p.id] || null} label="After Floor Plan"
+                    onFileSelected={(file, preview) => onPhotoQueued('fp-after-' + p.id, file, preview)}
+                    onError={msg => setPhotoErr(e => ({ ...e, [p.id]: msg }))} />
+                  <PhotoUploader currentSrc={p.floorPlanBefore || ''} previewDataUrl={photoPreviews['fp-before-' + p.id] || null} label="Before Floor Plan"
+                    onFileSelected={(file, preview) => onPhotoQueued('fp-before-' + p.id, file, preview)}
+                    onError={msg => setPhotoErr(e => ({ ...e, [p.id]: msg }))} />
+                </div>
                 <Field label="360° Panorama Link (optional)">
                   <input style={S.input} value={p.pano} onChange={e => update(p.id, 'pano', e.target.value)} placeholder="https://..." />
                   <p style={{ fontSize: '0.72rem', color: '#475569', marginTop: '0.3rem' }}>Paste a 360° panorama image URL. If provided, a "360° Panorama" button appears in the gallery.</p>
@@ -594,7 +616,6 @@ function LoginScreen({ onLogin }: { onLogin: (tok: string) => void }) {
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [showHelp, setShowHelp] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -630,25 +651,6 @@ function LoginScreen({ onLogin }: { onLogin: (tok: string) => void }) {
             {loading ? 'Checking...' : 'Sign In'}
           </button>
         </form>
-        <div style={{ marginTop: '2rem', borderTop: '1px solid #1e293b', paddingTop: '1.5rem' }}>
-          <button onClick={() => setShowHelp(h => !h)} style={{ ...S.btnGhost, width: '100%', justifyContent: 'center', fontSize: '0.82rem' }}>
-            {showHelp ? '▲' : '▼'} How do I get a token?
-          </button>
-          {showHelp && (
-            <div style={{ marginTop: '1rem', backgroundColor: '#0f172a', border: '1px solid #1e293b', borderRadius: '8px', padding: '1.25rem', fontSize: '0.85rem', color: '#94a3b8', lineHeight: 1.8 }}>
-              <p style={{ fontWeight: 700, color: '#e2e8f0', marginBottom: '0.75rem' }}>Follow these steps:</p>
-              <ol style={{ paddingLeft: '1.2rem', margin: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                <li>Go to <strong style={{ color: '#60a5fa' }}>github.com</strong> → your profile → <strong>Settings</strong></li>
-                <li>Scroll to <strong>Developer settings</strong> → <strong>Personal access tokens</strong> → <strong>Fine-grained tokens</strong></li>
-                <li>Click <strong>Generate new token</strong> and give it any name</li>
-                <li>Under <strong>Repository access</strong> select <strong>Only select repositories</strong> → choose <strong>UrbanPro</strong></li>
-                <li>Under <strong>Permissions → Contents</strong> set to <strong>Read and write</strong></li>
-                <li>Click <strong>Generate token</strong>, copy it, paste it above</li>
-              </ol>
-              <p style={{ marginTop: '0.75rem', color: '#475569', fontSize: '0.8rem' }}>Treat this like a password. It's stored only in this browser tab and cleared when you close it.</p>
-            </div>
-          )}
-        </div>
       </div>
     </div>
   );
@@ -679,6 +681,7 @@ export default function Admin() {
   const [deployPhase, setDeployPhase] = useState<DeployPhase | null>(null);
   const [saveMsg, setSaveMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [loadError, setLoadError] = useState('');
+  const [pendingDeletes, setPendingDeletes] = useState<Set<string>>(new Set());
   const snapshotRef = useRef(sessionStorage.getItem('urbanpro_snapshot') || '');
 
   useEffect(() => {
@@ -706,7 +709,13 @@ export default function Admin() {
 
   const removeGalleryExisting = (projectId: string, idx: number) => {
     if (!content) return;
-    setContent(c => c ? { ...c, buildingProjects: c.buildingProjects.map(p => p.id === projectId ? { ...p, photos: p.photos.filter((_, i) => i !== idx) } : p) } : c);
+    setContent(c => {
+      if (!c) return c;
+      const project = c.buildingProjects.find(p => p.id === projectId);
+      const removedPath = project?.photos?.[idx];
+      if (removedPath) setPendingDeletes(d => new Set([...d, 'public/' + removedPath]));
+      return { ...c, buildingProjects: c.buildingProjects.map(p => p.id === projectId ? { ...p, photos: p.photos.filter((_, i) => i !== idx) } : p) };
+    });
   };
   const removeGalleryPending = (key: string) => {
     setPendingGallery(g => { const n = { ...g }; delete n[key]; return n; });
@@ -774,14 +783,22 @@ export default function Admin() {
       const updated = JSON.parse(JSON.stringify(content)) as SiteContent;
       const files: Array<{ path: string; content: string }> = [];
 
-      // Prepare cover photo uploads
+      // Prepare cover photo + floor plan uploads
       for (const [id, file] of Object.entries(pendingPhotos)) {
         const base64 = await readFileAsBase64(file);
         const fname = sanitiseFilename(file.name);
         const imagePath = `images/${fname}`;
         files.push({ path: `public/images/${fname}`, content: base64 });
-        updated.team = updated.team.map(m => m.id === id ? { ...m, photo: imagePath } : m);
-        updated.buildingProjects = updated.buildingProjects.map(p => p.id === id ? { ...p, image: imagePath } : p);
+        if (id.startsWith('fp-after-')) {
+          const pid = id.slice('fp-after-'.length);
+          updated.buildingProjects = updated.buildingProjects.map(p => p.id === pid ? { ...p, floorPlanAfter: imagePath } : p);
+        } else if (id.startsWith('fp-before-')) {
+          const pid = id.slice('fp-before-'.length);
+          updated.buildingProjects = updated.buildingProjects.map(p => p.id === pid ? { ...p, floorPlanBefore: imagePath } : p);
+        } else {
+          updated.team = updated.team.map(m => m.id === id ? { ...m, photo: imagePath } : m);
+          updated.buildingProjects = updated.buildingProjects.map(p => p.id === id ? { ...p, image: imagePath } : p);
+        }
       }
 
       // Prepare gallery photo uploads
@@ -798,8 +815,21 @@ export default function Admin() {
       // Add content.json as the last file
       files.push({ path: CONTENT_PATH, content: JSON.stringify(updated, null, 2) });
 
-      // Single atomic commit
-      const commitSha = await batchCommit(token, files, 'Admin: update site content');
+      // Compute safe-to-delete paths: only delete if no longer referenced in updated content
+      const allRefs = new Set<string>();
+      for (const p of updated.buildingProjects) {
+        if (p.image) allRefs.add('public/' + p.image);
+        for (const ph of (p.photos || [])) allRefs.add('public/' + ph);
+        for (const ph of (p.beforePhotos || [])) allRefs.add('public/' + ph);
+        if (p.floorPlanAfter) allRefs.add('public/' + p.floorPlanAfter);
+        if (p.floorPlanBefore) allRefs.add('public/' + p.floorPlanBefore);
+      }
+      for (const m of updated.team) { if (m.photo) allRefs.add('public/' + m.photo); }
+      const safeDeletes = [...pendingDeletes].filter(dp => !allRefs.has(dp));
+
+      // Single atomic commit with deletions
+      const commitSha = await batchCommit(token, files, 'Admin: update site content', safeDeletes);
+      setPendingDeletes(new Set());
       setSaving(false);
 
       // Wait for deploy to complete, reporting progress

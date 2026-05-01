@@ -106,7 +106,8 @@ export async function uploadImage(
 export async function batchCommit(
   token: string,
   files: Array<{ path: string; content: string }>,
-  message: string
+  message: string,
+  deletePaths?: string[]
 ): Promise<string> {
   const h = headers(token);
 
@@ -128,13 +129,12 @@ export async function batchCommit(
   const commitData = await commitRes.json();
   const baseTreeSha: string = commitData.tree.sha;
 
-  // 3. Create blobs for each file
-  const treeEntries: Array<{ path: string; mode: string; type: string; sha: string }> = [];
+  // 3. Create blobs for each new/modified file
+  const treeEntries: Array<{ path: string; mode: string; type: string; sha: string | null }> = [];
   for (const file of files) {
     const isImage = file.path.startsWith('public/images/');
     const blobBody: Record<string, string> = { content: file.content };
     if (isImage) blobBody.encoding = 'base64';
-    // text files default to utf-8
 
     const blobRes = await fetch(`${API}/repos/${REPO_OWNER}/${REPO_NAME}/git/blobs`, {
       method: 'POST',
@@ -149,18 +149,64 @@ export async function batchCommit(
     treeEntries.push({ path: file.path, mode: '100644', type: 'blob', sha: blobData.sha });
   }
 
-  // 4. Create new tree
-  const treeRes = await fetch(`${API}/repos/${REPO_OWNER}/${REPO_NAME}/git/trees`, {
-    method: 'POST',
-    headers: h,
-    body: JSON.stringify({ base_tree: baseTreeSha, tree: treeEntries }),
-  });
-  if (!treeRes.ok) {
-    const err = await treeRes.json().catch(() => ({}));
-    throw new Error(err.message || `Failed to create tree: ${treeRes.status}`);
+  // 3b. Mark deleted files for removal from tree
+  const deleteSet = new Set(deletePaths || []);
+  if (deleteSet.size > 0) {
+    for (const dp of deleteSet) {
+      treeEntries.push({ path: dp, mode: '100644', type: 'blob', sha: null });
+    }
   }
-  const treeData = await treeRes.json();
-  const newTreeSha: string = treeData.sha;
+
+  // 4. Create new tree (if deletions needed, get recursive tree first to filter)
+  let newTreeSha: string;
+  if (deleteSet.size > 0) {
+    // Need the full tree to properly remove entries
+    const fullTreeRes = await fetch(`${API}/repos/${REPO_OWNER}/${REPO_NAME}/git/trees/${baseTreeSha}?recursive=1`, { headers: h });
+    if (!fullTreeRes.ok) {
+      const err = await fullTreeRes.json().catch(() => ({}));
+      throw new Error(err.message || `Failed to get full tree: ${fullTreeRes.status}`);
+    }
+    const fullTreeData = await fullTreeRes.json();
+    // Filter out deleted paths, keep all other entries
+    const keepEntries: Array<{ path: string; mode: string; type: string; sha: string }> = [];
+    for (const entry of fullTreeData.tree) {
+      if (entry.type === 'tree') continue; // skip sub-directories
+      if (deleteSet.has(entry.path)) continue; // skip deleted files
+      keepEntries.push({ path: entry.path, mode: entry.mode, type: 'blob', sha: entry.sha });
+    }
+    // Add new/modified entries (override existing with same path)
+    for (const e of treeEntries) {
+      if (e.sha !== null) {
+        // Remove existing entry at same path if present
+        const existIdx = keepEntries.findIndex(k => k.path === e.path);
+        if (existIdx >= 0) keepEntries.splice(existIdx, 1);
+        keepEntries.push({ path: e.path, mode: e.mode, type: e.type, sha: e.sha });
+      }
+    }
+    const treeRes = await fetch(`${API}/repos/${REPO_OWNER}/${REPO_NAME}/git/trees`, {
+      method: 'POST',
+      headers: h,
+      body: JSON.stringify({ tree: keepEntries }),
+    });
+    if (!treeRes.ok) {
+      const err = await treeRes.json().catch(() => ({}));
+      throw new Error(err.message || `Failed to create tree: ${treeRes.status}`);
+    }
+    const treeData = await treeRes.json();
+    newTreeSha = treeData.sha;
+  } else {
+    const treeRes = await fetch(`${API}/repos/${REPO_OWNER}/${REPO_NAME}/git/trees`, {
+      method: 'POST',
+      headers: h,
+      body: JSON.stringify({ base_tree: baseTreeSha, tree: treeEntries }),
+    });
+    if (!treeRes.ok) {
+      const err = await treeRes.json().catch(() => ({}));
+      throw new Error(err.message || `Failed to create tree: ${treeRes.status}`);
+    }
+    const treeData = await treeRes.json();
+    newTreeSha = treeData.sha;
+  }
 
   // 5. Create commit
   const newCommitRes = await fetch(`${API}/repos/${REPO_OWNER}/${REPO_NAME}/git/commits`, {

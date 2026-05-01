@@ -59,6 +59,9 @@ export interface BuildingProject {
   description: string;
   image: string;
   photos: string[];
+  beforePhotos: string[];
+  floorPlanBefore: string;
+  floorPlanAfter: string;
   category: string;
   pano: string;
 }
@@ -169,6 +172,9 @@ export function merge(data: Partial<SiteContent>): SiteContent {
     buildingProjects: (data.buildingProjects ?? DEFAULT.buildingProjects).map(p => ({
       ...p,
       photos: p.photos ?? [],
+      beforePhotos: p.beforePhotos ?? [],
+      floorPlanBefore: p.floorPlanBefore ?? '',
+      floorPlanAfter: p.floorPlanAfter ?? '',
     })),
     buildingCategories: data.buildingCategories ?? DEFAULT.buildingCategories,
   };

@@ -446,6 +446,62 @@ assert(JSON.stringify(photoR2) === JSON.stringify(['d.jpg', 'a.jpg', 'b.jpg', 'c
 // beforeunload uses ref to prevent over-registration
 assert(adminTsx.includes('hasUnsavedRef'), 'beforeunload uses ref to prevent over-registration');
 
+// =======================================================================
+// 15. BEFORE/AFTER GALLERY, FLOOR PLAN & DELETION
+// =======================================================================
+console.log('\n=== 15. Before/After Gallery, Floor Plan & Deletion ===');
+
+// BuildingProject has new fields
+assert(useContentTs.includes('beforePhotos: string[]'), 'BuildingProject has beforePhotos field');
+assert(useContentTs.includes('floorPlanBefore: string'), 'BuildingProject has floorPlanBefore field');
+assert(useContentTs.includes('floorPlanAfter: string'), 'BuildingProject has floorPlanAfter field');
+assert(useContentTs.includes('beforePhotos: p.beforePhotos ?? []'), 'merge() defaults beforePhotos');
+assert(useContentTs.includes('floorPlanBefore: p.floorPlanBefore ??'), 'merge() defaults floorPlanBefore');
+
+// Content.json has new fields on projects
+const projWithFields = content.buildingProjects.every(p => 'beforePhotos' in p && 'floorPlanBefore' in p && 'floorPlanAfter' in p);
+assert(projWithFields, 'all projects have beforePhotos/floorPlanBefore/floorPlanAfter');
+
+// Admin: Before Photos GalleryManager
+assert(adminTsx.includes('label="Before Photos"'), 'Admin has Before Photos GalleryManager');
+assert(adminTsx.includes('label="After Photos (shown first)"'), 'Admin has After Photos label');
+assert(adminTsx.includes('p.beforePhotos'), 'Admin references beforePhotos');
+
+// Admin: Floor plan upload fields
+assert(adminTsx.includes('Floor Plans (optional)'), 'Admin has Floor Plans section');
+assert(adminTsx.includes('fp-after-'), 'Admin uses fp-after- prefix for floor plan photos');
+assert(adminTsx.includes('fp-before-'), 'Admin uses fp-before- prefix for floor plan photos');
+
+// handleSave handles floor plan photo IDs
+assert(adminTsx.includes("id.startsWith('fp-after-')"), 'handleSave handles fp-after IDs');
+assert(adminTsx.includes("id.startsWith('fp-before-')"), 'handleSave handles fp-before IDs');
+
+// Building.tsx Before/After toggle
+assert(buildingTsx.includes('showBefore'), 'Building modal has showBefore state');
+assert(buildingTsx.includes('switchSet'), 'Building modal has switchSet function');
+assert(buildingTsx.includes('Before'), 'Building modal has Before toggle');
+assert(buildingTsx.includes('After'), 'Building modal has After toggle');
+
+// Building.tsx floor plan
+assert(buildingTsx.includes('View Floor Plan'), 'Building modal has floor plan button');
+assert(buildingTsx.includes('showFloorPlan'), 'Building modal has showFloorPlan state');
+assert(buildingTsx.includes('hasFloorPlan'), 'Building modal checks hasFloorPlan');
+
+// GalleryManager label prop
+assert(adminTsx.includes('label?: string'), 'GalleryManager accepts label prop');
+assert(adminTsx.includes('label ||'), 'GalleryManager uses label prop');
+
+// PAT instructions removed
+assert(!adminTsx.includes('How do I get a token?'), 'PAT help instructions removed');
+assert(!adminTsx.includes('showHelp'), 'showHelp state removed');
+
+// Deletion support
+assert(adminTsx.includes('pendingDeletes'), 'Admin has pendingDeletes state');
+assert(adminTsx.includes('safeDeletes'), 'handleSave computes safeToDelete paths');
+const ghTs2 = readFileSync(join(root, 'src/services/github.ts'), 'utf-8');
+assert(ghTs2.includes('deletePaths'), 'batchCommit accepts deletePaths');
+assert(ghTs2.includes('deleteSet'), 'batchCommit handles deletion set');
+
 // Daniel Chen error message
 assert(adminTsx.includes('contact Daniel Chen for technical support'), 'error message mentions Daniel Chen');
 

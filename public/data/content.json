@@ -100,7 +100,10 @@
         "images/building-extension.jpg"
       ],
       "category": "New Builds",
-      "pano": "https://pannellum.org/images/alma.jpg"
+      "pano": "https://pannellum.org/images/alma.jpg",
+      "beforePhotos": [],
+      "floorPlanBefore": "",
+      "floorPlanAfter": ""
     },
     {
       "id": "coastal-retreat",
@@ -114,7 +117,10 @@
         "images/building-acoustic.jpg"
       ],
       "category": "New Builds",
-      "pano": "https://pannellum.org/images/bma-1.jpg"
+      "pano": "https://pannellum.org/images/bma-1.jpg",
+      "beforePhotos": [],
+      "floorPlanBefore": "",
+      "floorPlanAfter": ""
     },
     {
       "id": "acoustic-ceilings",
@@ -127,7 +133,10 @@
         "images/building-glass-house.jpg"
       ],
       "category": "Small Projects",
-      "pano": "https://pannellum.org/images/alma.jpg"
+      "pano": "https://pannellum.org/images/alma.jpg",
+      "beforePhotos": [],
+      "floorPlanBefore": "",
+      "floorPlanAfter": ""
     },
     {
       "id": "project-1777566164290",
@@ -148,7 +157,10 @@
         "images/chatgpt-image-may-1-2026-01-47-28-am-1777566442652.png"
       ],
       "category": "Renovations",
-      "pano": ""
+      "pano": "",
+      "beforePhotos": [],
+      "floorPlanBefore": "",
+      "floorPlanAfter": ""
     },
     {
       "id": "project-1777565881655",
@@ -167,7 +179,10 @@
         "images/chatgpt-image-may-1-2026-01-27-57-am-1777566336173.png"
       ],
       "category": "Renovations",
-      "pano": ""
+      "pano": "",
+      "beforePhotos": [],
+      "floorPlanBefore": "",
+      "floorPlanAfter": ""
     },
     {
       "id": "project-1777565943927",
@@ -185,7 +200,10 @@
         "images/chatgpt-image-may-1-2026-02-13-59-am-1777566361863.png"
       ],
       "category": "Renovations",
-      "pano": ""
+      "pano": "",
+      "beforePhotos": [],
+      "floorPlanBefore": "",
+      "floorPlanAfter": ""
     },
     {
       "id": "project-1777566104115",
@@ -207,7 +225,10 @@
         "images/chatgpt-image-may-1-2026-01-58-15-am-1777566404026.png"
       ],
       "category": "Renovations",
-      "pano": ""
+      "pano": "",
+      "beforePhotos": [],
+      "floorPlanBefore": "",
+      "floorPlanAfter": ""
     }
   ],
   "buildingCategories": [

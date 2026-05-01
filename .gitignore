@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Raw photo imports
+public/images/renovation/
+public/images/team-john2.jpg
+*.ARW
+*.zip
