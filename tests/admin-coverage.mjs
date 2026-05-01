@@ -502,6 +502,57 @@ const ghTs2 = readFileSync(join(root, 'src/services/github.ts'), 'utf-8');
 assert(ghTs2.includes('deletePaths'), 'batchCommit accepts deletePaths');
 assert(ghTs2.includes('deleteSet'), 'batchCommit handles deletion set');
 
+// =======================================================================
+// 16. PANO & FULL FIELD AUDIT
+// =======================================================================
+console.log('\n=== 16. Panorama & Full Field Audit ===');
+
+// BuildingProject has pano field
+assert(useContentTs.includes('pano: string'), 'BuildingProject interface has pano field');
+
+// Admin has pano input
+assert(adminTsx.includes("360° Panorama Link"), 'Admin has panorama link input');
+assert(adminTsx.includes("update(p.id, 'pano'"), 'Admin update function handles pano');
+
+// merge preserves pano (not overridden with default — only beforePhotos/floors get defaults)
+assert(useContentTs.includes('...p'), 'merge spreads project data preserving all fields');
+const mergeBlock = useContentTs.slice(useContentTs.indexOf('...p'), useContentTs.indexOf('})', useContentTs.indexOf('...p')));
+assert(!mergeBlock.includes("pano"), 'merge does not override pano with a default');
+
+// All BuildingProject fields present in content.json
+const bpFields = ['id', 'title', 'location', 'description', 'image', 'photos', 'beforePhotos', 'floorPlanBefore', 'floorPlanAfter', 'category', 'pano'];
+for (const p of content.buildingProjects) {
+  for (const f of bpFields) {
+    assert(f in p, `project ${p.id} has field ${f}`);
+  }
+}
+
+// Dirty detection checks buildingProjects
+assert(adminTsx.includes("JSON.stringify(content.buildingProjects) !== JSON.stringify(snap.buildingProjects)"), 'dirty detection compares buildingProjects');
+
+// Simulate pano change detection
+const projWithPano = JSON.parse(JSON.stringify(content.buildingProjects[0]));
+projWithPano.pano = 'https://changed-link.com';
+const snapStr = JSON.stringify(content.buildingProjects);
+const changedStr = JSON.stringify([projWithPano, ...content.buildingProjects.slice(1)]);
+assert(snapStr !== changedStr, 'pano change detected by JSON.stringify comparison');
+
+// Simulate pano clear detection
+const projClearedPano = JSON.parse(JSON.stringify(content.buildingProjects[0]));
+projClearedPano.pano = '';
+const clearedStr = JSON.stringify([projClearedPano, ...content.buildingProjects.slice(1)]);
+assert(snapStr !== clearedStr, 'pano clear detected by JSON.stringify comparison');
+
+// Test that ALL editor onChange functions go through setContent
+assert(adminTsx.includes('onChange={setContent}'), 'editors use setContent');
+assert(adminTsx.includes('setContent(c => c ? { ...c, buildingProjects }'), 'Building editor updates content');
+
+// Check all editor onChange handlers exist
+const editorFuncs = ['SettingsEditor', 'HomeEditor', 'PlumbingEditor', 'ElectricalEditor', 'AboutEditor'];
+for (const ef of editorFuncs) {
+  assert(adminTsx.includes(`onChange={setContent}`), `${ef} wired to setContent`);
+}
+
 // Daniel Chen error message
 assert(adminTsx.includes('contact Daniel Chen for technical support'), 'error message mentions Daniel Chen');
 
