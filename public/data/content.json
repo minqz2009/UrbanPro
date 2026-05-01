@@ -158,9 +158,11 @@
       ],
       "category": "Renovations",
       "pano": "",
-      "beforePhotos": [],
-      "floorPlanBefore": "",
-      "floorPlanAfter": ""
+      "beforePhotos": [
+        "images/dsc01697-1777623464250.jpeg"
+      ],
+      "floorPlanBefore": "images/dsc01697-1777623464242.jpeg",
+      "floorPlanAfter": "images/dsc01681-1777623464233.jpeg"
     },
     {
       "id": "project-1777565881655",
