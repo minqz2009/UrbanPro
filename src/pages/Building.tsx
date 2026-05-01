@@ -79,17 +79,19 @@ function ProjectModal({ project, onClose, galleryFont }: { project: BuildingProj
                 />
               </AnimatePresence>
               {(hasFpBefore && hasFpAfter) && (
-                <div style={{ position: 'absolute', bottom: '2rem', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: '0.5rem' }}>
-                  <button onClick={() => setShowFloorBefore(false)} style={{
-                    padding: '0.6rem 1.5rem', border: `1px solid ${!showFloorBefore ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.1)'}`,
-                    backgroundColor: !showFloorBefore ? 'rgba(255,255,255,0.1)' : 'transparent', color: !showFloorBefore ? 'white' : 'rgba(255,255,255,0.35)',
-                    fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', cursor: !showFloorBefore ? 'default' : 'pointer', fontFamily: galleryFont
-                  }}>After</button>
-                  <button onClick={() => setShowFloorBefore(true)} style={{
-                    padding: '0.6rem 1.5rem', border: `1px solid ${showFloorBefore ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.1)'}`,
-                    backgroundColor: showFloorBefore ? 'rgba(255,255,255,0.1)' : 'transparent', color: showFloorBefore ? 'white' : 'rgba(255,255,255,0.35)',
-                    fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', cursor: showFloorBefore ? 'default' : 'pointer', fontFamily: galleryFont
-                  }}>Before</button>
+                <div style={{ position: 'absolute', bottom: '2rem', left: '50%', transform: 'translateX(-50%)' }}>
+                  <button onClick={() => setShowFloorBefore(!showFloorBefore)}
+                    style={{
+                      display: 'inline-flex', alignItems: 'center', padding: '0.5rem 1.2rem', borderRadius: '2rem',
+                      border: '1px solid rgba(255,255,255,0.2)', backgroundColor: 'rgba(0,0,0,0.3)', backdropFilter: 'blur(4px)',
+                      fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em',
+                      cursor: 'pointer', fontFamily: galleryFont, transition: 'all 0.3s ease',
+                    }}
+                  >
+                    <span style={{ color: showFloorBefore ? 'rgba(255,255,255,0.3)' : 'white', transition: 'color 0.3s' }}>After</span>
+                    <span style={{ margin: '0 0.6rem', color: 'rgba(255,255,255,0.15)', fontSize: '0.7rem' }}>⇄</span>
+                    <span style={{ color: showFloorBefore ? 'white' : 'rgba(255,255,255,0.3)', transition: 'color 0.3s' }}>Before</span>
+                  </button>
                 </div>
               )}
             </div>
@@ -107,17 +109,22 @@ function ProjectModal({ project, onClose, galleryFont }: { project: BuildingProj
           <>
             {/* Before/After toggle */}
             {(hasBefore || hasAfter) && (
-              <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
-                <button onClick={() => switchSet(false)} style={{
-                  padding: '0.55rem 1.6rem', border: `1px solid ${!showBefore ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.08)'}`,
-                  backgroundColor: !showBefore ? 'rgba(255,255,255,0.08)' : 'transparent', color: !showBefore ? 'white' : 'rgba(255,255,255,0.25)',
-                  fontSize: '0.78rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', cursor: !showBefore ? 'default' : (hasAfter ? 'pointer' : 'default'), fontFamily: galleryFont, transition: 'all 0.3s ease'
-                }}>After{hasAfter ? '' : ' (none)'}</button>
-                <button onClick={() => switchSet(true)} style={{
-                  padding: '0.55rem 1.6rem', border: `1px solid ${showBefore ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.08)'}`,
-                  backgroundColor: showBefore ? 'rgba(255,255,255,0.08)' : 'transparent', color: showBefore ? 'white' : 'rgba(255,255,255,0.25)',
-                  fontSize: '0.78rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', cursor: showBefore ? 'default' : (hasBefore ? 'pointer' : 'default'), fontFamily: galleryFont, transition: 'all 0.3s ease'
-                }}>Before{hasBefore ? '' : ' (none)'}</button>
+              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem' }}>
+                <button
+                  onClick={() => { const canSwitch = showBefore ? hasAfter : hasBefore; if (canSwitch) switchSet(!showBefore); }}
+                  style={{
+                    display: 'inline-flex', alignItems: 'center', padding: '0.5rem 1.2rem', borderRadius: '2rem',
+                    border: '1px solid rgba(255,255,255,0.2)', backgroundColor: 'transparent',
+                    fontSize: '0.78rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em',
+                    cursor: (showBefore ? hasAfter : hasBefore) ? 'pointer' : 'default',
+                    fontFamily: galleryFont, transition: 'all 0.3s ease',
+                    opacity: (showBefore ? hasAfter : hasBefore) ? 1 : 0.35,
+                  }}
+                >
+                  <span style={{ color: showBefore ? 'rgba(255,255,255,0.3)' : 'white', transition: 'color 0.3s' }}>After</span>
+                  <span style={{ margin: '0 0.6rem', color: 'rgba(255,255,255,0.15)', fontSize: '0.7rem' }}>⇄</span>
+                  <span style={{ color: showBefore ? 'white' : 'rgba(255,255,255,0.3)', transition: 'color 0.3s' }}>Before</span>
+                </button>
               </div>
             )}
 
