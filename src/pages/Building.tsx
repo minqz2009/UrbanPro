@@ -211,6 +211,12 @@ const Building = () => {
   const filteredCases = content.buildingProjects.filter(c => c.category === activeCategory);
 
   useEffect(() => {
+    if (content.buildingCategories?.length > 0) {
+      setActiveCategory(content.buildingCategories[0]);
+    }
+  }, [content.buildingCategories]);
+
+  useEffect(() => {
     const link = document.createElement('link');
     link.href = 'https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap';
     link.rel = 'stylesheet';

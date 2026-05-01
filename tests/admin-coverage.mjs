@@ -385,6 +385,68 @@ const reorder3 = simReorder(['New Builds', 'Renovations', 'Small Projects'], 'Ne
 assert(JSON.stringify(reorder3) === JSON.stringify(['Renovations', 'Small Projects', 'New Builds']), 'reorder: move New Builds after Small Projects');
 
 // =======================================================================
+// 13. PROJECT & PHOTO DRAG REORDERING
+// =======================================================================
+console.log('\n=== 13. Project & Photo Drag Reordering ===');
+
+// Project drag handlers in Admin.tsx
+assert(adminTsx.includes('handleProjDragStart'), 'Admin has handleProjDragStart');
+assert(adminTsx.includes('handleProjDragOver'), 'Admin has handleProjDragOver');
+assert(adminTsx.includes('handleProjDragEnd'), 'Admin has handleProjDragEnd');
+assert(adminTsx.includes('handleProjDrop'), 'Admin has handleProjDrop');
+assert(adminTsx.includes('dragProject'), 'Admin has dragProject state');
+
+// Photo drag handlers in GalleryManager
+assert(adminTsx.includes('handlePhotoDragStart'), 'GalleryManager has handlePhotoDragStart');
+assert(adminTsx.includes('handlePhotoDragOver'), 'GalleryManager has handlePhotoDragOver');
+assert(adminTsx.includes('handlePhotoDragEnd'), 'GalleryManager has handlePhotoDragEnd');
+assert(adminTsx.includes('handlePhotoDrop'), 'GalleryManager has handlePhotoDrop');
+assert(adminTsx.includes('dragPhotoIdx'), 'GalleryManager has dragPhotoIdx state');
+assert(adminTsx.includes('onPhotosReordered'), 'GalleryManager has onPhotosReordered prop');
+
+// GripVertical used on project cards and photo thumbs
+const projGripCount = (adminTsx.match(/GripVertical/g) || []).length;
+assert(projGripCount >= 3, `GripVertical used in multiple places (found ${projGripCount})`);
+
+// Pending photos NOT draggable
+assert(adminTsx.includes('!item.isPending'), 'pending photos excluded from drag');
+
+// Building.tsx leftmost category fix
+assert(buildingTsx.includes('setActiveCategory(content.buildingCategories[0])'), 'Building.tsx has useEffect for leftmost category sync');
+
+// Simulate project reorder (same logic as category reorder: unadjusted toIdx)
+function simProjReorder(arr, fromId, toId) {
+  const a = [...arr];
+  const fromIdx = a.findIndex(p => p.id === fromId);
+  const toIdx = a.findIndex(p => p.id === toId);
+  if (fromIdx === -1 || toIdx === -1) return a;
+  const [moved] = a.splice(fromIdx, 1);
+  a.splice(toIdx, 0, moved);
+  return a;
+}
+const projA = [{ id: 'a' }, { id: 'b' }, { id: 'c' }];
+const projR1 = simProjReorder(projA, 'a', 'c');
+assert(projR1[0].id === 'b' && projR1[1].id === 'c' && projR1[2].id === 'a', 'project reorder: drag a onto c → a after c');
+const projR2 = simProjReorder(projA, 'c', 'a');
+assert(projR2[0].id === 'c' && projR2[1].id === 'a' && projR2[2].id === 'b', 'project reorder: drag c onto a → c before a');
+
+// Simulate photo reorder
+function simPhotoReorder(arr, fromIdx, toIdx) {
+  const a = [...arr];
+  const [moved] = a.splice(fromIdx, 1);
+  a.splice(toIdx, 0, moved);
+  return a;
+}
+const photoArr = ['a.jpg', 'b.jpg', 'c.jpg', 'd.jpg'];
+const photoR1 = simPhotoReorder(photoArr, 0, 3);
+assert(JSON.stringify(photoR1) === JSON.stringify(['b.jpg', 'c.jpg', 'd.jpg', 'a.jpg']), 'photo reorder: drag idx 0 onto idx 3 → first to last');
+const photoR2 = simPhotoReorder(photoArr, 3, 0);
+assert(JSON.stringify(photoR2) === JSON.stringify(['d.jpg', 'a.jpg', 'b.jpg', 'c.jpg']), 'photo reorder: drag idx 3 onto idx 0 → last to first');
+
+// Daniel Chen error message
+assert(adminTsx.includes('contact Daniel Chen for technical support'), 'error message mentions Daniel Chen');
+
+// =======================================================================
 // SUMMARY
 // =======================================================================
 console.log(`\n${'='.repeat(60)}`);

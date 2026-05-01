@@ -91,12 +91,14 @@ function PhotoUploader({ currentSrc, previewDataUrl, onFileSelected, label = 'Ph
 
 // ─── Gallery Photo Manager ────────────────────────────────────────────────────
 
-function GalleryManager({ projectId, photos, previews, onPhotoQueued, onRemoveExisting, onRemovePending, pendingKeys }: {
+function GalleryManager({ projectId, photos, previews, onPhotoQueued, onRemoveExisting, onRemovePending, pendingKeys, onPhotosReordered }: {
   projectId: string; photos: string[]; previews: Record<string, string>; onPhotoQueued: (key: string, file: File, preview: string) => void;
   onRemoveExisting: (idx: number) => void; onRemovePending: (key: string) => void; pendingKeys: string[];
+  onPhotosReordered: (newOrder: string[]) => void;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [err, setErr] = useState('');
+  const [dragPhotoIdx, setDragPhotoIdx] = useState<number | null>(null);
 
   const handleFiles = (files: FileList) => {
     setErr('');
@@ -110,6 +112,24 @@ function GalleryManager({ projectId, photos, previews, onPhotoQueued, onRemoveEx
     });
   };
 
+  const handlePhotoDragStart = (e: React.DragEvent, idx: number) => {
+    setDragPhotoIdx(idx);
+    e.dataTransfer.setData('text/plain', String(idx));
+    e.dataTransfer.effectAllowed = 'move';
+  };
+  const handlePhotoDragOver = (e: React.DragEvent) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; };
+  const handlePhotoDragEnd = () => { setDragPhotoIdx(null); };
+  const handlePhotoDrop = (e: React.DragEvent, targetIdx: number) => {
+    e.preventDefault();
+    const fromIdx = parseInt(e.dataTransfer.getData('text/plain'));
+    if (isNaN(fromIdx) || fromIdx === targetIdx) { setDragPhotoIdx(null); return; }
+    const arr = [...photos];
+    const [moved] = arr.splice(fromIdx, 1);
+    arr.splice(targetIdx, 0, moved);
+    onPhotosReordered(arr);
+    setDragPhotoIdx(null);
+  };
+
   const allItems: { src: string; key: string; isPending: boolean; idx?: number }[] = [
     ...photos.map((src, idx) => ({ src, key: `existing-${idx}`, isPending: false, idx })),
     ...pendingKeys.map(k => ({ src: previews[k], key: k, isPending: true })),
@@ -119,13 +139,20 @@ function GalleryManager({ projectId, photos, previews, onPhotoQueued, onRemoveEx
     <div>
       <label style={S.label}>Gallery Photos (shown when visitors click this project)</label>
       <p style={{ fontSize: '0.78rem', color: '#475569', marginBottom: '0.75rem' }}>
-        Max {MAX_MB} MB · JPG, PNG, WEBP, AVIF. First photo shown as thumbnail if no cover photo.
+        Max {MAX_MB} MB · JPG, PNG, WEBP, AVIF. Drag to reorder.
       </p>
       {err && <p style={{ fontSize: '0.8rem', color: '#f87171', marginBottom: '0.5rem' }}>{err}</p>}
       <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '0.75rem' }}>
         {allItems.map(item => (
-          <div key={item.key} style={{ position: 'relative', width: '80px', height: '80px', borderRadius: '6px', overflow: 'hidden', border: `2px solid ${item.isPending ? '#22c55e' : '#1e3a5f'}`, flexShrink: 0 }}>
+          <div key={item.key}
+            draggable={!item.isPending}
+            onDragStart={item.isPending ? undefined : e => handlePhotoDragStart(e, item.idx!)}
+            onDragOver={item.isPending ? undefined : handlePhotoDragOver}
+            onDragEnd={item.isPending ? undefined : handlePhotoDragEnd}
+            onDrop={item.isPending ? undefined : e => handlePhotoDrop(e, item.idx!)}
+            style={{ position: 'relative', width: '80px', height: '80px', borderRadius: '6px', overflow: 'hidden', border: `2px solid ${item.isPending ? '#22c55e' : '#1e3a5f'}`, flexShrink: 0, opacity: dragPhotoIdx === item.idx ? 0.5 : 1, transition: 'opacity 0.15s', cursor: item.isPending ? 'default' : 'grab' }}>
             <img src={item.src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            {!item.isPending && <GripVertical size={10} color="rgba(255,255,255,0.5)" style={{ position: 'absolute', top: '2px', left: '2px' }} />}
             <button onClick={() => item.isPending ? onRemovePending(item.key) : onRemoveExisting(item.idx!)}
               style={{ position: 'absolute', top: '2px', right: '2px', backgroundColor: 'rgba(0,0,0,0.7)', border: 'none', color: 'white', width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', borderRadius: '50%', padding: 0 }}>
               <X size={12} />
@@ -158,6 +185,7 @@ function ProjectsEditor({ projects, onChange, onPhotoQueued, photoPreviews, onGa
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
   const [photoErr, setPhotoErr] = useState<Record<string, string>>({});
   const [dragCat, setDragCat] = useState<string | null>(null);
+  const [dragProject, setDragProject] = useState<string | null>(null);
 
   const update = (id: string, field: keyof BuildingProject, value: string) => onChange(projects.map(p => p.id === id ? { ...p, [field]: value } : p));
   const remove = (id: string) => { if (!confirm('Remove this project?')) return; onChange(projects.filter(p => p.id !== id)); };
@@ -185,6 +213,28 @@ function ProjectsEditor({ projects, onChange, onPhotoQueued, photoPreviews, onGa
     setDragCat(null);
   };
 
+  // ── project drag reorder
+  const handleProjDragStart = (e: React.DragEvent, id: string) => {
+    setDragProject(id);
+    e.dataTransfer.setData('application/project-id', id);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+  const handleProjDragOver = (e: React.DragEvent) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; };
+  const handleProjDragEnd = () => { setDragProject(null); };
+  const handleProjDrop = (e: React.DragEvent, targetId: string) => {
+    e.preventDefault();
+    const draggedId = e.dataTransfer.getData('application/project-id') || e.dataTransfer.getData('text/plain');
+    if (!draggedId || draggedId === targetId) { setDragProject(null); return; }
+    const arr = [...projects];
+    const fromIdx = arr.findIndex(p => p.id === draggedId);
+    const toIdx = arr.findIndex(p => p.id === targetId);
+    if (fromIdx === -1 || toIdx === -1) { setDragProject(null); return; }
+    const [moved] = arr.splice(fromIdx, 1);
+    arr.splice(toIdx, 0, moved);
+    onChange(arr);
+    setDragProject(null);
+  };
+
   return (
     <div>
       <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '1.5rem', lineHeight: 1.6 }}>Manage the exhibition gallery on the Building page. Each project can have a cover photo, multiple gallery photos, and an optional 360° panorama link.</p>
@@ -203,8 +253,10 @@ function ProjectsEditor({ projects, onChange, onPhotoQueued, photoPreviews, onGa
       {visible.map(p => {
         const open = !collapsed[p.id];
         return (
-          <div key={p.id} style={S.card}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', cursor: 'pointer' }} onClick={() => setCollapsed(c => ({ ...c, [p.id]: !c[p.id] }))}>
+          <div key={p.id} style={{ ...S.card, opacity: dragProject === p.id ? 0.5 : 1, transition: 'opacity 0.15s' }}
+            draggable onDragStart={e => handleProjDragStart(e, p.id)} onDragOver={handleProjDragOver} onDragEnd={handleProjDragEnd} onDrop={e => handleProjDrop(e, p.id)}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', cursor: 'pointer' }} onClick={() => setCollapsed(c => ({ ...c, [p.id]: !c[p.id] }))}>
+              <GripVertical size={14} color="#475569" style={{ flexShrink: 0, cursor: 'grab' }} />
               <div style={{ width: '52px', height: '40px', borderRadius: '4px', overflow: 'hidden', flexShrink: 0, backgroundColor: '#1e293b', border: '1px solid #1e3a5f' }}>
                 {(photoPreviews[p.id] || p.image) && <img src={photoPreviews[p.id] || p.image} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />}
               </div>
@@ -246,6 +298,7 @@ function ProjectsEditor({ projects, onChange, onPhotoQueued, photoPreviews, onGa
                   onRemoveExisting={idx => onRemoveGalleryExisting(p.id, idx)}
                   onRemovePending={onRemoveGalleryPending}
                   pendingKeys={pendingGalleryKeys(p.id)}
+                  onPhotosReordered={newOrder => onChange(projects.map(pr => pr.id === p.id ? { ...pr, photos: newOrder } : pr))}
                 />
                 <Field label="360° Panorama Link (optional)">
                   <input style={S.input} value={p.pano} onChange={e => update(p.id, 'pano', e.target.value)} placeholder="https://..." />
@@ -745,7 +798,7 @@ export default function Admin() {
         bustContentCache();
         setSaveMsg({ type: 'success', text: '✓ Saved and deployed successfully.' });
       } else if (result === 'failure') {
-        setSaveMsg({ type: 'error', text: '✗ Deploy failed. Changes committed but site not updated — check GitHub Actions.' });
+        setSaveMsg({ type: 'error', text: '✗ Deploy failed. Changes committed but site not updated. Please contact Daniel Chen for technical support.' });
       } else {
         // timeout — assume success but warn
         setContent(updated);
@@ -755,7 +808,7 @@ export default function Admin() {
         setSaveMsg({ type: 'success', text: '✓ Changes saved. Site will update shortly.' });
       }
     } catch (e: any) {
-      setSaveMsg({ type: 'error', text: 'Something went wrong: ' + e.message });
+      setSaveMsg({ type: 'error', text: 'Save failed: ' + e.message + '. Please contact Daniel Chen for technical support if this persists.' });
     } finally {
       setSaving(false);
       setDeploying(false);
