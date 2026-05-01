@@ -188,11 +188,21 @@ export async function batchCommit(
   return newCommitSha;
 }
 
+export type DeployPhase = 'queued' | 'building' | 'done';
+
 // waitForDeploy polls the GitHub Actions API for the workflow run triggered by commitSha.
+// Calls onProgress with the current phase as it transitions.
 // Returns 'success' if the deploy completed, 'failure' if it failed, 'timeout' if it didn't
 // finish within 5 minutes.
-export async function waitForDeploy(token: string, commitSha: string): Promise<'success' | 'failure' | 'timeout'> {
+export async function waitForDeploy(
+  token: string,
+  commitSha: string,
+  onProgress?: (phase: DeployPhase) => void
+): Promise<'success' | 'failure' | 'timeout'> {
   const h = headers(token);
+  let lastPhase: DeployPhase = 'queued';
+  onProgress?.(lastPhase);
+
   for (let i = 0; i < 60; i++) {
     await new Promise(r => setTimeout(r, 5000));
     try {
@@ -204,6 +214,13 @@ export async function waitForDeploy(token: string, commitSha: string): Promise<'
       const data = await res.json();
       const run = data.workflow_runs?.find((r: any) => r.head_sha === commitSha);
       if (!run) continue;
+
+      const phase: DeployPhase = run.status === 'completed' ? 'done' : 'building';
+      if (phase !== lastPhase) {
+        lastPhase = phase;
+        onProgress?.(phase);
+      }
+
       if (run.status === 'completed') {
         return run.conclusion === 'success' ? 'success' : 'failure';
       }

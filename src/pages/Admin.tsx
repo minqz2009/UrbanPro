@@ -8,6 +8,7 @@ import {
   readFileAsBase64,
   sanitiseFilename,
 } from '../services/github';
+import type { DeployPhase } from '../services/github';
 import { bustContentCache, merge } from '../hooks/useContent';
 import type { SiteContent, TeamMember, BuildingProject } from '../hooks/useContent';
 
@@ -675,9 +676,10 @@ export default function Admin() {
   const [pendingGallery, setPendingGallery] = useState<Record<string, File>>({});
   const [saving, setSaving] = useState(false);
   const [deploying, setDeploying] = useState(false);
+  const [deployPhase, setDeployPhase] = useState<DeployPhase | null>(null);
   const [saveMsg, setSaveMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [loadError, setLoadError] = useState('');
-  const snapshotRef = useRef('');
+  const snapshotRef = useRef(sessionStorage.getItem('urbanpro_snapshot') || '');
 
   useEffect(() => {
     const saved = loadToken();
@@ -691,6 +693,7 @@ export default function Admin() {
       const merged = merge(JSON.parse(raw));
       setContent(merged);
       snapshotRef.current = JSON.stringify(merged);
+      sessionStorage.setItem('urbanpro_snapshot', snapshotRef.current);
     } catch (e: any) {
       setLoadError('Could not load site content: ' + e.message);
     }
@@ -751,6 +754,14 @@ export default function Admin() {
     return { dirtyTabs: tabs, dirtyBuildingCategories: cats };
   }, [content, pendingPhotos, pendingGallery]);
 
+  // Warn before leaving if there are unsaved changes
+  useEffect(() => {
+    if (dirtyTabs.size === 0 && Object.keys(pendingPhotos).length === 0 && Object.keys(pendingGallery).length === 0) return;
+    const handler = (e: BeforeUnloadEvent) => { e.preventDefault(); };
+    window.addEventListener('beforeunload', handler);
+    return () => window.removeEventListener('beforeunload', handler);
+  }, [dirtyTabs, pendingPhotos, pendingGallery]);
+
   const handleSave = async () => {
     if (!content) return;
     setSaving(true); setDeploying(false); setSaveMsg(null);
@@ -786,14 +797,16 @@ export default function Admin() {
       const commitSha = await batchCommit(token, files, 'Admin: update site content');
       setSaving(false);
 
-      // Wait for deploy to complete
+      // Wait for deploy to complete, reporting progress
       setDeploying(true);
-      const result = await waitForDeploy(token, commitSha);
+      const result = await waitForDeploy(token, commitSha, phase => setDeployPhase(phase));
       setDeploying(false);
+      setDeployPhase(null);
 
       if (result === 'success') {
         setContent(updated);
         snapshotRef.current = JSON.stringify(updated);
+        sessionStorage.setItem('urbanpro_snapshot', snapshotRef.current);
         setPendingPhotos({}); setPhotoPreviews({}); setPendingGallery({});
         bustContentCache();
         setSaveMsg({ type: 'success', text: '✓ Saved and deployed successfully.' });
@@ -803,6 +816,7 @@ export default function Admin() {
         // timeout — assume success but warn
         setContent(updated);
         snapshotRef.current = JSON.stringify(updated);
+        sessionStorage.setItem('urbanpro_snapshot', snapshotRef.current);
         setPendingPhotos({}); setPhotoPreviews({}); setPendingGallery({});
         bustContentCache();
         setSaveMsg({ type: 'success', text: '✓ Changes saved. Site will update shortly.' });
@@ -812,6 +826,7 @@ export default function Admin() {
     } finally {
       setSaving(false);
       setDeploying(false);
+      setDeployPhase(null);
       setTimeout(() => setSaveMsg(null), 15000);
     }
   };
@@ -844,6 +859,34 @@ export default function Admin() {
       {saveMsg && (
         <div style={{ padding: '0.85rem 1.5rem', backgroundColor: saveMsg.type === 'success' ? '#052e16' : '#450a0a', borderBottom: `1px solid ${saveMsg.type === 'success' ? '#15803d' : '#7f1d1d'}`, color: saveMsg.type === 'success' ? '#4ade80' : '#fca5a5', fontSize: '0.9rem', fontWeight: 600, textAlign: 'center' }}>
           {saveMsg.text}
+        </div>
+      )}
+
+      {/* Deploy progress bar */}
+      {deploying && (
+        <div style={{ padding: '1rem 1.5rem', backgroundColor: '#0f1a2e', borderBottom: '1px solid #1e3a5f' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', marginBottom: '0.6rem', flexWrap: 'wrap' }}>
+            {[
+              { label: 'Committed', done: true },
+              { label: 'Building & Testing', done: deployPhase === 'building' || deployPhase === 'done', active: deployPhase === 'queued' || deployPhase === 'building' },
+              { label: 'Deploying to Site', done: deployPhase === 'done', active: deployPhase === 'building' || deployPhase === 'done' },
+            ].map((step) => (
+              <div key={step.label} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.82rem', color: step.done ? '#4ade80' : step.active ? '#60a5fa' : '#475569', fontWeight: 600 }}>
+                <span>{step.done ? '✓' : step.active ? '◐' : '○'}</span>
+                <span>{step.label}</span>
+              </div>
+            ))}
+          </div>
+          <div style={{ maxWidth: '500px', margin: '0 auto', height: '4px', backgroundColor: '#1e293b', borderRadius: '2px', overflow: 'hidden' }}>
+            <div style={{
+              height: '100%', backgroundColor: '#3b82f6', borderRadius: '2px',
+              width: deployPhase === 'done' ? '100%' : deployPhase === 'building' ? '60%' : '20%',
+              transition: 'width 0.5s ease',
+            }} />
+          </div>
+          <p style={{ textAlign: 'center', margin: '0.5rem 0 0', fontSize: '0.72rem', color: '#475569' }}>
+            This usually takes 1–2 minutes. Please don't close this page.
+          </p>
         </div>
       )}
 

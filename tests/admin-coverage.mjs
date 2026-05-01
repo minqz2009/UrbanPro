@@ -447,6 +447,44 @@ assert(JSON.stringify(photoR2) === JSON.stringify(['d.jpg', 'a.jpg', 'b.jpg', 'c
 assert(adminTsx.includes('contact Daniel Chen for technical support'), 'error message mentions Daniel Chen');
 
 // =======================================================================
+// 14. DEPLOY PROGRESS BAR & REFRESH SAFETY
+// =======================================================================
+console.log('\n=== 14. Deploy Progress Bar & Refresh Safety ===');
+
+// Progress bar exists
+assert(adminTsx.includes('Building & Testing'), 'progress bar shows Building & Testing step');
+assert(adminTsx.includes('Deploying to Site'), 'progress bar shows Deploying to Site step');
+assert(adminTsx.includes('Committed'), 'progress bar shows Committed step');
+assert(adminTsx.includes("This usually takes 1–2 minutes. Please don't close this page."), 'progress bar shows time estimate');
+
+// DeployPhase type imported
+assert(adminTsx.includes('DeployPhase'), 'Admin imports DeployPhase type');
+
+// deployPhase state
+assert(adminTsx.includes('deployPhase'), 'Admin has deployPhase state');
+assert(adminTsx.includes('setDeployPhase'), 'Admin calls setDeployPhase');
+
+// onProgress callback passed to waitForDeploy
+assert(adminTsx.includes('phase => setDeployPhase(phase)'), 'waitForDeploy called with progress callback');
+
+// beforeunload warning
+assert(adminTsx.includes('beforeunload'), 'Admin has beforeunload event listener');
+
+// sessionStorage persistence
+assert(adminTsx.includes("sessionStorage.getItem('urbanpro_snapshot')"), 'snapshotRef initialized from sessionStorage');
+assert(adminTsx.includes("sessionStorage.setItem('urbanpro_snapshot'"), 'snapshot saved to sessionStorage');
+
+// waitForDeploy called with progress callback
+assert(adminTsx.includes('phase => setDeployPhase(phase)'), 'waitForDeploy called with setDeployPhase progress callback');
+
+// github.ts exports DeployPhase type and waitForDeploy with progress
+const githubTs = readFileSync(join(root, 'src/services/github.ts'), 'utf-8');
+assert(githubTs.includes('export type DeployPhase'), 'github.ts exports DeployPhase type');
+assert(githubTs.includes('onProgress'), 'waitForDeploy has onProgress param');
+assert(githubTs.includes("lastPhase: DeployPhase = 'queued'"), 'waitForDeploy starts with queued phase');
+assert(githubTs.includes('phase !== lastPhase'), 'waitForDeploy only reports on phase changes');
+
+// =======================================================================
 // SUMMARY
 // =======================================================================
 console.log(`\n${'='.repeat(60)}`);
