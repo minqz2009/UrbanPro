@@ -130,18 +130,39 @@
       "pano": "https://pannellum.org/images/alma.jpg"
     },
     {
+      "id": "project-1777566164290",
+      "title": "Beverly Hills Reno",
+      "location": "26 Jordan Ave, Beverly Hills",
+      "description": "",
+      "image": "images/chatgpt-image-may-1-2026-01-37-38-am-1777566304713.png",
+      "photos": [
+        "images/chatgpt-image-may-1-2026-01-50-03-am-1777566423457.png",
+        "images/chatgpt-image-may-1-2026-01-37-38-am-1777566419260.png",
+        "images/chatgpt-image-may-1-2026-01-29-42-am-1777566409047.png",
+        "images/chatgpt-image-may-1-2026-01-30-00-am-1777566412602.png",
+        "images/chatgpt-image-may-1-2026-01-30-45-am-1777566416038.png",
+        "images/chatgpt-image-may-1-2026-01-32-59-am-1777566426874.png",
+        "images/chatgpt-image-may-1-2026-01-33-13-am-1777566430728.png",
+        "images/chatgpt-image-may-1-2026-01-50-15-am-1777566434935.png",
+        "images/chatgpt-image-may-1-2026-01-55-05-am-1777566438822.png",
+        "images/chatgpt-image-may-1-2026-01-47-28-am-1777566442652.png"
+      ],
+      "category": "Renovations",
+      "pano": ""
+    },
+    {
       "id": "project-1777565881655",
       "title": "Picnic Point Reno",
       "location": " 14 Prince St, Picnic Point",
       "description": "",
       "image": "images/chatgpt-image-may-1-2026-01-26-49-am-1777566292684.png",
       "photos": [
-        "images/chatgpt-image-may-1-2026-01-24-24-am-1777566308907.png",
         "images/chatgpt-image-may-1-2026-01-24-39-am-1777566312761.png",
+        "images/chatgpt-image-may-1-2026-01-26-49-am-1777566328430.png",
+        "images/chatgpt-image-may-1-2026-01-24-24-am-1777566308907.png",
         "images/chatgpt-image-may-1-2026-01-24-53-am-1777566316655.png",
         "images/chatgpt-image-may-1-2026-01-24-04-am-1777566320445.png",
         "images/chatgpt-image-may-1-2026-01-40-54-am-1777566324654.png",
-        "images/chatgpt-image-may-1-2026-01-26-49-am-1777566328430.png",
         "images/chatgpt-image-may-1-2026-01-26-20-am-1777566332042.png",
         "images/chatgpt-image-may-1-2026-01-27-57-am-1777566336173.png"
       ],
@@ -156,9 +177,9 @@
       "image": "images/chatgpt-image-may-1-2026-02-11-28-am-1777566296887.png",
       "photos": [
         "images/chatgpt-image-may-1-2026-02-11-28-am-1777566339897.png",
-        "images/chatgpt-image-may-1-2026-02-11-34-am-1777566343635.png",
         "images/chatgpt-image-may-1-2026-02-11-38-am-1777566347783.png",
         "images/chatgpt-image-may-1-2026-02-11-41-am-1777566351648.png",
+        "images/chatgpt-image-may-1-2026-02-11-34-am-1777566343635.png",
         "images/chatgpt-image-may-1-2026-02-13-39-am-1777566354430.png",
         "images/chatgpt-image-may-1-2026-02-13-33-am-1777566358192.png",
         "images/chatgpt-image-may-1-2026-02-13-59-am-1777566361863.png"
@@ -174,37 +195,16 @@
       "image": "images/chatgpt-image-may-1-2026-01-57-52-am-1777566300519.png",
       "photos": [
         "images/chatgpt-image-may-1-2026-01-57-47-am-1777566365534.png",
-        "images/chatgpt-image-may-1-2026-01-57-43-am-1777566369869.png",
         "images/chatgpt-image-may-1-2026-01-57-52-am-1777566373419.png",
+        "images/chatgpt-image-may-1-2026-01-58-27-am-1777566389973.png",
+        "images/chatgpt-image-may-1-2026-01-57-43-am-1777566369869.png",
+        "images/chatgpt-image-may-1-2026-01-58-22-am-1777566393758.png",
         "images/chatgpt-image-may-1-2026-01-57-56-am-1777566376969.png",
         "images/chatgpt-image-may-1-2026-01-58-19-am-1777566380857.png",
         "images/chatgpt-image-may-1-2026-01-58-07-am-1777566384609.png",
-        "images/chatgpt-image-may-1-2026-01-58-27-am-1777566389973.png",
-        "images/chatgpt-image-may-1-2026-01-58-22-am-1777566393758.png",
         "images/chatgpt-image-may-1-2026-01-58-00-am-1777566397520.png",
         "images/chatgpt-image-may-1-2026-01-58-03-am-1777566401234.png",
         "images/chatgpt-image-may-1-2026-01-58-15-am-1777566404026.png"
-      ],
-      "category": "Renovations",
-      "pano": ""
-    },
-    {
-      "id": "project-1777566164290",
-      "title": "Beverly Hills Reno",
-      "location": "26 Jordan Ave, Beverly Hills",
-      "description": "",
-      "image": "images/chatgpt-image-may-1-2026-01-37-38-am-1777566304713.png",
-      "photos": [
-        "images/chatgpt-image-may-1-2026-01-29-42-am-1777566409047.png",
-        "images/chatgpt-image-may-1-2026-01-30-00-am-1777566412602.png",
-        "images/chatgpt-image-may-1-2026-01-30-45-am-1777566416038.png",
-        "images/chatgpt-image-may-1-2026-01-37-38-am-1777566419260.png",
-        "images/chatgpt-image-may-1-2026-01-50-03-am-1777566423457.png",
-        "images/chatgpt-image-may-1-2026-01-32-59-am-1777566426874.png",
-        "images/chatgpt-image-may-1-2026-01-33-13-am-1777566430728.png",
-        "images/chatgpt-image-may-1-2026-01-50-15-am-1777566434935.png",
-        "images/chatgpt-image-may-1-2026-01-55-05-am-1777566438822.png",
-        "images/chatgpt-image-may-1-2026-01-47-28-am-1777566442652.png"
       ],
       "category": "Renovations",
       "pano": ""
