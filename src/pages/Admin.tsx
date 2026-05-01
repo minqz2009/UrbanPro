@@ -652,11 +652,11 @@ function LoginScreen({ onLogin }: { onLogin: (tok: string) => void }) {
         <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
           <div style={{ fontSize: '1.8rem', fontWeight: 800, marginBottom: '0.5rem' }}><span style={{ color: '#60a5fa' }}>URBAN</span><span style={{ color: '#94a3b8' }}>PRO</span></div>
           <h1 style={{ fontSize: '1.4rem', fontWeight: 700, color: 'white', margin: '0 0 0.5rem' }}>Admin Portal</h1>
-          <p style={{ color: '#64748b', fontSize: '0.9rem' }}>Enter your GitHub access token to continue</p>
+          <p style={{ color: '#64748b', fontSize: '0.9rem' }}>Enter your access token to continue</p>
         </div>
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
           <div>
-            <label style={S.label}>GitHub Access Token</label>
+            <label style={S.label}>Access Token</label>
             <div style={{ position: 'relative' }}>
               <input type={show ? 'text' : 'password'} value={token} onChange={e => setToken(e.target.value)} placeholder="github_pat_xxxx..." style={{ ...S.input, paddingRight: '3rem' }} autoComplete="off" />
               <button type="button" onClick={() => setShow(s => !s)} style={{ position: 'absolute', right: '0.75rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: '#475569', cursor: 'pointer', display: 'flex' }}>
