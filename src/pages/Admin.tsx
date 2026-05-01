@@ -712,12 +712,15 @@ export default function Admin() {
   const loadContent = async (tok: string) => {
     setLoadError('');
     try {
-      const { content: raw } = await getFile(tok, CONTENT_PATH);
+      const [raw, headSha] = await Promise.all([
+        getFile(tok, CONTENT_PATH).then(r => r.content),
+        getHeadSha(tok),
+      ]);
       const merged = merge(JSON.parse(raw));
+      headShaRef.current = headSha;
       setContent(merged);
       snapshotRef.current = JSON.stringify(merged);
       sessionStorage.setItem('urbanpro_snapshot', snapshotRef.current);
-      headShaRef.current = await getHeadSha(tok);
     } catch (e: any) {
       setLoadError('Could not load site content: ' + e.message);
     }
@@ -862,6 +865,7 @@ export default function Admin() {
 
       // Single atomic commit with deletions
       const commitSha = await batchCommit(token, files, 'Admin: update site content', { deletePaths: safeDeletes, expectedBaseSha: headShaRef.current });
+      headShaRef.current = commitSha; // Update immediately — commit is on GitHub regardless of deploy outcome
       setPendingDeletes(new Set());
       setSaving(false);
 
@@ -875,7 +879,6 @@ export default function Admin() {
         setContent(updated);
         snapshotRef.current = JSON.stringify(updated);
         sessionStorage.setItem('urbanpro_snapshot', snapshotRef.current);
-        headShaRef.current = commitSha;
         setPendingPhotos({}); setPhotoPreviews({}); setPendingGallery({});
         bustContentCache();
         setSaveMsg({ type: 'success', text: '✓ Saved and deployed successfully.' });
@@ -886,7 +889,6 @@ export default function Admin() {
         setContent(updated);
         snapshotRef.current = JSON.stringify(updated);
         sessionStorage.setItem('urbanpro_snapshot', snapshotRef.current);
-        headShaRef.current = commitSha;
         setPendingPhotos({}); setPhotoPreviews({}); setPendingGallery({});
         bustContentCache();
         setSaveMsg({ type: 'success', text: '✓ Changes saved. Site will update shortly.' });
