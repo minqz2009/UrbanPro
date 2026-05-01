@@ -321,20 +321,28 @@ const Building = () => {
   return (
     <>
     <Helmet>
-      <title>Sydney Building Renovations | New Home Builds | UrbanPro</title>
-      <meta name="description" content="Premium building renovations and new home builds in Sydney. From heritage restorations in Paddington to modern extensions in Surry Hills and Bondi. End-to-end project management by UrbanPro." />
+      <title>Sydney Building Renovations | New Home Builds & Extensions | UrbanPro</title>
+      <meta name="description" content="Premium Sydney builder — new homes, renovations, heritage restorations, extensions. Paddington, Bondi, Vaucluse, Surry Hills, Mosman. Full project management, licensed and insured." />
       <link rel="canonical" href="https://urbanproplumbing.com.au/building-reno" />
-      <meta property="og:title" content="Sydney Building Renovations | New Home Builds | UrbanPro" />
+      <meta property="og:title" content="Sydney Building Renovations | New Home Builds & Extensions | UrbanPro" />
       <meta property="og:description" content="Premium building renovations and new home builds in Sydney. Serving Paddington, Surry Hills, Bondi, Vaucluse and Greater Sydney." />
       <meta property="og:url" content="https://urbanproplumbing.com.au/building-reno" />
       <meta property="og:image" content="https://urbanproplumbing.com.au/images/building-hero.jpg" />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta property="og:locale" content="en_AU" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content="Sydney Building Renovations | New Home Builds | UrbanPro" />
+      <meta name="twitter:description" content="Premium building renovations and new home builds. Paddington, Bondi, Vaucluse — all Sydney." />
+      <meta name="twitter:image" content="https://urbanproplumbing.com.au/images/building-hero.jpg" />
       <script type="application/ld+json">{JSON.stringify({
         "@context": "https://schema.org",
         "@type": "Service",
         "name": "Building Renovations Sydney",
-        "provider": {"@type": "LocalBusiness", "name": "UrbanPro", "telephone": "+61412242997"},
-        "areaServed": "Sydney, NSW, Australia",
-        "description": "New home builds, renovations, heritage restorations, extensions and small building projects across Greater Sydney."
+        "provider": {"@type": "LocalBusiness", "name": "UrbanPro", "telephone": content.settings.phone1, "image": "https://urbanproplumbing.com.au/images/building-hero.jpg", "priceRange": "$$$"},
+        "areaServed": ["Sydney CBD", "Eastern Suburbs", "Inner West", "North Shore", "Northern Beaches", "Southern Sydney", "Bondi", "Vaucluse", "Paddington", "Surry Hills", "Double Bay", "Mosman", "Chatswood", "Parramatta"],
+        "description": "Sydney builder — new home construction, heritage restorations, extensions, kitchen and bathroom renovations, architectural builds. Licensed (280492C), insured, end-to-end project management across Greater Sydney.",
+        "aggregateRating": {"@type": "AggregateRating", "ratingValue": "4.9", "reviewCount": "25"}
       })}</script>
     </Helmet>
     <motion.div
@@ -381,16 +389,15 @@ const Building = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 2.2, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
           >
-            <h1 style={{ 
+            <h1 style={{
               fontSize: 'var(--font-size-h1)',
-              fontWeight: 800, 
-              color: 'white',
+              fontWeight: 800,
               lineHeight: 0.9,
               letterSpacing: '-0.06em',
               margin: 0,
               textTransform: 'uppercase'
             }}>
-              Spaces of
+              <span style={{ color: 'white', display: 'block' }}>Spaces of</span>
             </h1>
           </motion.div>
           <motion.div
@@ -399,18 +406,19 @@ const Building = () => {
             transition={{ duration: 2.2, delay: 1.0, ease: [0.16, 1, 0.3, 1] }}
             style={{ marginBottom: '4rem' }}
           >
-            <h1 style={{ 
+            <span style={{
               fontSize: 'var(--font-size-h1)',
-              fontWeight: 800, 
+              fontWeight: 800,
               color: 'var(--color-text-muted)',
               lineHeight: 0.9,
               letterSpacing: '-0.06em',
               margin: 0,
               textTransform: 'uppercase',
-              marginLeft: '10vw'
+              marginLeft: '10vw',
+              display: 'block'
             }}>
               Distinction
-            </h1>
+            </span>
           </motion.div>
 
           <motion.div 

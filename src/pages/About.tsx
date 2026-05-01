@@ -1,8 +1,16 @@
+import { Helmet } from 'react-helmet-async';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Shield, Clock, CheckCircle, Award, MapPin, PhoneCall } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useRef } from 'react';
 import { useContent } from '../hooks/useContent';
+
+const ABOUT_SEO = {
+  title: 'About UrbanPro | Sydney Plumber, Electrician & Builder',
+  description: 'Meet the UrbanPro team — licensed plumbers, electricians, and builders serving Sydney for over 10 years. Based in Greater Sydney, we cover the CBD, Eastern Suburbs, Inner West, North Shore, and beyond with 24/7 emergency trades.',
+  canonical: 'https://urbanproplumbing.com.au/about',
+  image: 'https://urbanproplumbing.com.au/images/team-bg.jpg',
+};
 
 const About = () => {
   const navigate = useNavigate();
@@ -34,10 +42,48 @@ const About = () => {
   const team = content.team;
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
+    <>
+      <Helmet>
+        <title>{ABOUT_SEO.title}</title>
+        <meta name="description" content={ABOUT_SEO.description} />
+        <link rel="canonical" href={ABOUT_SEO.canonical} />
+        <meta property="og:title" content={ABOUT_SEO.title} />
+        <meta property="og:description" content={ABOUT_SEO.description} />
+        <meta property="og:url" content={ABOUT_SEO.canonical} />
+        <meta property="og:image" content={ABOUT_SEO.image} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:locale" content="en_AU" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={ABOUT_SEO.title} />
+        <meta name="twitter:description" content={ABOUT_SEO.description} />
+        <meta name="twitter:image" content={ABOUT_SEO.image} />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'AboutPage',
+            name: 'About UrbanPro',
+            description: ABOUT_SEO.description,
+            mainEntity: {
+              '@type': 'LocalBusiness',
+              name: 'UrbanPro',
+              areaServed: [
+                'Sydney CBD', 'Eastern Suburbs', 'Inner West', 'North Shore',
+                'Northern Beaches', 'Southern Sydney', 'Western Sydney',
+                'Bondi', 'Vaucluse', 'Paddington', 'Surry Hills', 'Mosman',
+                'Chatswood', 'Parramatta', 'Hurstville', 'Liverpool', 'Penrith',
+              ],
+              priceRange: '$$',
+              telephone: content.settings.phone1,
+              email: content.settings.email,
+            },
+          })}
+        </script>
+      </Helmet>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
       style={{ backgroundColor: 'var(--color-bg)', color: 'var(--color-text)' }}
     >
       {/* Hero */}
@@ -321,6 +367,7 @@ const About = () => {
         </div>
       </section>
     </motion.div>
+    </>
   );
 };
 

@@ -42,20 +42,28 @@ const Plumbing = () => {
     <>
     <Helmet>
       <title>Sydney Plumber | 24/7 Emergency Plumbing | UrbanPro</title>
-      <meta name="description" content="Licensed Sydney plumber available 24/7. No call-out fee, $250 fixed drain cleaning, no fix no pay. Serving Bondi, Surry Hills, Paddington, Parramatta, North Shore and all Greater Sydney suburbs." />
+      <meta name="description" content="Licensed Sydney plumber available 24/7. No call-out fee, $250 fixed drain cleaning, no fix no pay. Bondi, Paddington, Surry Hills, Mosman, Chatswood, Parramatta — all Greater Sydney." />
       <link rel="canonical" href="https://urbanproplumbing.com.au/plumbing" />
       <meta property="og:title" content="Sydney Plumber | 24/7 Emergency Plumbing | UrbanPro" />
       <meta property="og:description" content="Licensed Sydney plumber available 24/7. No call-out fee, $250 fixed drain cleaning, no fix no pay." />
       <meta property="og:url" content="https://urbanproplumbing.com.au/plumbing" />
       <meta property="og:image" content="https://urbanproplumbing.com.au/images/plumbing-hero.jpg" />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta property="og:locale" content="en_AU" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content="Sydney Plumber | 24/7 Emergency Plumbing | UrbanPro" />
+      <meta name="twitter:description" content="Licensed Sydney plumber available 24/7. No call-out fee, $250 fixed drain cleaning." />
+      <meta name="twitter:image" content="https://urbanproplumbing.com.au/images/plumbing-hero.jpg" />
       <script type="application/ld+json">{JSON.stringify({
         "@context": "https://schema.org",
         "@type": "Service",
         "name": "Emergency Plumbing Sydney",
-        "provider": {"@type": "LocalBusiness", "name": "UrbanPro", "telephone": "+61412242997"},
-        "areaServed": "Sydney, NSW, Australia",
-        "description": "24/7 emergency plumbing, blocked drains, hot water systems, gas heating, water leak detection across Greater Sydney.",
-        "offers": {"@type": "Offer", "price": "250", "priceCurrency": "AUD", "description": "Fixed $250 drain cleaning"}
+        "provider": {"@type": "LocalBusiness", "name": "UrbanPro", "telephone": content.settings.phone1, "image": "https://urbanproplumbing.com.au/images/plumbing-hero.jpg", "priceRange": "$$"},
+        "areaServed": ["Sydney CBD", "Eastern Suburbs", "Inner West", "North Shore", "Northern Beaches", "Southern Sydney", "Western Sydney", "Bondi", "Vaucluse", "Paddington", "Surry Hills", "Double Bay", "Mosman", "Chatswood", "Parramatta", "Hurstville", "Liverpool", "Penrith"],
+        "description": "24/7 emergency plumber Sydney — blocked drains, hot water systems, gas fitting, burst pipe repair, leak detection. No call-out fee, $250 fixed drain cleaning. Serving all Sydney suburbs.",
+        "offers": {"@type": "Offer", "price": "250", "priceCurrency": "AUD", "description": "Fixed $250 drain cleaning Sydney"},
+        "aggregateRating": {"@type": "AggregateRating", "ratingValue": "4.9", "reviewCount": "80"}
       })}</script>
     </Helmet>
     <motion.div

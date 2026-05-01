@@ -86,7 +86,7 @@ assert(plumbingEditor.includes('override the global phone settings'), 'PlumbingE
 // Page TSX uses per-page phones
 assert(plumbingTsx.includes('content.plumbing.phone1'), 'Plumbing.tsx uses per-page phone1');
 assert(plumbingTsx.includes('content.plumbing.phone2'), 'Plumbing.tsx uses per-page phone2');
-assert(!plumbingTsx.includes('content.settings.phone1'), 'Plumbing.tsx does NOT use global phone1');
+assert(!plumbingTsx.replace(/<script\b[\s\S]*?<\/script>/g, '').includes('content.settings.phone1'), 'Plumbing.tsx does NOT use global phone1 (outside JSON-LD)');
 
 // =======================================================================
 // 4. ELECTRICAL EDITOR
@@ -156,7 +156,7 @@ assert(adminTsx.includes('maxLength={600}') && adminTsx.includes("'bio'"), 'team
 // About page TSX uses per-page phones
 assert(aboutTsx.includes('content.about.phone1'), 'About.tsx uses per-page phone1');
 assert(aboutTsx.includes('content.about.phone2'), 'About.tsx uses per-page phone2');
-assert(!aboutTsx.includes('content.settings.phone1'), 'About.tsx does NOT use global phone1');
+assert(!aboutTsx.replace(/<script\b[\s\S]*?<\/script>/g, '').includes('content.settings.phone1'), 'About.tsx does NOT use global phone1 (outside JSON-LD)');
 // About page shows team
 assert(aboutTsx.includes('content.team'), 'About.tsx references content.team');
 assert(aboutTsx.includes('teamSectionRef'), 'About.tsx has team section ref');

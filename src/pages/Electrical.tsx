@@ -37,19 +37,27 @@ const Electrical = () => {
     <>
     <Helmet>
       <title>Sydney Electrician | 24/7 Emergency Electrical | UrbanPro</title>
-      <meta name="description" content="Licensed master electricians in Sydney. Residential wiring, switchboard upgrades, lighting, EV chargers, fault diagnostics. 24/7 emergency service across Bondi, Surry Hills, Parramatta and all Sydney suburbs." />
+      <meta name="description" content="Licensed master electrician Sydney — residential wiring, switchboard upgrades, lighting, EV chargers, fault diagnostics. 24/7 emergency. Bondi, Surry Hills, Chatswood, Parramatta — all Sydney suburbs." />
       <link rel="canonical" href="https://urbanproplumbing.com.au/electrical" />
       <meta property="og:title" content="Sydney Electrician | 24/7 Emergency Electrical | UrbanPro" />
       <meta property="og:description" content="Licensed master electricians. 24/7 emergency service, upfront pricing, lifetime workmanship guarantee." />
       <meta property="og:url" content="https://urbanproplumbing.com.au/electrical" />
       <meta property="og:image" content="https://urbanproplumbing.com.au/images/electrical-hero.jpg" />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta property="og:locale" content="en_AU" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content="Sydney Electrician | 24/7 Emergency Electrical | UrbanPro" />
+      <meta name="twitter:description" content="Licensed master electricians. 24/7 emergency, upfront pricing, lifetime guarantee." />
+      <meta name="twitter:image" content="https://urbanproplumbing.com.au/images/electrical-hero.jpg" />
       <script type="application/ld+json">{JSON.stringify({
         "@context": "https://schema.org",
         "@type": "Service",
         "name": "Electrician Sydney",
-        "provider": {"@type": "LocalBusiness", "name": "UrbanPro", "telephone": "+61412242997"},
-        "areaServed": "Sydney, NSW, Australia",
-        "description": "Residential wiring, switchboard upgrades, lighting installation, EV chargers, home automation and emergency electrical across Greater Sydney."
+        "provider": {"@type": "LocalBusiness", "name": "UrbanPro", "telephone": content.settings.phone1, "image": "https://urbanproplumbing.com.au/images/electrical-hero.jpg", "priceRange": "$$"},
+        "areaServed": ["Sydney CBD", "Eastern Suburbs", "Inner West", "North Shore", "Northern Beaches", "Southern Sydney", "Western Sydney", "Bondi", "Vaucluse", "Paddington", "Surry Hills", "Double Bay", "Mosman", "Chatswood", "Parramatta", "Hurstville", "Liverpool", "Penrith"],
+        "description": "Licensed electrician Sydney — switchboard upgrades, rewiring, lighting design, EV charger installation, fault finding, safety inspections. 24/7 emergency service across all Sydney suburbs.",
+        "aggregateRating": {"@type": "AggregateRating", "ratingValue": "4.9", "reviewCount": "45"}
       })}</script>
     </Helmet>
     <motion.div

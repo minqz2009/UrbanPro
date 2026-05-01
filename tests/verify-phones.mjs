@@ -72,9 +72,11 @@ for (const [file, prefix] of [
   ['src/pages/Plumbing.tsx', 'content.plumbing.phone'],
   ['src/pages/Electrical.tsx', 'content.electrical.phone'],
 ]) {
-  const src = readFileSync(join(root, file), 'utf-8');
-  assert(!src.includes('content.settings.phone1') && !src.includes('content.settings.phone2'),
-    `${file.split('/').pop()} — no remaining content.settings.phone references`);
+  let src = readFileSync(join(root, file), 'utf-8');
+  // Strip JSON-LD script blocks — they legitimately use global phone for business schema
+  const srcNoScript = src.replace(/<script\b[\s\S]*?<\/script>/g, '');
+  assert(!srcNoScript.includes('content.settings.phone1') && !srcNoScript.includes('content.settings.phone2'),
+    `${file.split('/').pop()} — no remaining content.settings.phone references (outside JSON-LD)`);
   assert(src.includes(`${prefix}1`) && src.includes(`${prefix}2`),
     `${file.split('/').pop()} — uses per-page phone1/phone2`);
   assert(src.includes(`${prefix}1Name`) && src.includes(`${prefix}2Name`),

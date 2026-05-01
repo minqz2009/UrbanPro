@@ -106,6 +106,31 @@ const Home = () => {
       <meta property="og:title" content="UrbanPro Sydney | Plumber, Electrician & Building Renovations" />
       <meta property="og:description" content="Sydney's trusted trade specialists. 24/7 emergency service across Greater Sydney." />
       <meta property="og:url" content="https://urbanproplumbing.com.au/" />
+      <meta property="og:image" content="https://urbanproplumbing.com.au/images/hero-bg.jpg" />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta property="og:locale" content="en_AU" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content="UrbanPro Sydney | Plumber, Electrician & Building Renovations" />
+      <meta name="twitter:description" content="Sydney's trusted trade specialists. 24/7 emergency service across Greater Sydney." />
+      <meta name="twitter:image" content="https://urbanproplumbing.com.au/images/hero-bg.jpg" />
+      <script type="application/ld+json">{JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "UrbanPro",
+        "image": "https://urbanproplumbing.com.au/images/hero-bg.jpg",
+        "telephone": content.settings.phone1,
+        "email": content.settings.email,
+        "address": {"@type": "PostalAddress", "addressLocality": "Sydney", "addressRegion": "NSW", "addressCountry": "AU"},
+        "areaServed": ["Sydney CBD", "Eastern Suburbs", "Inner West", "North Shore", "Northern Beaches", "Southern Sydney", "Western Sydney", "Bondi", "Vaucluse", "Paddington", "Surry Hills", "Double Bay", "Mosman", "Chatswood", "Parramatta", "Hurstville", "Liverpool", "Penrith", "Campbelltown", "Cronulla"],
+        "priceRange": "$$",
+        "openingHours": "Mo-Su 00:00-23:59",
+        "hasOfferCatalog": {"@type": "OfferCatalog", "name": "Trade Services", "itemListElement": [
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Emergency Plumbing Sydney"}, "description": "24/7 plumber Sydney — blocked drains, hot water, burst pipes"},
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Electrical Services Sydney"}, "description": "Licensed electrician Sydney — switchboard upgrades, rewiring, fault finding"},
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Building Renovations Sydney"}, "description": "Sydney builder — new builds, renovations, extensions, heritage restoration"}
+        ]}
+      })}</script>
     </Helmet>
     <motion.div
       className="page-enter-active"
