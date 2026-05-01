@@ -157,12 +157,10 @@
         "images/chatgpt-image-may-1-2026-01-47-28-am-1777566442652.png"
       ],
       "category": "Renovations",
-      "pano": "https://pannellum.org/images/alma.jpg",
-      "beforePhotos": [
-        "images/dsc01697-1777620312071.jpeg"
-      ],
-      "floorPlanBefore": "images/dsc01681-1777620312065.jpeg",
-      "floorPlanAfter": "images/dsc01632-1777620312062.jpeg"
+      "pano": "",
+      "beforePhotos": [],
+      "floorPlanBefore": "",
+      "floorPlanAfter": ""
     },
     {
       "id": "project-1777565881655",
