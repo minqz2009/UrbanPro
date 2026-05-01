@@ -895,7 +895,8 @@ export default function Admin() {
       }
     } catch (e: any) {
       if (e.message?.startsWith('CONCURRENT_EDIT:')) {
-        // Auto-reload latest content — someone else pushed while we were editing
+        // Reset saving state before reload so UI stays responsive
+        setSaving(false); setDeploying(false); setDeployPhase(null);
         await loadContent(token);
         setPendingPhotos({}); setPhotoPreviews({}); setPendingGallery({});
         setPendingDeletes(new Set());
