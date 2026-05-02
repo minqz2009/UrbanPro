@@ -188,17 +188,9 @@ const Electrical = () => {
                 flex-direction: row !important; text-align: left !important;
                 padding: 1rem 0.75rem !important;
                 background: rgba(255, 255, 255, 0.03) !important;
-                backdrop-filter: blur(10px) !important;
                 border: 1px solid rgba(255, 255, 255, 0.08) !important;
                 border-radius: 12px !important;
                 box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.2) !important;
-                transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-              }
-              .benefit-card:hover {
-                transform: translateY(-5px) scale(1.02) !important;
-                border-color: var(--color-electrical) !important;
-                box-shadow: 0 10px 30px -10px var(--color-electrical) !important;
-                background: rgba(234, 179, 8, 0.05) !important;
               }
               .benefit-card span {
                 white-space: nowrap !important; font-size: var(--font-size-sm) !important;
@@ -320,12 +312,11 @@ const Electrical = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1, duration: 0.5 }}
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ scale: 1.03 }}
                 style={{
                   display: 'flex', gap: '1.25rem', alignItems: 'center', padding: '1.75rem',
                   backgroundColor: 'rgba(30, 41, 59, 0.5)', border: '1px solid rgba(255,255,255,0.05)',
-                  borderRadius: '12px', transform: 'translateZ(0)',
-                  WebkitBackfaceVisibility: 'hidden', backfaceVisibility: 'hidden'
+                  borderRadius: '12px',
                 }}
               >
                 <div className="benefit-icon-wrapper" style={{ color: 'var(--color-electrical)', display: 'flex', flexShrink: 0 }}>
