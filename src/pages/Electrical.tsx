@@ -422,7 +422,7 @@ const Electrical = () => {
               ))}
               {settings.email && (
                 <a href={`mailto:${settings.email}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', padding: '1.25rem 2.5rem', backgroundColor: 'transparent', color: 'var(--color-text)', textDecoration: 'none', fontSize: '1.125rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', border: '2px solid var(--color-text-muted)' }}>
-                  ✉ Email Us
+                  <Mail size={22} /> Email Us
                 </a>
               )}
             </div>
