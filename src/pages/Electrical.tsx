@@ -280,8 +280,7 @@ const Electrical = () => {
                   backgroundColor: 'var(--color-surface)', padding: '2.5rem 2rem',
                   display: 'flex', alignItems: 'center', gap: '1.5rem',
                   boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.5)', cursor: 'pointer',
-                  transition: 'background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease',
-                  transform: 'translateZ(0)', backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden'
+                  transition: 'background-color 0.3s ease, border-color 0.3s ease'
                 }}
               >
                 <div style={{ color: 'var(--color-electrical)', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--color-bg)', padding: '1rem' }}>

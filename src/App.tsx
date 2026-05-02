@@ -62,7 +62,6 @@ const Header = () => {
         backdropFilter: headerBackdrop, 
         WebkitBackdropFilter: headerBackdrop, 
         transition: 'all 0.4s ease',
-        transform: 'translateZ(0)',
         willChange: 'padding, background-color'
       }}>
         <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

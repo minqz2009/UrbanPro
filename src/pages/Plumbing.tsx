@@ -296,8 +296,7 @@ const Plumbing = () => {
                   backgroundColor: 'var(--color-surface)', padding: '2.5rem 1rem',
                   display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '1.5rem',
                   boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.5)', cursor: 'pointer', width: '100%',
-                  transition: 'background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease',
-                  transform: 'translateZ(0)', backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden'
+                  transition: 'background-color 0.3s ease, border-color 0.3s ease'
                 }}
               >
                 <div style={{ padding: '1rem', backgroundColor: 'rgba(255,255,255,0.03)', borderBottom: '1px solid var(--color-plumbing-steel)', color: 'var(--color-plumbing)' }}>

@@ -163,7 +163,6 @@ const Home = () => {
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               zIndex: 0,
-              transform: 'translateZ(0)',
               willChange: 'transform'
             }}
           />

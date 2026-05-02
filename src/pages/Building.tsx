@@ -248,7 +248,7 @@ const CaseItem = ({ project, setSelectedProject }: { project: BuildingProject, i
             transition={{ duration: 1.8, ease: "easeOut" }}
             src={project.image} 
             alt={project.title} 
-            style={{ width: '100%', height: 'auto', maxHeight: '70vh', objectFit: 'cover', transform: 'translateZ(0)' }}
+            style={{ width: '100%', height: 'auto', maxHeight: '70vh', objectFit: 'cover' }}
           />
         </motion.div>
       </div>
