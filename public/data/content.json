@@ -2,8 +2,8 @@
   "settings": {
     "phone1": "+61412242997",
     "phone1Name": "John",
-    "phone2": "+61426051275",
-    "phone2Name": "Leo",
+    "phone2": "",
+    "phone2Name": "",
     "email": "service@urbanproplumbing.com.au",
     "abn": "48 694 251 888",
     "licence": "280492C"
@@ -15,8 +15,8 @@
   "about": {
     "phone1": "+61412242997",
     "phone1Name": "John",
-    "phone2": "+61426051275",
-    "phone2Name": "Leo",
+    "phone2": "",
+    "phone2Name": "",
     "storyHeading": "Serving Greater Sydney Since 2015",
     "storyPara1": "Urban Pro Plumbing was founded with a straightforward mission: give Sydney homeowners and businesses access to reliable, honest plumbing without the runaround.",
     "storyPara2": "Led by John Zhao and Leo, our team brings decades of combined experience to every job — from emergency burst pipes at midnight to full bathroom renovations. We show up on time, price fairly, and never leave until the work is done right.",
@@ -44,8 +44,8 @@
   "plumbing": {
     "phone1": "+61412242997",
     "phone1Name": "John",
-    "phone2": "+61426051275",
-    "phone2Name": "Leo",
+    "phone2": "",
+    "phone2Name": "",
     "heroHeading": "Expert Plumbing Solutions",
     "heroSubtitle": "Fast, reliable, and upfront pricing. From emergency blockages to full renovations, we solve your plumbing problems without the guesswork.",
     "guarantees": [
@@ -184,8 +184,8 @@
   "electrical": {
     "phone1": "+61412242997",
     "phone1Name": "John",
-    "phone2": "+61426051275",
-    "phone2Name": "Leo",
+    "phone2": "",
+    "phone2Name": "",
     "heroHeading": "Expert Electrical Solutions",
     "heroSubtitle": "Safe, efficient, and innovative electrical services. From rapid fault-finding to complete smart home installations, we keep the lights on.",
     "guarantees": [
@@ -303,8 +303,16 @@
     ],
     "overallRating": 4.9,
     "reviewCountLabel": "120+ Google reviews",
-    "showReviews": true,
+    "showReviews": false,
     "mapsUrl": "https://www.google.com/maps/place/UrbanPro+Plumbing+Sydney/@-33.8461026,150.3081854,10z/data=!4m15!1m8!3m7!1s0xaa99133edb90a697:0xe93f25ae63342f5d!2sUrbanPro+Plumbing+Sydney!8m2!3d-33.8482439!4d150.9319747!10e1!16s%2Fg%2F11n4td_svt"
+  },
+  "building": {
+    "phone1": "+61412242997",
+    "phone1Name": "John",
+    "phone2": "",
+    "phone2Name": "",
+    "contactHeading": "Ready to Build?",
+    "contactSubtitle": "Transform your vision into reality with Sydney's most trusted architects and builders."
   },
   "team": [
     {
@@ -486,13 +494,5 @@
     "Renovations",
     "New Builds",
     "Small Projects"
-  ],
-  "building": {
-    "phone1": "+61412242997",
-    "phone1Name": "John",
-    "phone2": "+61426051275",
-    "phone2Name": "Leo",
-    "contactHeading": "Ready to Build?",
-    "contactSubtitle": "Transform your vision into reality with Sydney's most trusted architects and builders."
-  }
+  ]
 }
