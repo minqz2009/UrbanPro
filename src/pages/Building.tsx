@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion, useScroll, useTransform, AnimatePresence, useSpring } from 'framer-motion';
-import { X, ChevronLeft, ChevronRight, Maximize2, Layout } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, Maximize2, Layout, PhoneCall, Mail } from 'lucide-react';
 import { useContent } from '../hooks/useContent';
 import type { BuildingProject } from '../hooks/useContent';
 
@@ -517,51 +517,52 @@ const Building = () => {
           <div style={{ position: 'absolute', top: 0, bottom: 0, right: 0, width: '10vw', background: 'linear-gradient(to left, rgba(15, 23, 42, 1), transparent)', pointerEvents: 'none', zIndex: 1 }} />
         </div>
 
-        {/* CTA content */}
+        {/* Contact CTA — same shape as Plumbing/Electrical */}
         <div style={{
-          padding: '8vh 4vw 10vh', textAlign: 'center', position: 'relative',
-          backgroundImage: 'linear-gradient(rgba(10, 18, 35, 0.75), rgba(10, 18, 35, 0.88)), url(images/building-cta-bg.jpg)',
+          padding: '6rem 0', textAlign: 'center', position: 'relative',
+          backgroundImage: 'linear-gradient(rgba(10, 18, 35, 0.85), rgba(10, 18, 35, 0.92)), url(images/building-cta-bg.jpg)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}>
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <p style={{ fontSize: '1rem', textTransform: 'uppercase', letterSpacing: '0.2em', color: 'var(--color-text-muted)', marginBottom: '1.5rem', fontWeight: 600 }}>
-              Start Your Project
-            </p>
-            <h2 style={{ fontSize: 'var(--font-size-h1)', fontWeight: 800, color: 'white', letterSpacing: '-0.04em', margin: '0 0 1.5rem', lineHeight: 1.1 }}>
-              Ready to Build?
-            </h2>
-            <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 'var(--font-size-body)', maxWidth: '550px', margin: '0 auto 3rem', lineHeight: 1.7 }}>
-              Transform your vision into reality with Sydney's most trusted architects and builders.
-            </p>
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            style={{ display: 'flex', gap: '1.5rem', justifyContent: 'center', flexWrap: 'wrap' }}
-          >
-            <a href="mailto:info@urbanpro.com.au" style={{
-              display: 'inline-block',
-              padding: '1.25rem 3.5rem',
-              backgroundColor: 'white',
-              color: 'black',
-              textDecoration: 'none',
-              fontSize: '1rem',
-              fontWeight: 700,
-              textTransform: 'uppercase',
-              letterSpacing: '0.15em',
-              transition: 'all 0.3s'
-            }}>
-              Get in Touch
-            </a>
-          </motion.div>
+          <div className="container">
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.8 }}
+            >
+              <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 800, color: 'var(--color-text)', marginBottom: '1.5rem' }}>
+                {content.building.contactHeading}
+              </h2>
+              <p style={{ color: 'var(--color-text-muted)', fontSize: '1.25rem', maxWidth: '600px', margin: '0 auto 3rem', lineHeight: 1.6 }}>
+                {content.building.contactSubtitle}
+              </p>
+              <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '1.5rem', marginBottom: '3rem' }}>
+                {content.building.phone1 && (
+                  <a href={`tel:${content.building.phone1}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', padding: '1.25rem 2.5rem', backgroundColor: 'white', color: '#0f172a', textDecoration: 'none', fontSize: '1.125rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+                    <PhoneCall size={22} /> Call {content.building.phone1Name}
+                  </a>
+                )}
+                {content.building.phone2 && (
+                  <a href={`tel:${content.building.phone2}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', padding: '1.25rem 2.5rem', backgroundColor: 'white', color: '#0f172a', textDecoration: 'none', fontSize: '1.125rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+                    <PhoneCall size={22} /> Call {content.building.phone2Name}
+                  </a>
+                )}
+                {content.settings.email && (
+                  <a href={`mailto:${content.settings.email}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', padding: '1.25rem 2.5rem', backgroundColor: 'transparent', color: 'var(--color-text)', textDecoration: 'none', fontSize: '1.125rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', border: '2px solid var(--color-text-muted)' }}>
+                    <Mail size={22} /> Email Us
+                  </a>
+                )}
+              </div>
+              <div style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem', lineHeight: 2 }}>
+                <span>ABN: {content.settings.abn}</span>
+                <span style={{ margin: '0 1.5rem', opacity: 0.3 }}>|</span>
+                <span>Contractor Licence NO: {content.settings.licence}</span>
+                <span style={{ margin: '0 1.5rem', opacity: 0.3 }}>|</span>
+                <span>{content.settings.email}</span>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </section>
 

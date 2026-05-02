@@ -182,18 +182,24 @@ const Footer = () => {
         <div style={{ flex: '1 1 250px' }}>
           <h4 style={{ color: 'white', marginBottom: '1.5rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}>Contact</h4>
           <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '1rem', color: 'var(--color-text-muted)', padding: 0 }}>
-            <li style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <Phone size={16} style={{ flexShrink: 0, color: (path === '/plumbing' || path === '/about') ? 'var(--color-plumbing)' : 'var(--color-accent)' }} />
-              <a href={`tel:${content.settings.phone1}`} style={{ color: 'inherit', textDecoration: 'none' }}>{content.settings.phone1} ({content.settings.phone1Name})</a>
-            </li>
-            <li style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <Phone size={16} style={{ flexShrink: 0, color: (path === '/plumbing' || path === '/about') ? 'var(--color-plumbing)' : 'var(--color-accent)' }} />
-              <a href={`tel:${content.settings.phone2}`} style={{ color: 'inherit', textDecoration: 'none' }}>{content.settings.phone2} ({content.settings.phone2Name})</a>
-            </li>
-            <li style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <Mail size={16} style={{ flexShrink: 0, color: (path === '/plumbing' || path === '/about') ? 'var(--color-plumbing)' : 'var(--color-accent)' }} />
-              <a href={`mailto:${content.settings.email}`} style={{ color: 'inherit', textDecoration: 'none' }}>{content.settings.email}</a>
-            </li>
+            {content.settings.phone1 && (
+              <li style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <Phone size={16} style={{ flexShrink: 0, color: (path === '/plumbing' || path === '/about') ? 'var(--color-plumbing)' : 'var(--color-accent)' }} />
+                <a href={`tel:${content.settings.phone1}`} style={{ color: 'inherit', textDecoration: 'none' }}>{content.settings.phone1} ({content.settings.phone1Name})</a>
+              </li>
+            )}
+            {content.settings.phone2 && (
+              <li style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <Phone size={16} style={{ flexShrink: 0, color: (path === '/plumbing' || path === '/about') ? 'var(--color-plumbing)' : 'var(--color-accent)' }} />
+                <a href={`tel:${content.settings.phone2}`} style={{ color: 'inherit', textDecoration: 'none' }}>{content.settings.phone2} ({content.settings.phone2Name})</a>
+              </li>
+            )}
+            {content.settings.email && (
+              <li style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <Mail size={16} style={{ flexShrink: 0, color: (path === '/plumbing' || path === '/about') ? 'var(--color-plumbing)' : 'var(--color-accent)' }} />
+                <a href={`mailto:${content.settings.email}`} style={{ color: 'inherit', textDecoration: 'none' }}>{content.settings.email}</a>
+              </li>
+            )}
           </ul>
         </div>
       </div>

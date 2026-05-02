@@ -11,7 +11,8 @@ import {
 } from '../services/github';
 import type { DeployPhase } from '../services/github';
 import { bustContentCache, merge } from '../hooks/useContent';
-import type { SiteContent, TeamMember, BuildingProject } from '../hooks/useContent';
+import type { SiteContent, TeamMember, BuildingProject, ConfigItem, ReviewItem } from '../hooks/useContent';
+import { ICON_NAMES, Icon } from '../icons';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -359,6 +360,188 @@ function ProjectsEditor({ projects, onChange, onPhotoQueued, photoPreviews, onGa
   );
 }
 
+// ─── Icon Picker ──────────────────────────────────────────────────────────────
+
+function IconPicker({ value, onChange }: { value: string; onChange: (name: string) => void }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div style={{ position: 'relative' }}>
+      <button type="button" onClick={() => setOpen(o => !o)} style={{ ...S.input, display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', textAlign: 'left' }}>
+        <span style={{ display: 'inline-flex', color: '#60a5fa' }}><Icon name={value} size={18} /></span>
+        <span style={{ flex: 1 }}>{value}</span>
+        <ChevronDown size={14} color="#475569" />
+      </button>
+      {open && (
+        <div style={{ position: 'absolute', top: 'calc(100% + 4px)', left: 0, right: 0, zIndex: 20, backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '6px', maxHeight: '260px', overflowY: 'auto', padding: '0.5rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(56px, 1fr))', gap: '0.35rem' }}>
+          {ICON_NAMES.map(name => (
+            <button key={name} type="button" onClick={() => { onChange(name); setOpen(false); }} title={name}
+              style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.2rem', padding: '0.5rem 0.25rem', backgroundColor: name === value ? '#3b82f6' : 'transparent', border: '1px solid ' + (name === value ? '#3b82f6' : '#334155'), borderRadius: '4px', color: name === value ? 'white' : '#cbd5e1', cursor: 'pointer', fontFamily: 'inherit' }}>
+              <Icon name={name} size={18} />
+              <span style={{ fontSize: '0.55rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '100%' }}>{name}</span>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── Config Item List Editor ──────────────────────────────────────────────────
+
+function ConfigItemListEditor({ items, onChange, label, titleMax, subtitleMax, showSubtitle = true, addLabel = 'Add Item' }: {
+  items: ConfigItem[]; onChange: (items: ConfigItem[]) => void;
+  label: string; titleMax: number; subtitleMax: number; showSubtitle?: boolean; addLabel?: string;
+}) {
+  const [dragId, setDragId] = useState<string | null>(null);
+  const update = (id: string, field: keyof ConfigItem, val: string) => onChange(items.map(it => it.id === id ? { ...it, [field]: val } : it));
+  const remove = (id: string) => onChange(items.filter(it => it.id !== id));
+  const add = () => onChange([...items, { id: `item-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`, icon: 'CheckCircle', title: '', subtitle: '' }]);
+
+  const onDragStart = (e: React.DragEvent, id: string) => { setDragId(id); e.dataTransfer.setData('text/plain', id); e.dataTransfer.effectAllowed = 'move'; };
+  const onDragOver = (e: React.DragEvent) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; };
+  const onDrop = (e: React.DragEvent, targetId: string) => {
+    e.preventDefault();
+    const fromId = e.dataTransfer.getData('text/plain');
+    if (!fromId || fromId === targetId) { setDragId(null); return; }
+    const arr = [...items];
+    const fromIdx = arr.findIndex(it => it.id === fromId);
+    const toIdx = arr.findIndex(it => it.id === targetId);
+    if (fromIdx === -1 || toIdx === -1) { setDragId(null); return; }
+    const [moved] = arr.splice(fromIdx, 1);
+    arr.splice(toIdx, 0, moved);
+    onChange(arr);
+    setDragId(null);
+  };
+
+  return (
+    <div>
+      <SectionHeading>{label}</SectionHeading>
+      <p style={{ color: '#475569', fontSize: '0.78rem', marginTop: '-0.75rem', marginBottom: '1rem' }}>Drag items to reorder. Choose an icon, title, and (optional) subtitle. Character limits keep the UI tidy.</p>
+      {items.map(item => (
+        <div key={item.id}
+          draggable onDragStart={e => onDragStart(e, item.id)} onDragOver={onDragOver} onDrop={e => onDrop(e, item.id)} onDragEnd={() => setDragId(null)}
+          style={{ ...S.card, opacity: dragId === item.id ? 0.5 : 1, display: 'grid', gridTemplateColumns: 'auto 120px 1fr auto', gap: '0.75rem', alignItems: 'start' }}>
+          <div style={{ display: 'flex', alignItems: 'center', height: '42px', cursor: 'grab', color: '#475569' }}><GripVertical size={16} /></div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
+            <label style={{ ...S.label, marginBottom: 0 }}>Icon</label>
+            <IconPicker value={item.icon} onChange={name => update(item.id, 'icon', name)} />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+            <div>
+              <label style={S.label}>Title</label>
+              <input style={S.input} value={item.title} maxLength={titleMax} onChange={e => update(item.id, 'title', e.target.value)} />
+              <CharCount value={item.title} max={titleMax} />
+            </div>
+            {showSubtitle && (
+              <div>
+                <label style={S.label}>Subtitle (optional)</label>
+                <input style={S.input} value={item.subtitle} maxLength={subtitleMax} onChange={e => update(item.id, 'subtitle', e.target.value)} />
+                <CharCount value={item.subtitle} max={subtitleMax} />
+              </div>
+            )}
+          </div>
+          <button style={{ ...S.btnDanger, alignSelf: 'start' }} onClick={() => remove(item.id)}><Trash2 size={14} /></button>
+        </div>
+      ))}
+      <button style={{ ...S.btnGhost, width: '100%', justifyContent: 'center', padding: '0.75rem' }} onClick={add}><Plus size={16} /> {addLabel}</button>
+    </div>
+  );
+}
+
+// ─── Reviews Editor ───────────────────────────────────────────────────────────
+
+function ReviewsEditor({ reviews, onChange, mapsUrl, onMapsUrlChange, onPhotoQueued, photoPreviews, onClearPending }: {
+  reviews: ReviewItem[]; onChange: (r: ReviewItem[]) => void;
+  mapsUrl: string; onMapsUrlChange: (s: string) => void;
+  onPhotoQueued: (id: string, file: File, preview: string) => void;
+  photoPreviews: Record<string, string>;
+  onClearPending: (id: string) => void;
+}) {
+  const [dragId, setDragId] = useState<string | null>(null);
+  const [photoErr, setPhotoErr] = useState<Record<string, string>>({});
+  const update = (id: string, field: keyof ReviewItem, val: string | number) => onChange(reviews.map(r => r.id === id ? { ...r, [field]: val } : r));
+  const remove = (id: string) => { if (!confirm('Remove this review?')) return; onClearPending(id); onChange(reviews.filter(r => r.id !== id)); };
+  const add = () => onChange([...reviews, { id: `rev-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`, name: '', initials: '', rating: 5, date: '', text: '', photo: '' }]);
+  const initialsFrom = (name: string) => name.trim().split(/\s+/).map(p => p[0] || '').join('').slice(0, 2).toUpperCase();
+
+  const onDragStart = (e: React.DragEvent, id: string) => { setDragId(id); e.dataTransfer.setData('text/plain', id); e.dataTransfer.effectAllowed = 'move'; };
+  const onDragOver = (e: React.DragEvent) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; };
+  const onDrop = (e: React.DragEvent, targetId: string) => {
+    e.preventDefault();
+    const fromId = e.dataTransfer.getData('text/plain');
+    if (!fromId || fromId === targetId) { setDragId(null); return; }
+    const arr = [...reviews];
+    const fromIdx = arr.findIndex(r => r.id === fromId);
+    const toIdx = arr.findIndex(r => r.id === targetId);
+    if (fromIdx === -1 || toIdx === -1) { setDragId(null); return; }
+    const [moved] = arr.splice(fromIdx, 1);
+    arr.splice(toIdx, 0, moved);
+    onChange(arr);
+    setDragId(null);
+  };
+
+  const clearPhoto = (id: string) => { onClearPending(id); update(id, 'photo', ''); };
+
+  return (
+    <div>
+      <SectionHeading>Google Reviews</SectionHeading>
+      <p style={{ color: '#94a3b8', fontSize: '0.85rem', marginTop: '-0.75rem', marginBottom: '1rem' }}>Paste real reviews from your Google Business profile here. They'll appear in the marquee on this page. Drag the grip handle to reorder. If empty, the reviews section is hidden.</p>
+      <Field label="Google Maps Listing URL (View All Reviews button)">
+        <input style={S.input} value={mapsUrl} onChange={e => onMapsUrlChange(e.target.value)} placeholder="https://www.google.com/maps/place/..." />
+      </Field>
+      {reviews.map(r => {
+        const hasPhoto = !!(photoPreviews[r.id] || r.photo);
+        return (
+          <div key={r.id} style={{ ...S.card, opacity: dragId === r.id ? 0.5 : 1 }}
+            draggable onDragStart={e => onDragStart(e, r.id)} onDragOver={onDragOver} onDrop={e => onDrop(e, r.id)} onDragEnd={() => setDragId(null)}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }}>
+              <GripVertical size={16} color="#475569" style={{ cursor: 'grab' }} />
+              <span style={{ color: '#94a3b8', fontSize: '0.85rem', fontWeight: 600 }}>{r.name || 'Untitled review'}</span>
+            </div>
+            <div style={{ display: 'flex', gap: '1.25rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                <PhotoUploader currentSrc={r.photo} previewDataUrl={photoPreviews[r.id] || null} label="Profile Photo (optional)"
+                  onFileSelected={(file, preview) => { setPhotoErr(e => ({ ...e, [r.id]: '' })); onPhotoQueued(r.id, file, preview); }}
+                  onError={msg => setPhotoErr(e => ({ ...e, [r.id]: msg }))} />
+                {hasPhoto && (
+                  <button onClick={() => clearPhoto(r.id)} style={{ ...S.btnDanger, alignSelf: 'flex-start', padding: '0.25rem 0.6rem', fontSize: '0.7rem' }}>
+                    <X size={11} /> Remove
+                  </button>
+                )}
+                {photoErr[r.id] && <p style={{ color: '#f87171', fontSize: '0.75rem', margin: 0 }}>{photoErr[r.id]}</p>}
+              </div>
+              <div style={{ flex: 1, minWidth: '260px', display: 'grid', gridTemplateColumns: '1fr 100px 100px 1fr', gap: '0.75rem' }}>
+                <Field label="Reviewer Name">
+                  <input style={S.input} value={r.name} maxLength={60} onChange={e => { update(r.id, 'name', e.target.value); if (!r.initials) update(r.id, 'initials', initialsFrom(e.target.value)); }} placeholder="e.g. Sarah M." />
+                </Field>
+                <Field label="Initials">
+                  <input style={S.input} value={r.initials} maxLength={3} onChange={e => update(r.id, 'initials', e.target.value.toUpperCase())} placeholder="SM" />
+                </Field>
+                <Field label="Rating">
+                  <select style={{ ...S.input, cursor: 'pointer' }} value={r.rating} onChange={e => update(r.id, 'rating', Number(e.target.value))}>
+                    {[5, 4, 3, 2, 1].map(n => <option key={n} value={n}>{n} ★</option>)}
+                  </select>
+                </Field>
+                <Field label="Date Label">
+                  <input style={S.input} value={r.date} maxLength={30} onChange={e => update(r.id, 'date', e.target.value)} placeholder="e.g. 2 weeks ago" />
+                </Field>
+              </div>
+            </div>
+            <Field label="Review Text">
+              <textarea style={S.textarea} value={r.text} maxLength={500} onChange={e => update(r.id, 'text', e.target.value)} rows={3} />
+              <CharCount value={r.text} max={500} />
+            </Field>
+            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <button style={S.btnDanger} onClick={() => remove(r.id)}><Trash2 size={14} /> Remove Review</button>
+            </div>
+          </div>
+        );
+      })}
+      <button style={{ ...S.btnGhost, width: '100%', justifyContent: 'center', padding: '0.75rem' }} onClick={add}><Plus size={16} /> Add Review</button>
+    </div>
+  );
+}
+
 // ─── Settings Editor ──────────────────────────────────────────────────────────
 
 function SettingsEditor({ content, onChange }: { content: SiteContent; onChange: (c: SiteContent) => void }) {
@@ -424,68 +607,110 @@ function HomeEditor({ content, onChange }: { content: SiteContent; onChange: (c:
 
 // ─── Plumbing Editor ──────────────────────────────────────────────────────────
 
-function PlumbingEditor({ content, onChange }: { content: SiteContent; onChange: (c: SiteContent) => void }) {
+function PlumbingEditor({ content, onChange, onPhotoQueued, photoPreviews, onClearPending }: { content: SiteContent; onChange: (c: SiteContent) => void; onPhotoQueued: (id: string, file: File, preview: string) => void; photoPreviews: Record<string, string>; onClearPending: (id: string) => void }) {
   const p = content.plumbing;
-  const set = (field: keyof typeof p, value: string) => onChange({ ...content, plumbing: { ...p, [field]: value } });
+  const setField = (field: keyof typeof p, value: any) => onChange({ ...content, plumbing: { ...p, [field]: value } });
   return (
     <div>
-      <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '1.5rem', lineHeight: 1.6 }}>Edit the hero text and contact buttons shown on the Plumbing page.</p>
+      <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '1.5rem', lineHeight: 1.6 }}>Edit everything shown on the Plumbing page — hero, contact buttons, guarantees, services, benefits, and Google reviews.</p>
       <SectionHeading>Hero Section</SectionHeading>
       <Field label="Main Heading">
-        <input style={S.input} value={p.heroHeading} maxLength={60} onChange={e => set('heroHeading', e.target.value)} />
+        <input style={S.input} value={p.heroHeading} maxLength={60} onChange={e => setField('heroHeading', e.target.value)} />
         <CharCount value={p.heroHeading} max={60} />
       </Field>
       <Field label="Subtitle">
-        <textarea style={S.textarea} value={p.heroSubtitle} maxLength={220} onChange={e => set('heroSubtitle', e.target.value)} rows={3} />
+        <textarea style={S.textarea} value={p.heroSubtitle} maxLength={220} onChange={e => setField('heroSubtitle', e.target.value)} rows={3} />
         <CharCount value={p.heroSubtitle} max={220} />
       </Field>
       <SectionHeading>Contact Buttons</SectionHeading>
-      <p style={{ color: '#475569', fontSize: '0.8rem', marginBottom: '1rem', marginTop: '-0.75rem' }}>These override the global phone settings for this page only.</p>
+      <p style={{ color: '#475569', fontSize: '0.8rem', marginBottom: '1rem', marginTop: '-0.75rem' }}>Leave a number empty to hide that call button on this page. These override the global phone settings; if blank, the global numbers are used.</p>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-        <Field label="Button 1 — Number"><input style={S.input} value={p.phone1} onChange={e => set('phone1', e.target.value)} placeholder="+61412242997" /></Field>
+        <Field label="Button 1 — Number (optional)"><input style={S.input} value={p.phone1} onChange={e => setField('phone1', e.target.value)} placeholder="+61412242997 (or leave blank)" /></Field>
         <Field label="Button 1 — Display Name">
-          <input style={S.input} value={p.phone1Name} maxLength={30} onChange={e => set('phone1Name', e.target.value)} placeholder="John" />
+          <input style={S.input} value={p.phone1Name} maxLength={30} onChange={e => setField('phone1Name', e.target.value)} placeholder="John" />
           <CharCount value={p.phone1Name} max={30} />
         </Field>
-        <Field label="Button 2 — Number"><input style={S.input} value={p.phone2} onChange={e => set('phone2', e.target.value)} placeholder="+61426051275" /></Field>
+        <Field label="Button 2 — Number (optional)"><input style={S.input} value={p.phone2} onChange={e => setField('phone2', e.target.value)} placeholder="+61426051275 (or leave blank)" /></Field>
         <Field label="Button 2 — Display Name">
-          <input style={S.input} value={p.phone2Name} maxLength={30} onChange={e => set('phone2Name', e.target.value)} placeholder="Leo" />
+          <input style={S.input} value={p.phone2Name} maxLength={30} onChange={e => setField('phone2Name', e.target.value)} placeholder="Leo" />
           <CharCount value={p.phone2Name} max={30} />
         </Field>
       </div>
+      <ConfigItemListEditor items={p.guarantees} onChange={v => setField('guarantees', v)} label="Guarantees" titleMax={28} subtitleMax={36} addLabel="Add Guarantee" />
+      <ConfigItemListEditor items={p.services} onChange={v => setField('services', v)} label="Services" titleMax={30} subtitleMax={40} showSubtitle={false} addLabel="Add Service" />
+      <ConfigItemListEditor items={p.benefits} onChange={v => setField('benefits', v)} label="Benefits" titleMax={50} subtitleMax={40} showSubtitle={false} addLabel="Add Benefit" />
+      <ReviewsEditor reviews={p.reviews} onChange={v => setField('reviews', v)} mapsUrl={p.mapsUrl} onMapsUrlChange={v => setField('mapsUrl', v)} onPhotoQueued={onPhotoQueued} photoPreviews={photoPreviews} onClearPending={onClearPending} />
     </div>
   );
 }
 
 // ─── Electrical Editor ────────────────────────────────────────────────────────
 
-function ElectricalEditor({ content, onChange }: { content: SiteContent; onChange: (c: SiteContent) => void }) {
+function ElectricalEditor({ content, onChange, onPhotoQueued, photoPreviews, onClearPending }: { content: SiteContent; onChange: (c: SiteContent) => void; onPhotoQueued: (id: string, file: File, preview: string) => void; photoPreviews: Record<string, string>; onClearPending: (id: string) => void }) {
   const e = content.electrical;
-  const set = (field: keyof typeof e, value: string) => onChange({ ...content, electrical: { ...e, [field]: value } });
+  const setField = (field: keyof typeof e, value: any) => onChange({ ...content, electrical: { ...e, [field]: value } });
   return (
     <div>
-      <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '1.5rem', lineHeight: 1.6 }}>Edit the hero text and contact buttons shown on the Electrical page.</p>
+      <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '1.5rem', lineHeight: 1.6 }}>Edit everything shown on the Electrical page — hero, contact buttons, guarantees, services, benefits, and Google reviews.</p>
       <SectionHeading>Hero Section</SectionHeading>
       <Field label="Main Heading">
-        <input style={S.input} value={e.heroHeading} maxLength={60} onChange={e2 => set('heroHeading', e2.target.value)} />
+        <input style={S.input} value={e.heroHeading} maxLength={60} onChange={e2 => setField('heroHeading', e2.target.value)} />
         <CharCount value={e.heroHeading} max={60} />
       </Field>
       <Field label="Subtitle">
-        <textarea style={S.textarea} value={e.heroSubtitle} maxLength={220} onChange={e2 => set('heroSubtitle', e2.target.value)} rows={3} />
+        <textarea style={S.textarea} value={e.heroSubtitle} maxLength={220} onChange={e2 => setField('heroSubtitle', e2.target.value)} rows={3} />
         <CharCount value={e.heroSubtitle} max={220} />
       </Field>
       <SectionHeading>Contact Buttons</SectionHeading>
-      <p style={{ color: '#475569', fontSize: '0.8rem', marginBottom: '1rem', marginTop: '-0.75rem' }}>These override the global phone settings for this page only.</p>
+      <p style={{ color: '#475569', fontSize: '0.8rem', marginBottom: '1rem', marginTop: '-0.75rem' }}>Leave a number empty to hide that call button on this page. These override the global phone settings; if blank, the global numbers are used.</p>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-        <Field label="Button 1 — Number"><input style={S.input} value={e.phone1} onChange={e2 => set('phone1', e2.target.value)} placeholder="+61412242997" /></Field>
+        <Field label="Button 1 — Number (optional)"><input style={S.input} value={e.phone1} onChange={e2 => setField('phone1', e2.target.value)} placeholder="+61412242997 (or leave blank)" /></Field>
         <Field label="Button 1 — Display Name">
-          <input style={S.input} value={e.phone1Name} maxLength={30} onChange={e2 => set('phone1Name', e2.target.value)} placeholder="John" />
+          <input style={S.input} value={e.phone1Name} maxLength={30} onChange={e2 => setField('phone1Name', e2.target.value)} placeholder="John" />
           <CharCount value={e.phone1Name} max={30} />
         </Field>
-        <Field label="Button 2 — Number"><input style={S.input} value={e.phone2} onChange={e2 => set('phone2', e2.target.value)} placeholder="+61426051275" /></Field>
+        <Field label="Button 2 — Number (optional)"><input style={S.input} value={e.phone2} onChange={e2 => setField('phone2', e2.target.value)} placeholder="+61426051275 (or leave blank)" /></Field>
         <Field label="Button 2 — Display Name">
-          <input style={S.input} value={e.phone2Name} maxLength={30} onChange={e2 => set('phone2Name', e2.target.value)} placeholder="Leo" />
+          <input style={S.input} value={e.phone2Name} maxLength={30} onChange={e2 => setField('phone2Name', e2.target.value)} placeholder="Leo" />
           <CharCount value={e.phone2Name} max={30} />
+        </Field>
+      </div>
+      <ConfigItemListEditor items={e.guarantees} onChange={v => setField('guarantees', v)} label="Guarantees" titleMax={28} subtitleMax={36} addLabel="Add Guarantee" />
+      <ConfigItemListEditor items={e.services} onChange={v => setField('services', v)} label="Services" titleMax={30} subtitleMax={40} showSubtitle={false} addLabel="Add Service" />
+      <ConfigItemListEditor items={e.benefits} onChange={v => setField('benefits', v)} label="Benefits" titleMax={50} subtitleMax={40} showSubtitle={false} addLabel="Add Benefit" />
+      <ReviewsEditor reviews={e.reviews} onChange={v => setField('reviews', v)} mapsUrl={e.mapsUrl} onMapsUrlChange={v => setField('mapsUrl', v)} onPhotoQueued={onPhotoQueued} photoPreviews={photoPreviews} onClearPending={onClearPending} />
+    </div>
+  );
+}
+
+// ─── Building Contact Editor ──────────────────────────────────────────────────
+
+function BuildingContactEditor({ content, onChange }: { content: SiteContent; onChange: (c: SiteContent) => void }) {
+  const b = content.building;
+  const setField = (field: keyof typeof b, value: any) => onChange({ ...content, building: { ...b, [field]: value } });
+  return (
+    <div style={{ marginTop: '2.5rem', paddingTop: '2rem', borderTop: '1px solid #1e3a5f' }}>
+      <SectionHeading>Building Page — Contact Section</SectionHeading>
+      <p style={{ color: '#475569', fontSize: '0.85rem', marginBottom: '1rem' }}>Configure the heading, subtitle, and contact buttons that appear at the bottom of the Building page.</p>
+      <Field label="Section Heading">
+        <input style={S.input} value={b.contactHeading} maxLength={40} onChange={e => setField('contactHeading', e.target.value)} />
+        <CharCount value={b.contactHeading} max={40} />
+      </Field>
+      <Field label="Section Subtitle">
+        <textarea style={S.textarea} value={b.contactSubtitle} maxLength={220} onChange={e => setField('contactSubtitle', e.target.value)} rows={2} />
+        <CharCount value={b.contactSubtitle} max={220} />
+      </Field>
+      <p style={{ color: '#475569', fontSize: '0.8rem', marginBottom: '1rem' }}>Leave a number empty to hide that call button. Numbers default to the global settings.</p>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+        <Field label="Button 1 — Number (optional)"><input style={S.input} value={b.phone1} onChange={e => setField('phone1', e.target.value)} placeholder="+61412242997 (or leave blank)" /></Field>
+        <Field label="Button 1 — Display Name">
+          <input style={S.input} value={b.phone1Name} maxLength={30} onChange={e => setField('phone1Name', e.target.value)} placeholder="John" />
+          <CharCount value={b.phone1Name} max={30} />
+        </Field>
+        <Field label="Button 2 — Number (optional)"><input style={S.input} value={b.phone2} onChange={e => setField('phone2', e.target.value)} placeholder="+61426051275 (or leave blank)" /></Field>
+        <Field label="Button 2 — Display Name">
+          <input style={S.input} value={b.phone2Name} maxLength={30} onChange={e => setField('phone2Name', e.target.value)} placeholder="Leo" />
+          <CharCount value={b.phone2Name} max={30} />
         </Field>
       </div>
     </div>
@@ -764,6 +989,9 @@ export default function Admin() {
     if (JSON.stringify(content.about) !== JSON.stringify(snap.about)
         || JSON.stringify(content.team) !== JSON.stringify(snap.team)) tabs.add('about');
 
+    if (JSON.stringify(content.building) !== JSON.stringify(snap.building)) {
+      tabs.add('building');
+    }
     if (JSON.stringify(content.buildingProjects) !== JSON.stringify(snap.buildingProjects)) {
       tabs.add('building');
       const snapByCat = new Map<string, Set<string>>();
@@ -824,6 +1052,9 @@ export default function Admin() {
         } else if (id.startsWith('fp-before-')) {
           const pid = id.slice('fp-before-'.length);
           updated.buildingProjects = updated.buildingProjects.map(p => p.id === pid ? { ...p, floorPlanBefore: imagePath } : p);
+        } else if (id.startsWith('rev-')) {
+          updated.plumbing.reviews = updated.plumbing.reviews.map(r => r.id === id ? { ...r, photo: imagePath } : r);
+          updated.electrical.reviews = updated.electrical.reviews.map(r => r.id === id ? { ...r, photo: imagePath } : r);
         } else {
           updated.team = updated.team.map(m => m.id === id ? { ...m, photo: imagePath } : m);
           updated.buildingProjects = updated.buildingProjects.map(p => p.id === id ? { ...p, image: imagePath } : p);
@@ -861,6 +1092,8 @@ export default function Admin() {
         if (p.floorPlanBefore) allRefs.add('public/' + p.floorPlanBefore);
       }
       for (const m of updated.team) { if (m.photo) allRefs.add('public/' + m.photo); }
+      for (const r of updated.plumbing.reviews) { if (r.photo) allRefs.add('public/' + r.photo); }
+      for (const r of updated.electrical.reviews) { if (r.photo) allRefs.add('public/' + r.photo); }
       const safeDeletes = [...pendingDeletes].filter(dp => !allRefs.has(dp));
 
       // Single atomic commit with deletions
@@ -998,10 +1231,10 @@ export default function Admin() {
         <div style={{ maxWidth: '860px', margin: '0 auto', padding: '2rem 1.25rem' }}>
           {activeTab === 'settings' && <SettingsEditor content={content} onChange={setContent} />}
           {activeTab === 'home' && <HomeEditor content={content} onChange={setContent} />}
-          {activeTab === 'plumbing' && <PlumbingEditor content={content} onChange={setContent} />}
-          {activeTab === 'electrical' && <ElectricalEditor content={content} onChange={setContent} />}
+          {activeTab === 'plumbing' && <PlumbingEditor content={content} onChange={setContent} onPhotoQueued={queuePhoto} photoPreviews={photoPreviews} onClearPending={clearPendingPhoto} />}
+          {activeTab === 'electrical' && <ElectricalEditor content={content} onChange={setContent} onPhotoQueued={queuePhoto} photoPreviews={photoPreviews} onClearPending={clearPendingPhoto} />}
           {activeTab === 'about' && <AboutEditor content={content} onChange={setContent} onPhotoQueued={queuePhoto} photoPreviews={photoPreviews} />}
-          {activeTab === 'building' && (
+          {activeTab === 'building' && (<>
             <ProjectsEditor
               projects={content.buildingProjects}
               onChange={buildingProjects => setContent(c => c ? { ...c, buildingProjects } : c)}
@@ -1016,7 +1249,8 @@ export default function Admin() {
               onCategoriesChange={cats => setContent(c => c ? { ...c, buildingCategories: cats } : c)}
               onClearPending={clearPendingPhoto}
             />
-          )}
+            <BuildingContactEditor content={content} onChange={setContent} />
+          </>)}
         </div>
       )}
     </div>

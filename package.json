@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "test": "node tests/verify-phones.mjs && node tests/admin-coverage.mjs",
+    "test": "node tests/verify-phones.mjs && node tests/admin-coverage.mjs && node tests/configurable-items.mjs",
     "lint": "eslint .",
     "preview": "vite preview"
   },

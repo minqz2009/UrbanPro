@@ -33,14 +33,47 @@ export interface AboutContent extends PagePhones {
   teamSubheading: string;
 }
 
+// Configurable card item used for guarantees, services, benefits.
+export interface ConfigItem {
+  id: string;
+  icon: string;       // name from ICON_MAP
+  title: string;      // primary label
+  subtitle: string;   // secondary label (optional usage per section)
+}
+
+export interface ReviewItem {
+  id: string;
+  name: string;
+  initials: string;
+  rating: number;
+  date: string;
+  text: string;
+  photo: string;
+}
+
 export interface PlumbingContent extends PagePhones {
   heroHeading: string;
   heroSubtitle: string;
+  guarantees: ConfigItem[];
+  services: ConfigItem[];
+  benefits: ConfigItem[];
+  reviews: ReviewItem[];
+  mapsUrl: string;
 }
 
 export interface ElectricalContent extends PagePhones {
   heroHeading: string;
   heroSubtitle: string;
+  guarantees: ConfigItem[];
+  services: ConfigItem[];
+  benefits: ConfigItem[];
+  reviews: ReviewItem[];
+  mapsUrl: string;
+}
+
+export interface BuildingContent extends PagePhones {
+  contactHeading: string;
+  contactSubtitle: string;
 }
 
 export interface TeamMember {
@@ -72,6 +105,7 @@ export interface SiteContent {
   about: AboutContent;
   plumbing: PlumbingContent;
   electrical: ElectricalContent;
+  building: BuildingContent;
   team: TeamMember[];
   buildingProjects: BuildingProject[];
   buildingCategories: string[];
@@ -86,6 +120,53 @@ const DEFAULT_SETTINGS: SiteSettings = {
   abn: '48 694 251 888',
   licence: '280492C',
 };
+
+const PLUMBING_GUARANTEES: ConfigItem[] = [
+  { id: 'pg1', icon: 'BadgeDollarSign', title: 'NO CALL OUT FEE', subtitle: 'Transparent honest pricing' },
+  { id: 'pg2', icon: 'Wrench', title: '$250 FIXED RATE', subtitle: 'Drain cleaning special' },
+  { id: 'pg3', icon: 'ShieldCheck', title: 'NO FIX NO PAY', subtitle: 'Our ultimate guarantee' },
+];
+
+const PLUMBING_SERVICES: ConfigItem[] = [
+  { id: 'ps1', icon: 'Wrench', title: 'General Plumbing', subtitle: '' },
+  { id: 'ps2', icon: 'ShowerHead', title: 'Hot Water', subtitle: '' },
+  { id: 'ps3', icon: 'Flame', title: 'Gas Heating', subtitle: '' },
+  { id: 'ps4', icon: 'Waves', title: 'Blockages', subtitle: '' },
+  { id: 'ps5', icon: 'Droplets', title: 'Water Leak Detection', subtitle: '' },
+];
+
+const PLUMBING_BENEFITS: ConfigItem[] = [
+  { id: 'pb1', icon: 'CheckCircle', title: 'Fully Licensed & Insured Plumbers', subtitle: '' },
+  { id: 'pb2', icon: 'CheckCircle', title: 'No Call Out Fees', subtitle: '' },
+  { id: 'pb3', icon: 'CheckCircle', title: 'Fixed $250 limit for Drain Cleaning', subtitle: '' },
+  { id: 'pb4', icon: 'CheckCircle', title: 'No Fix No Pay Guarantee', subtitle: '' },
+  { id: 'pb5', icon: 'CheckCircle', title: 'Fast Emergency 24/7 Deployment', subtitle: '' },
+  { id: 'pb6', icon: 'CheckCircle', title: 'Commercial & Domestic Coverage', subtitle: '' },
+];
+
+const ELECTRICAL_GUARANTEES: ConfigItem[] = [
+  { id: 'eg1', icon: 'Shield', title: 'LIFETIME WORKMANSHIP', subtitle: 'On all electrical services' },
+  { id: 'eg2', icon: 'BadgeDollarSign', title: 'FIXED UPFRONT PRICING', subtitle: 'No hidden costs promised' },
+  { id: 'eg3', icon: 'Zap', title: 'MASTER ELECTRICIANS', subtitle: "Sydney's finest technicians" },
+];
+
+const ELECTRICAL_SERVICES: ConfigItem[] = [
+  { id: 'es1', icon: 'Activity', title: 'Residential Wiring', subtitle: '' },
+  { id: 'es2', icon: 'Lightbulb', title: 'Lighting Installation', subtitle: '' },
+  { id: 'es3', icon: 'Shield', title: 'Switchboard Upgrades', subtitle: '' },
+  { id: 'es4', icon: 'Search', title: 'Fault Diagnostics', subtitle: '' },
+  { id: 'es5', icon: 'BatteryCharging', title: 'EV Chargers', subtitle: '' },
+  { id: 'es6', icon: 'Power', title: 'Home Automation', subtitle: '' },
+];
+
+const ELECTRICAL_BENEFITS: ConfigItem[] = [
+  { id: 'eb1', icon: 'CheckCircle', title: 'Fully Licensed Master Electricians', subtitle: '' },
+  { id: 'eb2', icon: 'CheckCircle', title: 'Transparent Upfront Pricing', subtitle: '' },
+  { id: 'eb3', icon: 'CheckCircle', title: 'Latest Diagnostics Technology', subtitle: '' },
+  { id: 'eb4', icon: 'CheckCircle', title: 'Clean & Respectful Team', subtitle: '' },
+];
+
+const DEFAULT_MAPS_URL = 'https://www.google.com/maps/place/UrbanPro+Plumbing+Sydney/@-33.8461026,150.3081854,10z/data=!4m15!1m8!3m7!1s0xaa99133edb90a697:0xe93f25ae63342f5d!2sUrbanPro+Plumbing+Sydney!8m2!3d-33.8482439!4d150.9319747!10e1!16s%2Fg%2F11n4td_svt';
 
 const DEFAULT: SiteContent = {
   settings: DEFAULT_SETTINGS,
@@ -117,6 +198,11 @@ const DEFAULT: SiteContent = {
     phone2Name: DEFAULT_SETTINGS.phone2Name,
     heroHeading: 'Expert Plumbing Solutions',
     heroSubtitle: 'Fast, reliable, and upfront pricing. From emergency blockages to full renovations, we solve your plumbing problems without the guesswork.',
+    guarantees: PLUMBING_GUARANTEES,
+    services: PLUMBING_SERVICES,
+    benefits: PLUMBING_BENEFITS,
+    reviews: [],
+    mapsUrl: DEFAULT_MAPS_URL,
   },
   electrical: {
     phone1: DEFAULT_SETTINGS.phone1,
@@ -125,6 +211,19 @@ const DEFAULT: SiteContent = {
     phone2Name: DEFAULT_SETTINGS.phone2Name,
     heroHeading: 'Expert Electrical Solutions',
     heroSubtitle: 'Safe, efficient, and innovative electrical services. From rapid fault-finding to complete smart home installations, we keep the lights on.',
+    guarantees: ELECTRICAL_GUARANTEES,
+    services: ELECTRICAL_SERVICES,
+    benefits: ELECTRICAL_BENEFITS,
+    reviews: [],
+    mapsUrl: DEFAULT_MAPS_URL,
+  },
+  building: {
+    phone1: DEFAULT_SETTINGS.phone1,
+    phone1Name: DEFAULT_SETTINGS.phone1Name,
+    phone2: DEFAULT_SETTINGS.phone2,
+    phone2Name: DEFAULT_SETTINGS.phone2Name,
+    contactHeading: 'Ready to Build?',
+    contactSubtitle: "Transform your vision into reality with Sydney's most trusted architects and builders.",
   },
   team: [],
   buildingProjects: [],
@@ -136,6 +235,11 @@ let _cache: SiteContent | null = null;
 
 export function bustContentCache() {
   _cache = null;
+}
+
+function withDefaults<T extends ConfigItem>(items: T[] | undefined, fallback: ConfigItem[]): ConfigItem[] {
+  if (!items) return fallback;
+  return items.map(it => ({ id: it.id, icon: it.icon || 'CheckCircle', title: it.title || '', subtitle: it.subtitle || '' }));
 }
 
 export function merge(data: Partial<SiteContent>): SiteContent {
@@ -162,11 +266,26 @@ export function merge(data: Partial<SiteContent>): SiteContent {
       ...DEFAULT.plumbing,
       ...pagePhoneDefaults,
       ...(data.plumbing || {}),
+      guarantees: withDefaults(data.plumbing?.guarantees, DEFAULT.plumbing.guarantees),
+      services: withDefaults(data.plumbing?.services, DEFAULT.plumbing.services),
+      benefits: withDefaults(data.plumbing?.benefits, DEFAULT.plumbing.benefits),
+      reviews: data.plumbing?.reviews ?? DEFAULT.plumbing.reviews,
+      mapsUrl: data.plumbing?.mapsUrl ?? DEFAULT.plumbing.mapsUrl,
     },
     electrical: {
       ...DEFAULT.electrical,
       ...pagePhoneDefaults,
       ...(data.electrical || {}),
+      guarantees: withDefaults(data.electrical?.guarantees, DEFAULT.electrical.guarantees),
+      services: withDefaults(data.electrical?.services, DEFAULT.electrical.services),
+      benefits: withDefaults(data.electrical?.benefits, DEFAULT.electrical.benefits),
+      reviews: data.electrical?.reviews ?? DEFAULT.electrical.reviews,
+      mapsUrl: data.electrical?.mapsUrl ?? DEFAULT.electrical.mapsUrl,
+    },
+    building: {
+      ...DEFAULT.building,
+      ...pagePhoneDefaults,
+      ...(data.building || {}),
     },
     team: data.team ?? DEFAULT.team,
     buildingProjects: (data.buildingProjects ?? DEFAULT.buildingProjects).map(p => ({
