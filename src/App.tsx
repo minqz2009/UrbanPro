@@ -261,6 +261,7 @@ const FloatingContact = () => {
     e.preventDefault();
     const subject = encodeURIComponent(`Enquiry from ${formData.name}`);
     const body = encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\n${formData.message}`);
+    if (!content.settings.email) return;
     window.open(`mailto:${content.settings.email}?subject=${subject}&body=${body}`);
     setSent(true);
     resetTimer.current = setTimeout(() => { setSent(false); setIsOpen(false); setFormData({ name: '', email: '', message: '' }); }, 3000);

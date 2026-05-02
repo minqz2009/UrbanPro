@@ -202,9 +202,11 @@ const Home = () => {
               <a href="#services" onClick={(e) => { e.preventDefault(); const el = document.getElementById('services'); if (el) { const top = el.getBoundingClientRect().top + window.scrollY - 80; window.scrollTo({ top, behavior: 'smooth' }); } }} style={{ padding: '1.1rem 3rem', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.15em', fontWeight: 700, backgroundColor: 'white', color: '#0f172a', textDecoration: 'none', transition: 'all 0.3s ease', cursor: 'pointer' }}>
                 Explore Services
               </a>
+              {content.settings.email && (
               <a href={`mailto:${content.settings.email}`} style={{ padding: '1.1rem 3rem', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.15em', fontWeight: 700, backgroundColor: 'transparent', color: 'white', textDecoration: 'none', border: '1px solid rgba(255,255,255,0.3)', transition: 'all 0.3s ease' }}>
                 Get in Touch
               </a>
+              )}
             </motion.div>
 
             <motion.div variants={itemVariants} style={{ display: 'flex', justifyContent: 'center', gap: 'clamp(1rem, 3vw, 2.5rem)', flexWrap: 'wrap' }}>

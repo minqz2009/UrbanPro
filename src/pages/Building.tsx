@@ -559,7 +559,7 @@ const Building = () => {
                 <span style={{ margin: '0 1.5rem', opacity: 0.3 }}>|</span>
                 <span>Contractor Licence NO: {content.settings.licence}</span>
                 <span style={{ margin: '0 1.5rem', opacity: 0.3 }}>|</span>
-                <span>{content.settings.email}</span>
+                {content.settings.email && <span>{content.settings.email}</span>}
               </div>
             </motion.div>
           </div>

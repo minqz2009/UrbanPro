@@ -432,7 +432,7 @@ const Electrical = () => {
               <span style={{ margin: '0 1.5rem', opacity: 0.3 }}>|</span>
               <span>Contractor Licence NO: {settings.licence}</span>
               <span style={{ margin: '0 1.5rem', opacity: 0.3 }}>|</span>
-              <span>{settings.email}</span>
+              {settings.email && <span>{settings.email}</span>}
             </div>
           </motion.div>
         </div>
