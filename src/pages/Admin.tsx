@@ -366,18 +366,18 @@ function IconPicker({ value, onChange }: { value: string; onChange: (name: strin
   const [open, setOpen] = useState(false);
   return (
     <div style={{ position: 'relative' }}>
-      <button type="button" onClick={() => setOpen(o => !o)} style={{ ...S.input, display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', textAlign: 'left' }}>
-        <span style={{ display: 'inline-flex', color: '#60a5fa' }}><Icon name={value} size={18} /></span>
-        <span style={{ flex: 1 }}>{value}</span>
-        <ChevronDown size={14} color="#475569" />
+      <button type="button" onClick={() => setOpen(o => !o)} style={{ ...S.input, display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', textAlign: 'left', overflow: 'hidden' }}>
+        <span style={{ display: 'inline-flex', color: '#60a5fa', flexShrink: 0 }}><Icon name={value} size={18} /></span>
+        <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', minWidth: 0 }}>{value}</span>
+        <ChevronDown size={14} color="#475569" style={{ flexShrink: 0 }} />
       </button>
       {open && (
-        <div style={{ position: 'absolute', top: 'calc(100% + 4px)', left: 0, right: 0, zIndex: 20, backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '6px', maxHeight: '260px', overflowY: 'auto', padding: '0.5rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(56px, 1fr))', gap: '0.35rem' }}>
+        <div style={{ position: 'absolute', top: 'calc(100% + 4px)', left: 0, right: 0, zIndex: 20, backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '6px', maxHeight: '260px', overflowY: 'auto', padding: '0.5rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(64px, 1fr))', gap: '0.35rem' }}>
           {ICON_NAMES.map(name => (
             <button key={name} type="button" onClick={() => { onChange(name); setOpen(false); }} title={name}
-              style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.2rem', padding: '0.5rem 0.25rem', backgroundColor: name === value ? '#3b82f6' : 'transparent', border: '1px solid ' + (name === value ? '#3b82f6' : '#334155'), borderRadius: '4px', color: name === value ? 'white' : '#cbd5e1', cursor: 'pointer', fontFamily: 'inherit' }}>
+              style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.2rem', padding: '0.5rem 0.15rem', backgroundColor: name === value ? '#3b82f6' : 'transparent', border: '1px solid ' + (name === value ? '#3b82f6' : '#334155'), borderRadius: '4px', color: name === value ? 'white' : '#cbd5e1', cursor: 'pointer', fontFamily: 'inherit', overflow: 'hidden', minWidth: 0 }}>
               <Icon name={name} size={18} />
-              <span style={{ fontSize: '0.55rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '100%' }}>{name}</span>
+              <span style={{ fontSize: '0.55rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '100%', lineHeight: 1.2 }}>{name}</span>
             </button>
           ))}
         </div>
@@ -393,9 +393,14 @@ function ConfigItemListEditor({ items, onChange, label, titleMax, subtitleMax, s
   label: string; titleMax: number; subtitleMax: number; showSubtitle?: boolean; addLabel?: string;
 }) {
   const [dragId, setDragId] = useState<string | null>(null);
+  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
   const update = (id: string, field: keyof ConfigItem, val: string) => onChange(items.map(it => it.id === id ? { ...it, [field]: val } : it));
-  const remove = (id: string) => onChange(items.filter(it => it.id !== id));
-  const add = () => onChange([...items, { id: `item-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`, icon: 'CheckCircle', title: '', subtitle: '' }]);
+  const remove = (id: string) => { onChange(items.filter(it => it.id !== id)); setExpanded(e => { const n = { ...e }; delete n[id]; return n; }); };
+  const add = () => {
+    const newId = `item-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
+    onChange([...items, { id: newId, icon: 'CheckCircle', title: '', subtitle: '' }]);
+    setExpanded(e => ({ ...e, [newId]: true }));
+  };
 
   const onDragStart = (e: React.DragEvent, id: string) => { setDragId(id); e.dataTransfer.setData('text/plain', id); e.dataTransfer.effectAllowed = 'move'; };
   const onDragOver = (e: React.DragEvent) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; };
@@ -414,47 +419,71 @@ function ConfigItemListEditor({ items, onChange, label, titleMax, subtitleMax, s
   };
 
   return (
-    <div>
+    <div style={{ marginTop: '2.5rem' }}>
       <SectionHeading>{label}</SectionHeading>
-      <p style={{ color: '#475569', fontSize: '0.78rem', marginTop: '-0.75rem', marginBottom: '1rem' }}>Drag items to reorder. Choose an icon, title, and (optional) subtitle. Character limits keep the UI tidy.</p>
-      {items.map(item => (
-        <div key={item.id}
-          draggable onDragStart={e => onDragStart(e, item.id)} onDragOver={onDragOver} onDrop={e => onDrop(e, item.id)} onDragEnd={() => setDragId(null)}
-          style={{ ...S.card, opacity: dragId === item.id ? 0.5 : 1, display: 'grid', gridTemplateColumns: 'auto 120px 1fr auto', gap: '0.75rem', alignItems: 'start' }}>
-          <div style={{ display: 'flex', alignItems: 'center', height: '42px', cursor: 'grab', color: '#475569' }}><GripVertical size={16} /></div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
-            <label style={{ ...S.label, marginBottom: 0 }}>Icon</label>
-            <IconPicker value={item.icon} onChange={name => update(item.id, 'icon', name)} />
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            <div>
-              <label style={S.label}>Title</label>
-              <input style={S.input} value={item.title} maxLength={titleMax} onChange={e => update(item.id, 'title', e.target.value)} />
-              <CharCount value={item.title} max={titleMax} />
-            </div>
-            {showSubtitle && (
-              <div>
-                <label style={S.label}>Subtitle (optional)</label>
-                <input style={S.input} value={item.subtitle} maxLength={subtitleMax} onChange={e => update(item.id, 'subtitle', e.target.value)} />
-                <CharCount value={item.subtitle} max={subtitleMax} />
+      <p style={{ color: '#475569', fontSize: '0.78rem', marginTop: '-0.75rem', marginBottom: '1rem' }}>Drag cards to reorder. Click the chevron to edit icon, title, and subtitle.</p>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(190px, 1fr))', gap: '0.65rem' }}>
+        {items.map(item => {
+          const open = !!expanded[item.id];
+          return (
+            <div key={item.id}
+              draggable onDragStart={e => onDragStart(e, item.id)} onDragOver={onDragOver} onDrop={e => onDrop(e, item.id)} onDragEnd={() => setDragId(null)}
+              style={{ ...S.card, padding: '0.7rem', opacity: dragId === item.id ? 0.5 : 1, display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+              {/* Card header: drag + icon + title + expand + delete */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', minWidth: 0 }}>
+                <GripVertical size={14} color="#475569" style={{ cursor: 'grab', flexShrink: 0 }} />
+                <span style={{ color: '#60a5fa', display: 'inline-flex', flexShrink: 0 }}><Icon name={item.icon} size={18} /></span>
+                <span style={{ flex: 1, fontWeight: 600, fontSize: '0.8rem', color: '#e2e8f0', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', minWidth: 0 }}>
+                  {item.title || 'Untitled'}
+                </span>
+                <button type="button" onClick={() => setExpanded(e => ({ ...e, [item.id]: !open }))}
+                  style={{ background: 'none', border: 'none', color: '#475569', cursor: 'pointer', padding: 0, display: 'flex', flexShrink: 0 }}>
+                  {open ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                </button>
+                <button type="button" onClick={() => remove(item.id)}
+                  style={{ background: 'none', border: 'none', color: '#f87171', cursor: 'pointer', padding: 0, display: 'flex', flexShrink: 0 }}>
+                  <Trash2 size={13} />
+                </button>
               </div>
-            )}
-          </div>
-          <button style={{ ...S.btnDanger, alignSelf: 'start' }} onClick={() => remove(item.id)}><Trash2 size={14} /></button>
-        </div>
-      ))}
-      <button style={{ ...S.btnGhost, width: '100%', justifyContent: 'center', padding: '0.75rem' }} onClick={add}><Plus size={16} /> {addLabel}</button>
+              {showSubtitle && <div style={{ fontSize: '0.68rem', color: '#64748b', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', paddingLeft: '1.9rem' }}>{item.subtitle || 'No subtitle'}</div>}
+              {/* Expanded edit area */}
+              {open && (
+                <div style={{ marginTop: '0.3rem', display: 'flex', flexDirection: 'column', gap: '0.5rem', paddingTop: '0.5rem', borderTop: '1px solid #1e3a5f' }}>
+                  <div>
+                    <label style={{ ...S.label, marginBottom: '0.2rem', fontSize: '0.68rem' }}>Icon</label>
+                    <IconPicker value={item.icon} onChange={name => update(item.id, 'icon', name)} />
+                  </div>
+                  <div>
+                    <label style={{ ...S.label, marginBottom: '0.2rem', fontSize: '0.68rem' }}>Title</label>
+                    <input style={S.input} value={item.title} maxLength={titleMax} onChange={e => update(item.id, 'title', e.target.value)} placeholder="Item title" />
+                    <CharCount value={item.title} max={titleMax} />
+                  </div>
+                  {showSubtitle && (
+                    <div>
+                      <label style={{ ...S.label, marginBottom: '0.2rem', fontSize: '0.68rem' }}>Subtitle (optional)</label>
+                      <input style={S.input} value={item.subtitle} maxLength={subtitleMax} onChange={e => update(item.id, 'subtitle', e.target.value)} placeholder="Optional subtitle" />
+                      <CharCount value={item.subtitle} max={subtitleMax} />
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+      <button style={{ ...S.btnGhost, width: '100%', justifyContent: 'center', padding: '0.7rem', marginTop: '0.65rem' }} onClick={add}><Plus size={16} /> {addLabel}</button>
     </div>
   );
 }
 
 // ─── Reviews Editor ───────────────────────────────────────────────────────────
 
-function ReviewsEditor({ reviews, onChange, mapsUrl, onMapsUrlChange, overallRating, onOverallRatingChange, reviewCountLabel, onReviewCountLabelChange, onPhotoQueued, photoPreviews, onClearPending }: {
+function ReviewsEditor({ reviews, onChange, mapsUrl, onMapsUrlChange, overallRating, onOverallRatingChange, reviewCountLabel, onReviewCountLabelChange, showReviews, onShowReviewsChange, onPhotoQueued, photoPreviews, onClearPending }: {
   reviews: ReviewItem[]; onChange: (r: ReviewItem[]) => void;
   mapsUrl: string; onMapsUrlChange: (s: string) => void;
   overallRating: number; onOverallRatingChange: (v: number) => void;
   reviewCountLabel: string; onReviewCountLabelChange: (s: string) => void;
+  showReviews: boolean; onShowReviewsChange: (v: boolean) => void;
   onPhotoQueued: (id: string, file: File, preview: string) => void;
   photoPreviews: Record<string, string>;
   onClearPending: (id: string) => void;
@@ -485,9 +514,27 @@ function ReviewsEditor({ reviews, onChange, mapsUrl, onMapsUrlChange, overallRat
   const clearPhoto = (id: string) => { onClearPending(id); update(id, 'photo', ''); };
 
   return (
-    <div>
+    <div style={{ marginTop: '2.5rem' }}>
       <SectionHeading>Google Reviews</SectionHeading>
-      <p style={{ color: '#94a3b8', fontSize: '0.85rem', marginTop: '-0.75rem', marginBottom: '1rem' }}>Paste real reviews from your Google Business profile here. They'll appear in the marquee on this page. Drag the grip handle to reorder. If empty, the reviews section is hidden.</p>
+      <p style={{ color: '#94a3b8', fontSize: '0.85rem', marginTop: '-0.75rem', marginBottom: '1rem' }}>Paste real reviews from your Google Business profile here. They'll appear in the marquee on this page. Drag the grip handle to reorder. If the section is toggled off, it won't appear on the site at all.</p>
+      <div style={{ ...S.card, padding: '1rem', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
+        <div>
+          <div style={{ fontWeight: 700, color: '#e2e8f0', fontSize: '0.9rem', marginBottom: '0.25rem' }}>Show Reviews Section</div>
+          <div style={{ fontSize: '0.75rem', color: '#64748b' }}>When off, the entire Google Reviews section is hidden on this page, even if reviews are configured.</div>
+        </div>
+        <button type="button" onClick={() => onShowReviewsChange(!showReviews)}
+          style={{
+            width: '48px', height: '28px', borderRadius: '14px', border: 'none', cursor: 'pointer',
+            backgroundColor: showReviews ? '#22c55e' : '#334155',
+            position: 'relative', transition: 'background-color 0.2s', flexShrink: 0,
+          }}>
+          <div style={{
+            position: 'absolute', top: '3px', left: showReviews ? '23px' : '3px',
+            width: '22px', height: '22px', borderRadius: '50%', backgroundColor: 'white',
+            transition: 'left 0.2s', boxShadow: '0 1px 3px rgba(0,0,0,0.3)',
+          }} />
+        </button>
+      </div>
       <Field label="Google Maps Listing URL (View All Reviews button)">
         <input style={S.input} value={mapsUrl} onChange={e => onMapsUrlChange(e.target.value)} placeholder="https://www.google.com/maps/place/..." />
       </Field>
@@ -652,7 +699,7 @@ function PlumbingEditor({ content, onChange, onPhotoQueued, photoPreviews, onCle
       <ConfigItemListEditor items={p.guarantees} onChange={v => setField('guarantees', v)} label="Guarantees" titleMax={28} subtitleMax={36} addLabel="Add Guarantee" />
       <ConfigItemListEditor items={p.services} onChange={v => setField('services', v)} label="Services" titleMax={30} subtitleMax={40} showSubtitle={false} addLabel="Add Service" />
       <ConfigItemListEditor items={p.benefits} onChange={v => setField('benefits', v)} label="Benefits" titleMax={50} subtitleMax={40} showSubtitle={false} addLabel="Add Benefit" />
-      <ReviewsEditor reviews={p.reviews} onChange={v => setField('reviews', v)} mapsUrl={p.mapsUrl} onMapsUrlChange={v => setField('mapsUrl', v)} overallRating={p.overallRating} onOverallRatingChange={v => setField('overallRating', v)} reviewCountLabel={p.reviewCountLabel} onReviewCountLabelChange={v => setField('reviewCountLabel', v)} onPhotoQueued={onPhotoQueued} photoPreviews={photoPreviews} onClearPending={onClearPending} />
+      <ReviewsEditor reviews={p.reviews} onChange={v => setField('reviews', v)} mapsUrl={p.mapsUrl} onMapsUrlChange={v => setField('mapsUrl', v)} overallRating={p.overallRating} onOverallRatingChange={v => setField('overallRating', v)} reviewCountLabel={p.reviewCountLabel} onReviewCountLabelChange={v => setField('reviewCountLabel', v)} showReviews={p.showReviews} onShowReviewsChange={v => setField('showReviews', v)} onPhotoQueued={onPhotoQueued} photoPreviews={photoPreviews} onClearPending={onClearPending} />
     </div>
   );
 }
@@ -691,7 +738,7 @@ function ElectricalEditor({ content, onChange, onPhotoQueued, photoPreviews, onC
       <ConfigItemListEditor items={e.guarantees} onChange={v => setField('guarantees', v)} label="Guarantees" titleMax={28} subtitleMax={36} addLabel="Add Guarantee" />
       <ConfigItemListEditor items={e.services} onChange={v => setField('services', v)} label="Services" titleMax={30} subtitleMax={40} showSubtitle={false} addLabel="Add Service" />
       <ConfigItemListEditor items={e.benefits} onChange={v => setField('benefits', v)} label="Benefits" titleMax={50} subtitleMax={40} showSubtitle={false} addLabel="Add Benefit" />
-      <ReviewsEditor reviews={e.reviews} onChange={v => setField('reviews', v)} mapsUrl={e.mapsUrl} onMapsUrlChange={v => setField('mapsUrl', v)} overallRating={e.overallRating} onOverallRatingChange={v => setField('overallRating', v)} reviewCountLabel={e.reviewCountLabel} onReviewCountLabelChange={v => setField('reviewCountLabel', v)} onPhotoQueued={onPhotoQueued} photoPreviews={photoPreviews} onClearPending={onClearPending} />
+      <ReviewsEditor reviews={e.reviews} onChange={v => setField('reviews', v)} mapsUrl={e.mapsUrl} onMapsUrlChange={v => setField('mapsUrl', v)} overallRating={e.overallRating} onOverallRatingChange={v => setField('overallRating', v)} reviewCountLabel={e.reviewCountLabel} onReviewCountLabelChange={v => setField('reviewCountLabel', v)} showReviews={e.showReviews} onShowReviewsChange={v => setField('showReviews', v)} onPhotoQueued={onPhotoQueued} photoPreviews={photoPreviews} onClearPending={onClearPending} />
     </div>
   );
 }

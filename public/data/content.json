@@ -178,6 +178,7 @@
     ],
     "overallRating": 4.9,
     "reviewCountLabel": "150+ Google reviews",
+    "showReviews": true,
     "mapsUrl": "https://www.google.com/maps/place/UrbanPro+Plumbing+Sydney/@-33.8461026,150.3081854,10z/data=!4m15!1m8!3m7!1s0xaa99133edb90a697:0xe93f25ae63342f5d!2sUrbanPro+Plumbing+Sydney!8m2!3d-33.8482439!4d150.9319747!10e1!16s%2Fg%2F11n4td_svt"
   },
   "electrical": {
@@ -302,6 +303,7 @@
     ],
     "overallRating": 4.9,
     "reviewCountLabel": "120+ Google reviews",
+    "showReviews": true,
     "mapsUrl": "https://www.google.com/maps/place/UrbanPro+Plumbing+Sydney/@-33.8461026,150.3081854,10z/data=!4m15!1m8!3m7!1s0xaa99133edb90a697:0xe93f25ae63342f5d!2sUrbanPro+Plumbing+Sydney!8m2!3d-33.8482439!4d150.9319747!10e1!16s%2Fg%2F11n4td_svt"
   },
   "team": [

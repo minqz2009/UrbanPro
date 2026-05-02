@@ -61,6 +61,7 @@ export interface PlumbingContent extends PagePhones {
   mapsUrl: string;
   overallRating: number;
   reviewCountLabel: string;
+  showReviews: boolean;
 }
 
 export interface ElectricalContent extends PagePhones {
@@ -73,6 +74,7 @@ export interface ElectricalContent extends PagePhones {
   mapsUrl: string;
   overallRating: number;
   reviewCountLabel: string;
+  showReviews: boolean;
 }
 
 export interface BuildingContent extends PagePhones {
@@ -208,6 +210,7 @@ const DEFAULT: SiteContent = {
     reviews: [],
     overallRating: 4.9,
     reviewCountLabel: '150+ Google reviews',
+    showReviews: true,
     mapsUrl: DEFAULT_MAPS_URL,
   },
   electrical: {
@@ -223,6 +226,7 @@ const DEFAULT: SiteContent = {
     reviews: [],
     overallRating: 4.9,
     reviewCountLabel: '120+ Google reviews',
+    showReviews: true,
     mapsUrl: DEFAULT_MAPS_URL,
   },
   building: {
@@ -280,6 +284,7 @@ export function merge(data: Partial<SiteContent>): SiteContent {
       reviews: data.plumbing?.reviews ?? DEFAULT.plumbing.reviews,
       overallRating: data.plumbing?.overallRating ?? DEFAULT.plumbing.overallRating,
       reviewCountLabel: data.plumbing?.reviewCountLabel ?? DEFAULT.plumbing.reviewCountLabel,
+      showReviews: data.plumbing?.showReviews ?? DEFAULT.plumbing.showReviews,
       mapsUrl: data.plumbing?.mapsUrl ?? DEFAULT.plumbing.mapsUrl,
     },
     electrical: {
@@ -292,6 +297,7 @@ export function merge(data: Partial<SiteContent>): SiteContent {
       reviews: data.electrical?.reviews ?? DEFAULT.electrical.reviews,
       overallRating: data.electrical?.overallRating ?? DEFAULT.electrical.overallRating,
       reviewCountLabel: data.electrical?.reviewCountLabel ?? DEFAULT.electrical.reviewCountLabel,
+      showReviews: data.electrical?.showReviews ?? DEFAULT.electrical.showReviews,
       mapsUrl: data.electrical?.mapsUrl ?? DEFAULT.electrical.mapsUrl,
     },
     building: {

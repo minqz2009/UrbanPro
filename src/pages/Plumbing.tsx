@@ -40,7 +40,7 @@ const Plumbing = () => {
         "@type": "Service",
         "name": "Emergency Plumbing Sydney",
         "provider": {"@type": "LocalBusiness", "name": "UrbanPro", "telephone": settings.phone1, "image": "https://urbanproplumbing.com.au/images/plumbing-hero.jpg", "priceRange": "$$"},
-        "areaServed": ["Sydney CBD", "Eastern Suburbs", "Inner West", "North Shore", "Northern Beaches", "Southern Sydney", "Western Sydney", "Bondi", "Vaucluse", "Paddington", "Surry Hills", "Double Bay", "Mosman", "Chatswood", "Parramatta", "Hurstville", "Liverpool", "Penrith"],
+        "areaServed": ["Sydney CBD", "Eastern Suburbs", "Inner West", "North Shore", "Northern Beaches", "Southern Sydney", "Western Sydney", "Hills District", "Canterbury-Bankstown", "Bondi", "Vaucluse", "Paddington", "Surry Hills", "Double Bay", "Mosman", "Chatswood", "Parramatta", "Hurstville", "Liverpool", "Penrith", "Randwick", "Coogee", "Maroubra", "Kensington", "Newtown", "Marrickville", "Balmain", "Glebe", "Strathfield", "Burwood", "Ashfield", "North Sydney", "Lane Cove", "St Leonards", "Hornsby", "Manly", "Dee Why", "Cronulla", "Sutherland", "Kogarah", "Blacktown", "Campbelltown", "Castle Hill", "Baulkham Hills", "Bankstown", "Campsie", "Canterbury", "Drummoyne", "Five Dock", "Concord", "Rhodes", "Wentworth Point"],
         "description": "24/7 emergency plumber Sydney — blocked drains, hot water systems, gas fitting, burst pipe repair, leak detection. No call-out fee, $250 fixed drain cleaning. Serving all Sydney suburbs.",
         "offers": {"@type": "Offer", "price": "250", "priceCurrency": "AUD", "description": "Fixed $250 drain cleaning Sydney"},
         "aggregateRating": {"@type": "AggregateRating", "ratingValue": String(plumbing.overallRating || 4.9), "reviewCount": String(plumbing.reviews.length || 1)}
@@ -356,7 +356,7 @@ const Plumbing = () => {
       </section>
 
       {/* Google Reviews */}
-      {plumbing.reviews.length > 0 && (
+      {plumbing.showReviews && plumbing.reviews.length > 0 && (
       <section className="plumbing-section" style={{ padding: '8rem 0', backgroundColor: 'var(--color-bg)', overflow: 'hidden' }}>
         <div className="container" style={{ textAlign: 'center', marginBottom: '4rem' }}>
           <div className="google-review-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.6rem', marginBottom: '1.5rem' }}>
