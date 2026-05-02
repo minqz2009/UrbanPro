@@ -205,10 +205,10 @@ const Footer = () => {
       <div className="container" style={{ marginTop: '4rem', paddingTop: '2rem', borderTop: '1px solid var(--color-border)', textAlign: 'center', color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>
         &copy; {new Date().getFullYear()} UrbanPro. All rights reserved.
       </div>
-      <div className="container" style={{ marginTop: '0.75rem', textAlign: 'center' }}>
-        <a href="mailto:MINQZ2009@gmail.com?subject=Website%20Inquiry" style={{ color: 'var(--color-border)', fontSize: '0.58rem', textDecoration: 'none', opacity: 0.22 }}
-           onMouseEnter={e => (e.currentTarget.style.opacity = '0.6')}
-           onMouseLeave={e => (e.currentTarget.style.opacity = '0.22')}>
+      <div className="container" style={{ marginTop: '1rem', textAlign: 'center' }}>
+        <a href="mailto:MINQZ2009@gmail.com?subject=Website%20Inquiry" style={{ color: 'var(--color-text-muted)', fontSize: '0.72rem', textDecoration: 'none', opacity: 0.55 }}
+           onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
+           onMouseLeave={e => (e.currentTarget.style.opacity = '0.55')}>
           Made by Daniel Chen &mdash; Get a site like this for your business
         </a>
       </div>

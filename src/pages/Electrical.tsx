@@ -84,7 +84,7 @@ const Electrical = () => {
                       <Icon name={item.icon} size={28} />
                     </div>
                     <div style={{ textAlign: 'center' }}>
-                      <span className="guarantee-text" style={{ fontWeight: 800, fontSize: 'var(--font-size-body)', display: 'block', marginBottom: '0.2rem', letterSpacing: '0.02em', color: 'white', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '100%' }}>{item.title}</span>
+                      <span className="guarantee-text" style={{ fontWeight: 800, fontSize: 'var(--font-size-body)', display: 'block', marginBottom: '0.2rem', letterSpacing: '0.02em', color: 'white', lineHeight: 1.2 }}>{item.title}</span>
                       {item.subtitle && <span style={{ fontSize: 'var(--font-size-xs)', fontWeight: 600, textTransform: 'uppercase', color: 'var(--color-text-muted)', letterSpacing: '0.08em', display: 'block' }}>{item.subtitle}</span>}
                     </div>
                   </div>
