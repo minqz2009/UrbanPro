@@ -58,8 +58,8 @@
       {
         "id": "pg2",
         "icon": "Wrench",
-        "title": "$250 FIXED RATE",
-        "subtitle": "Drain cleaning special"
+        "title": "NO SURCHARGE",
+        "subtitle": "On all our services"
       },
       {
         "id": "pg3",
@@ -141,45 +141,45 @@
     "reviews": [
       {
         "id": "pr1",
-        "name": "Sarah M.",
-        "initials": "SM",
+        "name": "Jerry Jia",
+        "initials": "JJ",
         "rating": 5,
-        "date": "2 weeks ago",
-        "text": "Fast response, fixed our blocked drain in under an hour. Highly recommend John and the team!",
+        "date": "2 months ago",
+        "text": "Found UrbanPro Plumbing on social media and contacted them when our drain had issues. The plumber came the same evening, worked overtime without extra charge, and carefully inspected before fixing. Problem solved quickly the same day. Clear pricing, no hidden fees. Professional, honest, and highly recommended.",
         "photo": ""
       },
       {
         "id": "pr2",
-        "name": "David K.",
-        "initials": "DK",
+        "name": "mike liu",
+        "initials": "ML",
         "rating": 5,
         "date": "1 month ago",
-        "text": "Called at 8pm for a burst pipe, Leo was there by 9pm. Saved our bathroom from flooding. True 24/7 service!",
+        "text": "Highly recommend Urbanpro Plumbing! The team was professional, reliable, and responded quickly. They explained the issue clearly and completed the job efficiently. The quality of work was excellent and everything was left clean afterwards. Would definitely use their services again.",
         "photo": ""
       },
       {
         "id": "pr3",
-        "name": "Michael R.",
-        "initials": "MR",
+        "name": "Jiayi Hu",
+        "initials": "JH",
         "rating": 5,
-        "date": "3 weeks ago",
-        "text": "Fixed $250 drain cleaning - no hidden costs. These guys are honest and professional. Best plumber in Sydney.",
+        "date": "1 week ago",
+        "text": "We needed a toilet replacement for our apartment in Rhodes, and Urbanpro did a fantastic job. They were very professional, helped us install the new one perfectly, and made sure there were no leaks. They even tidied up everything before leaving. Efficient service and very reasonable pricing for Sydney. Highly recommend them for any plumbing needs!",
         "photo": ""
       },
       {
         "id": "pr4",
-        "name": "Lisa T.",
-        "initials": "LT",
+        "name": "gaga",
+        "initials": "GG",
         "rating": 5,
-        "date": "2 months ago",
+        "date": "6 days ago",
         "text": "Had 3 plumbers quote, UrbanPro gave the best price and finished ahead of schedule. Great work on our renovation.",
         "photo": ""
       }
     ],
-    "overallRating": 4.9,
-    "reviewCountLabel": "150+ Google reviews",
+    "overallRating": 5,
+    "reviewCountLabel": "Top-rated Google reviews",
     "showReviews": true,
-    "mapsUrl": "https://www.google.com/maps/place/UrbanPro+Plumbing+Sydney/@-33.8461026,150.3081854,10z/data=!4m15!1m8!3m7!1s0xaa99133edb90a697:0xe93f25ae63342f5d!2sUrbanPro+Plumbing+Sydney!8m2!3d-33.8482439!4d150.9319747!10e1!16s%2Fg%2F11n4td_svt"
+    "mapsUrl": "https://maps.app.goo.gl/TJg8MmRCiWJUcv2k7"
   },
   "electrical": {
     "phone1": "+61412242997",
