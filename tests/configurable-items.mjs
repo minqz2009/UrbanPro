@@ -136,7 +136,7 @@ assert(revBlock.includes('PhotoUploader'), 'ReviewsEditor uses PhotoUploader');
 assert(revBlock.includes('draggable'), 'ReviewsEditor supports drag');
 assert(revBlock.includes('GripVertical'), 'ReviewsEditor shows grip handle');
 assert(revBlock.includes('onDragStart') && revBlock.includes('onDrop'), 'ReviewsEditor has drag handlers');
-assert(adminTsx.includes("id.startsWith('rev-')"), 'handleSave routes review photo uploads');
+assert(adminTsx.includes('plumbing.reviews.some(r => r.id === id)'), 'handleSave routes review photo uploads by ID lookup');
 assert(adminTsx.includes('updated.plumbing.reviews = updated.plumbing.reviews.map'), 'handleSave updates plumbing review photos');
 assert(adminTsx.includes('updated.electrical.reviews = updated.electrical.reviews.map'), 'handleSave updates electrical review photos');
 assert(adminTsx.includes('for (const r of updated.plumbing.reviews)'), 'safe-delete refs include plumbing reviews');

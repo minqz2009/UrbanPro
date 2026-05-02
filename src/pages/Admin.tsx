@@ -1093,7 +1093,7 @@ export default function Admin() {
       if (content.team.some(m => m.id === id)) tabs.add('about');
       if (content.buildingProjects.some(p => p.id === id)) tabs.add('building');
       if (id.startsWith('fp-after-') || id.startsWith('fp-before-')) tabs.add('building');
-      if (id.startsWith('rev-')) { tabs.add('plumbing'); tabs.add('electrical'); }
+      if (content.plumbing.reviews.some(r => r.id === id) || content.electrical.reviews.some(r => r.id === id)) { tabs.add('plumbing'); tabs.add('electrical'); }
     }
     if (Object.keys(pendingGallery).length > 0) tabs.add('building');
 
@@ -1132,7 +1132,7 @@ export default function Admin() {
         } else if (id.startsWith('fp-before-')) {
           const pid = id.slice('fp-before-'.length);
           updated.buildingProjects = updated.buildingProjects.map(p => p.id === pid ? { ...p, floorPlanBefore: imagePath } : p);
-        } else if (id.startsWith('rev-')) {
+        } else if (updated.plumbing.reviews.some(r => r.id === id) || updated.electrical.reviews.some(r => r.id === id)) {
           updated.plumbing.reviews = updated.plumbing.reviews.map(r => r.id === id ? { ...r, photo: imagePath } : r);
           updated.electrical.reviews = updated.electrical.reviews.map(r => r.id === id ? { ...r, photo: imagePath } : r);
         } else {
