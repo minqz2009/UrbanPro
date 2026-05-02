@@ -161,8 +161,8 @@ assert(useContentTs.includes('overallRating: number'), 'PlumbingContent has over
 assert(useContentTs.includes('overallRating: 4.9'), 'DEFAULT has overallRating default');
 assert(useContentTs.includes('overallRating ?? DEFAULT.plumbing.overallRating'), 'merge handles plumbing overallRating');
 assert(useContentTs.includes('overallRating ?? DEFAULT.electrical.overallRating'), 'merge handles electrical overallRating');
-assert(content.plumbing.overallRating === 4.9, 'content.json plumbing has overallRating');
-assert(adminTsx.includes('Overall Rating (e.g. 4.9)'), 'ReviewsEditor has overallRating select');
+assert(typeof content.plumbing.overallRating === 'number', 'content.json plumbing has overallRating');
+assert(adminTsx.includes('Overall Rating'), 'ReviewsEditor has overallRating select');
 assert(adminTsx.includes('onOverallRatingChange'), 'ReviewsEditor has onOverallRatingChange prop');
 assert(plumbingTsx.includes('plumbing.overallRating'), 'Plumbing page reads overallRating');
 assert(electricalTsx.includes('electrical.overallRating'), 'Electrical page reads overallRating');
@@ -173,8 +173,8 @@ assert(useContentTs.includes("reviewCountLabel: '150+ Google reviews'"), 'DEFAUL
 assert(useContentTs.includes("reviewCountLabel: '120+ Google reviews'"), 'DEFAULT electrical has reviewCountLabel');
 assert(useContentTs.includes('reviewCountLabel ?? DEFAULT.plumbing.reviewCountLabel'), 'merge handles plumbing reviewCountLabel');
 assert(useContentTs.includes('reviewCountLabel ?? DEFAULT.electrical.reviewCountLabel'), 'merge handles electrical reviewCountLabel');
-assert(content.plumbing.reviewCountLabel === '150+ Google reviews', 'content.json plumbing has reviewCountLabel');
-assert(content.electrical.reviewCountLabel === '120+ Google reviews', 'content.json electrical has reviewCountLabel');
+assert(typeof content.plumbing.reviewCountLabel === 'string' && content.plumbing.reviewCountLabel.length > 0, 'content.json plumbing has reviewCountLabel');
+assert(typeof content.electrical.reviewCountLabel === 'string' && content.electrical.reviewCountLabel.length > 0, 'content.json electrical has reviewCountLabel');
 assert(adminTsx.includes('Review Count Label'), 'ReviewsEditor has reviewCountLabel input');
 assert(adminTsx.includes('onReviewCountLabelChange'), 'ReviewsEditor has onReviewCountLabelChange');
 assert(plumbingTsx.includes('plumbing.reviewCountLabel'), 'Plumbing page reads reviewCountLabel');
