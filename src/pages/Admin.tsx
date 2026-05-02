@@ -786,6 +786,13 @@ function TeamMemberCards({ members, onChange, onPhotoQueued, photoPreviews }: {
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
   const [photoErr, setPhotoErr] = useState<Record<string, string>>({});
   const update = (id: string, field: keyof TeamMember, value: string) => onChange(members.map(m => m.id === id ? { ...m, [field]: value } : m));
+  const updateImgStyle = (id: string, key: string, value: string) => onChange(members.map(m => {
+    if (m.id !== id) return m;
+    const style = { ...(m.imgStyle || {}) };
+    if (value) style[key] = value;
+    else delete style[key];
+    return { ...m, imgStyle: Object.keys(style).length > 0 ? style : null };
+  }));
   const remove = (id: string) => { if (!confirm('Remove this team member?')) return; onChange(members.filter(m => m.id !== id)); };
   const add = () => { const id = `member-${Date.now()}`; onChange([...members, { id, name: 'New Member', role: 'Role', bio: '', photo: '', imgStyle: null }]); };
 
@@ -825,6 +832,20 @@ function TeamMemberCards({ members, onChange, onPhotoQueued, photoPreviews }: {
                   <textarea style={S.textarea} value={m.bio} maxLength={600} onChange={e => update(m.id, 'bio', e.target.value)} rows={5} placeholder="Write a short bio..." />
                   <CharCount value={m.bio} max={600} />
                 </Field>
+                <SectionHeading>Photo Positioning (optional)</SectionHeading>
+                <p style={{ color: '#475569', fontSize: '0.78rem', marginTop: '-0.75rem', marginBottom: '1rem' }}>Adjust how the photo is cropped or scaled. Leave blank to use defaults.</p>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                  <Field label="Transform Origin">
+                    <input style={S.input} value={(m.imgStyle?.transformOrigin) || ''} maxLength={40}
+                      onChange={e => updateImgStyle(m.id, 'transformOrigin', e.target.value)}
+                      placeholder="e.g. center 55%" />
+                  </Field>
+                  <Field label="Transform (CSS)">
+                    <input style={S.input} value={(m.imgStyle?.transform) || ''} maxLength={40}
+                      onChange={e => updateImgStyle(m.id, 'transform', e.target.value)}
+                      placeholder="e.g. scale(1.0)" />
+                  </Field>
+                </div>
                 <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                   <button style={S.btnDanger} onClick={() => remove(m.id)}><Trash2 size={14} /> Remove</button>
                 </div>
@@ -997,11 +1018,9 @@ export default function Admin() {
   const loadContent = async (tok: string) => {
     setLoadError('');
     try {
-      const [raw, headSha] = await Promise.all([
-        getFile(tok, CONTENT_PATH).then(r => r.content),
-        getHeadSha(tok),
-      ]);
-      const merged = merge(JSON.parse(raw));
+      const headSha = await getHeadSha(tok);
+      const file = await getFile(tok, CONTENT_PATH, headSha);
+      const merged = merge(JSON.parse(file.content));
       headShaRef.current = headSha;
       setContent(merged);
       snapshotRef.current = JSON.stringify(merged);

@@ -21,8 +21,8 @@ export async function verifyToken(token: string): Promise<boolean | 'readonly'> 
   return true;
 }
 
-export async function getFile(token: string, path: string): Promise<{ content: string; sha: string }> {
-  const res = await fetch(`${API}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${path}?ref=${BRANCH}`, {
+export async function getFile(token: string, path: string, ref?: string): Promise<{ content: string; sha: string }> {
+  const res = await fetch(`${API}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${path}?ref=${ref || BRANCH}`, {
     headers: headers(token),
   });
   if (!res.ok) throw new Error(`Could not read file: ${res.status}`);
@@ -315,6 +315,7 @@ export function readFileAsBase64(file: File): Promise<string> {
 
 export function sanitiseFilename(original: string): string {
   const ts = Date.now();
+  const rnd = Math.random().toString(36).slice(2, 6);
   const ext = original.split('.').pop()?.toLowerCase() || 'jpg';
   const base = original
     .replace(/\.[^.]+$/, '')
@@ -322,5 +323,5 @@ export function sanitiseFilename(original: string): string {
     .replace(/[^a-z0-9]/g, '-')
     .replace(/-+/g, '-')
     .slice(0, 40);
-  return `${base}-${ts}.${ext}`;
+  return `${base}-${ts}-${rnd}.${ext}`;
 }

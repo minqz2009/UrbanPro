@@ -156,6 +156,55 @@ assert(useContentTs.includes('withDefaults'), 'merge() uses withDefaults helper'
 assert(useContentTs.includes('plumbing?.guarantees'), 'merge handles plumbing guarantees');
 assert(useContentTs.includes('electrical?.guarantees'), 'merge handles electrical guarantees');
 
+console.log('\n=== 10. overallRating field ===');
+assert(useContentTs.includes('overallRating: number'), 'PlumbingContent has overallRating');
+assert(useContentTs.includes('overallRating: 4.9'), 'DEFAULT has overallRating default');
+assert(useContentTs.includes('overallRating ?? DEFAULT.plumbing.overallRating'), 'merge handles plumbing overallRating');
+assert(useContentTs.includes('overallRating ?? DEFAULT.electrical.overallRating'), 'merge handles electrical overallRating');
+assert(content.plumbing.overallRating === 4.9, 'content.json plumbing has overallRating');
+assert(adminTsx.includes('Overall Rating (e.g. 4.9)'), 'ReviewsEditor has overallRating select');
+assert(adminTsx.includes('onOverallRatingChange'), 'ReviewsEditor has onOverallRatingChange prop');
+assert(plumbingTsx.includes('plumbing.overallRating'), 'Plumbing page reads overallRating');
+assert(electricalTsx.includes('electrical.overallRating'), 'Electrical page reads overallRating');
+
+console.log('\n=== 11. reviewCountLabel field ===');
+assert(useContentTs.includes('reviewCountLabel: string'), 'PlumbingContent has reviewCountLabel');
+assert(useContentTs.includes("reviewCountLabel: '150+ Google reviews'"), 'DEFAULT plumbing has reviewCountLabel');
+assert(useContentTs.includes("reviewCountLabel: '120+ Google reviews'"), 'DEFAULT electrical has reviewCountLabel');
+assert(useContentTs.includes('reviewCountLabel ?? DEFAULT.plumbing.reviewCountLabel'), 'merge handles plumbing reviewCountLabel');
+assert(useContentTs.includes('reviewCountLabel ?? DEFAULT.electrical.reviewCountLabel'), 'merge handles electrical reviewCountLabel');
+assert(content.plumbing.reviewCountLabel === '150+ Google reviews', 'content.json plumbing has reviewCountLabel');
+assert(content.electrical.reviewCountLabel === '120+ Google reviews', 'content.json electrical has reviewCountLabel');
+assert(adminTsx.includes('Review Count Label'), 'ReviewsEditor has reviewCountLabel input');
+assert(adminTsx.includes('onReviewCountLabelChange'), 'ReviewsEditor has onReviewCountLabelChange');
+assert(plumbingTsx.includes('plumbing.reviewCountLabel'), 'Plumbing page reads reviewCountLabel');
+assert(electricalTsx.includes('electrical.reviewCountLabel'), 'Electrical page reads reviewCountLabel');
+
+console.log('\n=== 12. showReviews toggle field ===');
+assert(useContentTs.includes('showReviews: boolean'), 'PlumbingContent has showReviews');
+assert(useContentTs.includes('showReviews: true'), 'DEFAULT has showReviews default');
+assert(useContentTs.includes('showReviews ?? DEFAULT.plumbing.showReviews'), 'merge handles plumbing showReviews');
+assert(useContentTs.includes('showReviews ?? DEFAULT.electrical.showReviews'), 'merge handles electrical showReviews');
+assert(typeof content.plumbing.showReviews === 'boolean', 'content.json plumbing has showReviews');
+assert(typeof content.electrical.showReviews === 'boolean', 'content.json electrical has showReviews');
+assert(adminTsx.includes('Show Reviews Section'), 'ReviewsEditor has showReviews toggle label');
+assert(adminTsx.includes('onShowReviewsChange'), 'ReviewsEditor has onShowReviewsChange prop');
+assert(plumbingTsx.includes('plumbing.showReviews && plumbing.reviews.length'), 'Plumbing gates reviews on showReviews');
+assert(electricalTsx.includes('electrical.showReviews && electrical.reviews.length'), 'Electrical gates reviews on showReviews');
+
+console.log('\n=== 13. imgStyle editor field ===');
+assert(adminTsx.includes('updateImgStyle'), 'TeamMemberCards has updateImgStyle handler');
+assert(adminTsx.includes('Transform Origin'), 'TeamMemberCards has transformOrigin input');
+assert(adminTsx.includes('Transform (CSS)'), 'TeamMemberCards has transform input');
+
+console.log('\n=== 14. Filename collision fix ===');
+const githubTs = readFileSync(join(root, 'src/services/github.ts'), 'utf-8');
+assert(githubTs.includes('random()'), 'sanitiseFilename uses Math.random() for uniqueness');
+
+console.log('\n=== 15. Atomic content load ===');
+assert(adminTsx.includes('getHeadSha(tok)'), 'loadContent fetches HEAD SHA first');
+assert(adminTsx.includes('getFile(tok, CONTENT_PATH, headSha)'), 'loadContent passes headSha to getFile');
+
 // =======================================================================
 console.log(`\n${'='.repeat(60)}`);
 console.log(`Total: ${total} | Passed: ${total - failures} | Failed: ${failures}`);
