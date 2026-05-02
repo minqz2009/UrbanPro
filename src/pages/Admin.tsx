@@ -450,9 +450,11 @@ function ConfigItemListEditor({ items, onChange, label, titleMax, subtitleMax, s
 
 // ─── Reviews Editor ───────────────────────────────────────────────────────────
 
-function ReviewsEditor({ reviews, onChange, mapsUrl, onMapsUrlChange, onPhotoQueued, photoPreviews, onClearPending }: {
+function ReviewsEditor({ reviews, onChange, mapsUrl, onMapsUrlChange, overallRating, onOverallRatingChange, reviewCountLabel, onReviewCountLabelChange, onPhotoQueued, photoPreviews, onClearPending }: {
   reviews: ReviewItem[]; onChange: (r: ReviewItem[]) => void;
   mapsUrl: string; onMapsUrlChange: (s: string) => void;
+  overallRating: number; onOverallRatingChange: (v: number) => void;
+  reviewCountLabel: string; onReviewCountLabelChange: (s: string) => void;
   onPhotoQueued: (id: string, file: File, preview: string) => void;
   photoPreviews: Record<string, string>;
   onClearPending: (id: string) => void;
@@ -489,6 +491,17 @@ function ReviewsEditor({ reviews, onChange, mapsUrl, onMapsUrlChange, onPhotoQue
       <Field label="Google Maps Listing URL (View All Reviews button)">
         <input style={S.input} value={mapsUrl} onChange={e => onMapsUrlChange(e.target.value)} placeholder="https://www.google.com/maps/place/..." />
       </Field>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+        <Field label="Overall Rating (e.g. 4.9)">
+          <select style={{ ...S.input, cursor: 'pointer' }} value={overallRating} onChange={e => onOverallRatingChange(Number(e.target.value))}>
+            {[5.0, 4.9, 4.8, 4.7, 4.6, 4.5, 4.4, 4.3, 4.2, 4.1, 4.0, 3.9, 3.8, 3.7, 3.6, 3.5].map(n => <option key={n} value={n}>{n.toFixed(1)} ★</option>)}
+          </select>
+        </Field>
+        <Field label="Review Count Label (e.g. 150+ Google reviews)">
+          <input style={S.input} value={reviewCountLabel} maxLength={40} onChange={e => onReviewCountLabelChange(e.target.value)} placeholder="150+ Google reviews" />
+          <CharCount value={reviewCountLabel} max={40} />
+        </Field>
+      </div>
       {reviews.map(r => {
         const hasPhoto = !!(photoPreviews[r.id] || r.photo);
         return (
@@ -639,7 +652,7 @@ function PlumbingEditor({ content, onChange, onPhotoQueued, photoPreviews, onCle
       <ConfigItemListEditor items={p.guarantees} onChange={v => setField('guarantees', v)} label="Guarantees" titleMax={28} subtitleMax={36} addLabel="Add Guarantee" />
       <ConfigItemListEditor items={p.services} onChange={v => setField('services', v)} label="Services" titleMax={30} subtitleMax={40} showSubtitle={false} addLabel="Add Service" />
       <ConfigItemListEditor items={p.benefits} onChange={v => setField('benefits', v)} label="Benefits" titleMax={50} subtitleMax={40} showSubtitle={false} addLabel="Add Benefit" />
-      <ReviewsEditor reviews={p.reviews} onChange={v => setField('reviews', v)} mapsUrl={p.mapsUrl} onMapsUrlChange={v => setField('mapsUrl', v)} onPhotoQueued={onPhotoQueued} photoPreviews={photoPreviews} onClearPending={onClearPending} />
+      <ReviewsEditor reviews={p.reviews} onChange={v => setField('reviews', v)} mapsUrl={p.mapsUrl} onMapsUrlChange={v => setField('mapsUrl', v)} overallRating={p.overallRating} onOverallRatingChange={v => setField('overallRating', v)} reviewCountLabel={p.reviewCountLabel} onReviewCountLabelChange={v => setField('reviewCountLabel', v)} onPhotoQueued={onPhotoQueued} photoPreviews={photoPreviews} onClearPending={onClearPending} />
     </div>
   );
 }
@@ -678,7 +691,7 @@ function ElectricalEditor({ content, onChange, onPhotoQueued, photoPreviews, onC
       <ConfigItemListEditor items={e.guarantees} onChange={v => setField('guarantees', v)} label="Guarantees" titleMax={28} subtitleMax={36} addLabel="Add Guarantee" />
       <ConfigItemListEditor items={e.services} onChange={v => setField('services', v)} label="Services" titleMax={30} subtitleMax={40} showSubtitle={false} addLabel="Add Service" />
       <ConfigItemListEditor items={e.benefits} onChange={v => setField('benefits', v)} label="Benefits" titleMax={50} subtitleMax={40} showSubtitle={false} addLabel="Add Benefit" />
-      <ReviewsEditor reviews={e.reviews} onChange={v => setField('reviews', v)} mapsUrl={e.mapsUrl} onMapsUrlChange={v => setField('mapsUrl', v)} onPhotoQueued={onPhotoQueued} photoPreviews={photoPreviews} onClearPending={onClearPending} />
+      <ReviewsEditor reviews={e.reviews} onChange={v => setField('reviews', v)} mapsUrl={e.mapsUrl} onMapsUrlChange={v => setField('mapsUrl', v)} overallRating={e.overallRating} onOverallRatingChange={v => setField('overallRating', v)} reviewCountLabel={e.reviewCountLabel} onReviewCountLabelChange={v => setField('reviewCountLabel', v)} onPhotoQueued={onPhotoQueued} photoPreviews={photoPreviews} onClearPending={onClearPending} />
     </div>
   );
 }

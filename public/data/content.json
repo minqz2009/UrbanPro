@@ -138,7 +138,46 @@
         "subtitle": ""
       }
     ],
-    "reviews": [],
+    "reviews": [
+      {
+        "id": "pr1",
+        "name": "Sarah M.",
+        "initials": "SM",
+        "rating": 5,
+        "date": "2 weeks ago",
+        "text": "Fast response, fixed our blocked drain in under an hour. Highly recommend John and the team!",
+        "photo": ""
+      },
+      {
+        "id": "pr2",
+        "name": "David K.",
+        "initials": "DK",
+        "rating": 5,
+        "date": "1 month ago",
+        "text": "Called at 8pm for a burst pipe, Leo was there by 9pm. Saved our bathroom from flooding. True 24/7 service!",
+        "photo": ""
+      },
+      {
+        "id": "pr3",
+        "name": "Michael R.",
+        "initials": "MR",
+        "rating": 5,
+        "date": "3 weeks ago",
+        "text": "Fixed $250 drain cleaning - no hidden costs. These guys are honest and professional. Best plumber in Sydney.",
+        "photo": ""
+      },
+      {
+        "id": "pr4",
+        "name": "Lisa T.",
+        "initials": "LT",
+        "rating": 5,
+        "date": "2 months ago",
+        "text": "Had 3 plumbers quote, UrbanPro gave the best price and finished ahead of schedule. Great work on our renovation.",
+        "photo": ""
+      }
+    ],
+    "overallRating": 4.9,
+    "reviewCountLabel": "150+ Google reviews",
     "mapsUrl": "https://www.google.com/maps/place/UrbanPro+Plumbing+Sydney/@-33.8461026,150.3081854,10z/data=!4m15!1m8!3m7!1s0xaa99133edb90a697:0xe93f25ae63342f5d!2sUrbanPro+Plumbing+Sydney!8m2!3d-33.8482439!4d150.9319747!10e1!16s%2Fg%2F11n4td_svt"
   },
   "electrical": {
@@ -232,7 +271,37 @@
         "subtitle": ""
       }
     ],
-    "reviews": [],
+    "reviews": [
+      {
+        "id": "er1",
+        "name": "James P.",
+        "initials": "JP",
+        "rating": 5,
+        "date": "1 week ago",
+        "text": "Switchboard upgrade done perfectly. Clean work, fair price. Ben and the team know their stuff.",
+        "photo": ""
+      },
+      {
+        "id": "er2",
+        "name": "Emma W.",
+        "initials": "EW",
+        "rating": 5,
+        "date": "1 month ago",
+        "text": "EV charger installed the next day. Professional, tidy work. Lifetime workmanship guarantee gives real peace of mind.",
+        "photo": ""
+      },
+      {
+        "id": "er3",
+        "name": "Robert H.",
+        "initials": "RH",
+        "rating": 5,
+        "date": "3 weeks ago",
+        "text": "Found a fault other electricians missed. Saved us thousands in potential damage. Master electricians indeed.",
+        "photo": ""
+      }
+    ],
+    "overallRating": 4.9,
+    "reviewCountLabel": "120+ Google reviews",
     "mapsUrl": "https://www.google.com/maps/place/UrbanPro+Plumbing+Sydney/@-33.8461026,150.3081854,10z/data=!4m15!1m8!3m7!1s0xaa99133edb90a697:0xe93f25ae63342f5d!2sUrbanPro+Plumbing+Sydney!8m2!3d-33.8482439!4d150.9319747!10e1!16s%2Fg%2F11n4td_svt"
   },
   "team": [

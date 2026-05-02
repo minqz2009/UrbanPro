@@ -43,7 +43,7 @@ const Plumbing = () => {
         "areaServed": ["Sydney CBD", "Eastern Suburbs", "Inner West", "North Shore", "Northern Beaches", "Southern Sydney", "Western Sydney", "Bondi", "Vaucluse", "Paddington", "Surry Hills", "Double Bay", "Mosman", "Chatswood", "Parramatta", "Hurstville", "Liverpool", "Penrith"],
         "description": "24/7 emergency plumber Sydney — blocked drains, hot water systems, gas fitting, burst pipe repair, leak detection. No call-out fee, $250 fixed drain cleaning. Serving all Sydney suburbs.",
         "offers": {"@type": "Offer", "price": "250", "priceCurrency": "AUD", "description": "Fixed $250 drain cleaning Sydney"},
-        "aggregateRating": {"@type": "AggregateRating", "ratingValue": "4.9", "reviewCount": String(plumbing.reviews.length || 1)}
+        "aggregateRating": {"@type": "AggregateRating", "ratingValue": String(plumbing.overallRating || 4.9), "reviewCount": String(plumbing.reviews.length || 1)}
       })}</script>
     </Helmet>
     <motion.div
@@ -97,7 +97,7 @@ const Plumbing = () => {
                       <Icon name={item.icon} size={28} />
                     </div>
                     <div style={{ textAlign: 'center' }}>
-                      <span className="guarantee-text" style={{ fontWeight: 800, fontSize: 'var(--font-size-body)', display: 'block', marginBottom: '0.25rem', letterSpacing: '0.02em', color: 'white' }}>{item.title}</span>
+                      <span className="guarantee-text" style={{ fontWeight: 800, fontSize: 'var(--font-size-body)', display: 'block', marginBottom: '0.25rem', letterSpacing: '0.02em', color: 'white', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '100%' }}>{item.title}</span>
                       {item.subtitle && <span style={{ fontSize: 'var(--font-size-xs)', fontWeight: 600, textTransform: 'uppercase', color: 'var(--color-plumbing-steel)', letterSpacing: '0.1em', display: 'block' }}>{item.subtitle}</span>}
                     </div>
                   </div>
@@ -348,7 +348,7 @@ const Plumbing = () => {
                 <div className="benefit-icon-wrapper" style={{ color: 'var(--color-plumbing)', display: 'flex', flexShrink: 0 }}>
                   <Icon name={benefit.icon} size={28} />
                 </div>
-                <span style={{ fontWeight: 700, fontSize: '1.125rem', color: 'white', letterSpacing: '-0.01em' }}>{benefit.title}</span>
+                <span style={{ fontWeight: 700, fontSize: '1.125rem', color: 'white', letterSpacing: '-0.01em', overflow: 'hidden', textOverflow: 'ellipsis', minWidth: 0 }}>{benefit.title}</span>
               </motion.div>
             ))}
           </div>
@@ -377,13 +377,17 @@ const Plumbing = () => {
           </div>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1.25rem', marginBottom: '1rem' }}>
             <span style={{ fontSize: '3.5rem', fontWeight: 900, color: 'white', lineHeight: 1 }}>
-              {(plumbing.reviews.reduce((s, r) => s + r.rating, 0) / plumbing.reviews.length).toFixed(1)}
+              {plumbing.overallRating ? plumbing.overallRating.toFixed(1) : (plumbing.reviews.reduce((s, r) => s + r.rating, 0) / plumbing.reviews.length).toFixed(1)}
             </span>
             <div>
               <div style={{ display: 'flex', gap: '0.25rem', marginBottom: '0.4rem' }}>
-                {[1,2,3,4,5].map(i => <Star key={i} size={22} fill="#FBBC05" color="#FBBC05" />)}
+                {[1,2,3,4,5].map(i => {
+                  const rating = plumbing.overallRating || (plumbing.reviews.reduce((s, r) => s + r.rating, 0) / plumbing.reviews.length);
+                  const fill = i <= Math.round(rating) ? '#FBBC05' : 'none';
+                  return <Star key={i} size={22} fill={fill} color={i <= Math.round(rating) ? '#FBBC05' : '#475569'} />;
+                })}
               </div>
-              <div style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>Top-rated by our customers</div>
+              <div style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>{plumbing.reviewCountLabel || 'Top-rated by our customers'}</div>
             </div>
           </div>
           <div style={{ width: '80px', height: '4px', backgroundColor: 'var(--color-plumbing)', margin: '1.5rem auto 0' }} />

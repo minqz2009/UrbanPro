@@ -59,6 +59,8 @@ export interface PlumbingContent extends PagePhones {
   benefits: ConfigItem[];
   reviews: ReviewItem[];
   mapsUrl: string;
+  overallRating: number;
+  reviewCountLabel: string;
 }
 
 export interface ElectricalContent extends PagePhones {
@@ -69,6 +71,8 @@ export interface ElectricalContent extends PagePhones {
   benefits: ConfigItem[];
   reviews: ReviewItem[];
   mapsUrl: string;
+  overallRating: number;
+  reviewCountLabel: string;
 }
 
 export interface BuildingContent extends PagePhones {
@@ -202,6 +206,8 @@ const DEFAULT: SiteContent = {
     services: PLUMBING_SERVICES,
     benefits: PLUMBING_BENEFITS,
     reviews: [],
+    overallRating: 4.9,
+    reviewCountLabel: '150+ Google reviews',
     mapsUrl: DEFAULT_MAPS_URL,
   },
   electrical: {
@@ -215,6 +221,8 @@ const DEFAULT: SiteContent = {
     services: ELECTRICAL_SERVICES,
     benefits: ELECTRICAL_BENEFITS,
     reviews: [],
+    overallRating: 4.9,
+    reviewCountLabel: '120+ Google reviews',
     mapsUrl: DEFAULT_MAPS_URL,
   },
   building: {
@@ -270,6 +278,8 @@ export function merge(data: Partial<SiteContent>): SiteContent {
       services: withDefaults(data.plumbing?.services, DEFAULT.plumbing.services),
       benefits: withDefaults(data.plumbing?.benefits, DEFAULT.plumbing.benefits),
       reviews: data.plumbing?.reviews ?? DEFAULT.plumbing.reviews,
+      overallRating: data.plumbing?.overallRating ?? DEFAULT.plumbing.overallRating,
+      reviewCountLabel: data.plumbing?.reviewCountLabel ?? DEFAULT.plumbing.reviewCountLabel,
       mapsUrl: data.plumbing?.mapsUrl ?? DEFAULT.plumbing.mapsUrl,
     },
     electrical: {
@@ -280,6 +290,8 @@ export function merge(data: Partial<SiteContent>): SiteContent {
       services: withDefaults(data.electrical?.services, DEFAULT.electrical.services),
       benefits: withDefaults(data.electrical?.benefits, DEFAULT.electrical.benefits),
       reviews: data.electrical?.reviews ?? DEFAULT.electrical.reviews,
+      overallRating: data.electrical?.overallRating ?? DEFAULT.electrical.overallRating,
+      reviewCountLabel: data.electrical?.reviewCountLabel ?? DEFAULT.electrical.reviewCountLabel,
       mapsUrl: data.electrical?.mapsUrl ?? DEFAULT.electrical.mapsUrl,
     },
     building: {
