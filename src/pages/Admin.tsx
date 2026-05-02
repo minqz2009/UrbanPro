@@ -1093,6 +1093,7 @@ export default function Admin() {
       if (content.team.some(m => m.id === id)) tabs.add('about');
       if (content.buildingProjects.some(p => p.id === id)) tabs.add('building');
       if (id.startsWith('fp-after-') || id.startsWith('fp-before-')) tabs.add('building');
+      if (id.startsWith('rev-')) { tabs.add('plumbing'); tabs.add('electrical'); }
     }
     if (Object.keys(pendingGallery).length > 0) tabs.add('building');
 
