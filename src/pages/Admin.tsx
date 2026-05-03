@@ -1074,7 +1074,7 @@ export default function Admin() {
     const cats = new Set<string>();
     const sections: Record<string, Set<string>> = {};
     const fields: Record<string, Set<string>> = {}; // field-level dirty tracking
-    if (!content || !snapshotRef.current) return { dirtyTabs: tabs, dirtyBuildingCategories: cats, dirtySections: sections };
+    if (!content || !snapshotRef.current) return { dirtyTabs: tabs, dirtyBuildingCategories: cats, dirtySections: sections, dirtyFields: fields };
     const snap = JSON.parse(snapshotRef.current) as SiteContent;
 
     // Helper: compare a subset of fields between snap and current
