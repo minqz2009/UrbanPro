@@ -692,7 +692,7 @@ function PlumbingEditor({ content, onChange, onPhotoQueued, photoPreviews, onCle
         <CharCount value={p.heroSubtitle} max={220} />
       </Field>
       <SectionHeading dirty={ds('Contact Buttons')}>Contact Buttons</SectionHeading>
-      <p style={{ color: '#475569', fontSize: '0.8rem', marginBottom: '1rem', marginTop: '-0.75rem' }}>Leave a number empty to hide that call button on this page. These override the global phone settings; if blank, the global numbers are used.</p>
+      <p style={{ color: '#475569', fontSize: '0.8rem', marginBottom: '1rem', marginTop: '-0.75rem' }}>Leave a number empty to hide that call button on this page. Fill in a number here to override the global phone setting.</p>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
         <Field label="Button 1 — Number (optional)" dirty={df('phone1')}><input style={S.input} value={p.phone1} onChange={e => setField('phone1', e.target.value)} placeholder="+61412242997 (or leave blank)" /></Field>
         <Field label="Button 1 — Display Name" dirty={df('phone1Name')}>
@@ -733,7 +733,7 @@ function ElectricalEditor({ content, onChange, onPhotoQueued, photoPreviews, onC
         <CharCount value={e.heroSubtitle} max={220} />
       </Field>
       <SectionHeading dirty={ds('Contact Buttons')}>Contact Buttons</SectionHeading>
-      <p style={{ color: '#475569', fontSize: '0.8rem', marginBottom: '1rem', marginTop: '-0.75rem' }}>Leave a number empty to hide that call button on this page. These override the global phone settings; if blank, the global numbers are used.</p>
+      <p style={{ color: '#475569', fontSize: '0.8rem', marginBottom: '1rem', marginTop: '-0.75rem' }}>Leave a number empty to hide that call button on this page. Fill in a number here to override the global phone default.</p>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
         <Field label="Button 1 — Number (optional)" dirty={df('phone1')}><input style={S.input} value={e.phone1} onChange={e2 => setField('phone1', e2.target.value)} placeholder="+61412242997 (or leave blank)" /></Field>
         <Field label="Button 1 — Display Name" dirty={df('phone1Name')}>
@@ -1052,6 +1052,7 @@ export default function Admin() {
   const [pendingDeletes, setPendingDeletes] = useState<Set<string>>(new Set());
   const snapshotRef = useRef(sessionStorage.getItem('urbanpro_snapshot') || '');
   const headShaRef = useRef('');
+  const saveMsgTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const saved = loadToken();
@@ -1104,7 +1105,8 @@ export default function Admin() {
     const sections: Record<string, Set<string>> = {};
     const fields: Record<string, Set<string>> = {}; // field-level dirty tracking
     if (!content || !snapshotRef.current) return { dirtyTabs: tabs, dirtyBuildingCategories: cats, dirtySections: sections, dirtyFields: fields };
-    const snap = JSON.parse(snapshotRef.current) as SiteContent;
+    let snap: SiteContent;
+    try { snap = JSON.parse(snapshotRef.current) as SiteContent; } catch { snap = content; }
 
     // Helper: compare a subset of fields between snap and current
     const fieldsChanged = (tab: string, flds: string[]) => {
@@ -1207,7 +1209,7 @@ export default function Admin() {
 
     for (const id of Object.keys(pendingPhotos)) {
       if (content.team.some(m => m.id === id)) tabs.add('about');
-      if (content.buildingProjects.some(p => p.id === id)) tabs.add('building');
+      else if (content.buildingProjects.some(p => p.id === id)) tabs.add('building');
       if (id.startsWith('fp-after-') || id.startsWith('fp-before-')) tabs.add('building');
       if (content.plumbing.reviews.some(r => r.id === id)) { tabs.add('plumbing'); sections.plumbing = sections.plumbing || new Set(); sections.plumbing.add('Google Reviews'); }
       if (content.electrical.reviews.some(r => r.id === id)) { tabs.add('electrical'); sections.electrical = sections.electrical || new Set(); sections.electrical.add('Google Reviews'); }
@@ -1252,8 +1254,9 @@ export default function Admin() {
         } else if (updated.plumbing.reviews.some(r => r.id === id) || updated.electrical.reviews.some(r => r.id === id)) {
           if (updated.plumbing.reviews.some(r => r.id === id)) updated.plumbing.reviews = updated.plumbing.reviews.map(r => r.id === id ? { ...r, photo: imagePath } : r);
           if (updated.electrical.reviews.some(r => r.id === id)) updated.electrical.reviews = updated.electrical.reviews.map(r => r.id === id ? { ...r, photo: imagePath } : r);
-        } else {
+        } else if (updated.team.some(m => m.id === id)) {
           updated.team = updated.team.map(m => m.id === id ? { ...m, photo: imagePath } : m);
+        } else {
           updated.buildingProjects = updated.buildingProjects.map(p => p.id === id ? { ...p, image: imagePath } : p);
         }
       }
@@ -1295,8 +1298,7 @@ export default function Admin() {
 
       // Single atomic commit with deletions
       const commitSha = await batchCommit(token, files, 'Admin: update site content', { deletePaths: safeDeletes, expectedBaseSha: headShaRef.current });
-      headShaRef.current = commitSha; // Update immediately — commit is on GitHub regardless of deploy outcome
-      setPendingDeletes(new Set());
+      headShaRef.current = commitSha;
       setSaving(false);
 
       // Wait for deploy to complete, reporting progress
@@ -1309,7 +1311,7 @@ export default function Admin() {
         setContent(updated);
         snapshotRef.current = JSON.stringify(updated);
         sessionStorage.setItem('urbanpro_snapshot', snapshotRef.current);
-        setPendingPhotos({}); setPhotoPreviews({}); setPendingGallery({});
+        setPendingPhotos({}); setPhotoPreviews({}); setPendingGallery({}); setPendingDeletes(new Set());
         bustContentCache();
         setSaveMsg({ type: 'success', text: '✓ Saved and deployed successfully.' });
       } else if (result === 'failure') {
@@ -1319,7 +1321,7 @@ export default function Admin() {
         setContent(updated);
         snapshotRef.current = JSON.stringify(updated);
         sessionStorage.setItem('urbanpro_snapshot', snapshotRef.current);
-        setPendingPhotos({}); setPhotoPreviews({}); setPendingGallery({});
+        setPendingPhotos({}); setPhotoPreviews({}); setPendingGallery({}); setPendingDeletes(new Set());
         bustContentCache();
         setSaveMsg({ type: 'success', text: '✓ Changes saved. Site will update shortly.' });
       }
@@ -1338,7 +1340,8 @@ export default function Admin() {
       setSaving(false);
       setDeploying(false);
       setDeployPhase(null);
-      setTimeout(() => setSaveMsg(null), 15000);
+      if (saveMsgTimerRef.current) clearTimeout(saveMsgTimerRef.current);
+      saveMsgTimerRef.current = setTimeout(() => { setSaveMsg(null); saveMsgTimerRef.current = null; }, 15000);
     }
   };
 

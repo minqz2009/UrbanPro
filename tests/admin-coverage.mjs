@@ -81,7 +81,7 @@ const plumbingEditorStart = adminTsx.indexOf('function PlumbingEditor');
 const plumbingEditorEnd = adminTsx.indexOf('function ElectricalEditor');
 const plumbingEditor = adminTsx.slice(plumbingEditorStart, plumbingEditorEnd);
 assert(plumbingEditor.includes('Contact Buttons'), 'PlumbingEditor has Contact Buttons section');
-assert(plumbingEditor.includes('override the global phone settings'), 'PlumbingEditor mentions phone override');
+assert(plumbingEditor.includes('override the global phone'), 'PlumbingEditor mentions phone override');
 
 // Page TSX uses per-page phones
 assert(plumbingTsx.includes('content.plumbing.phone1'), 'Plumbing.tsx uses per-page phone1');
@@ -104,7 +104,7 @@ const electricalEditorStart = adminTsx.indexOf('function ElectricalEditor');
 const electricalEditorEnd = adminTsx.indexOf('function TeamMemberCards');
 const electricalEditor = adminTsx.slice(electricalEditorStart, electricalEditorEnd);
 assert(electricalEditor.includes('Contact Buttons'), 'ElectricalEditor has Contact Buttons section');
-assert(electricalEditor.includes('override the global phone settings'), 'ElectricalEditor mentions phone override');
+assert(electricalEditor.includes('override the global phone'), 'ElectricalEditor mentions phone override');
 
 assert(electricalTsx.includes('content.electrical.phone1'), 'Electrical.tsx uses per-page phone1');
 assert(electricalTsx.includes('content.electrical.phone2'), 'Electrical.tsx uses per-page phone2');

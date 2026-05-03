@@ -270,6 +270,7 @@ const Plumbing = () => {
       </section>
 
       {/* Services List */}
+      {plumbing.services.length > 0 && (
       <section className="section plumbing-section plumbing-services-section" style={{ padding: '8rem 0' }}>
         <div className="container">
           <div className="plumbing-services-heading" style={{ textAlign: 'center', marginBottom: '5rem' }}>
@@ -310,6 +311,7 @@ const Plumbing = () => {
           </div>
         </div>
       </section>
+      )}
 
       <section className="section plumbing-section" style={{
         padding: '6rem 0',

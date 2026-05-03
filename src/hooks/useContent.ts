@@ -260,6 +260,19 @@ function withDefaults<T extends ConfigItem>(items: T[] | undefined, fallback: Co
   return items.map(it => ({ id: it.id, icon: it.icon || 'CheckCircle', title: it.title || '', subtitle: it.subtitle || '' }));
 }
 
+function sanitizeReviews(items: ReviewItem[] | undefined): ReviewItem[] {
+  if (!items?.length) return [];
+  return items.map(r => ({
+    id: r.id || '',
+    name: r.name || '',
+    initials: r.initials || (r.name ? r.name.trim().split(/\s+/).map(p => p[0] || '').join('').slice(0, 2).toUpperCase() : ''),
+    rating: typeof r.rating === 'number' && r.rating >= 1 && r.rating <= 5 ? r.rating : 5,
+    date: r.date || '',
+    text: r.text || '',
+    photo: r.photo || '',
+  }));
+}
+
 export function merge(data: Partial<SiteContent>): SiteContent {
   // Resolve settings first so per-page phones can fall back to them
   const settings: SiteSettings = { ...DEFAULT_SETTINGS, ...(data.settings || {}) };
@@ -287,7 +300,7 @@ export function merge(data: Partial<SiteContent>): SiteContent {
       guarantees: withDefaults(data.plumbing?.guarantees, DEFAULT.plumbing.guarantees),
       services: withDefaults(data.plumbing?.services, DEFAULT.plumbing.services),
       benefits: withDefaults(data.plumbing?.benefits, DEFAULT.plumbing.benefits),
-      reviews: data.plumbing?.reviews ?? DEFAULT.plumbing.reviews,
+      reviews: sanitizeReviews(data.plumbing?.reviews ?? DEFAULT.plumbing.reviews),
       overallRating: data.plumbing?.overallRating ?? DEFAULT.plumbing.overallRating,
       reviewCountLabel: data.plumbing?.reviewCountLabel ?? DEFAULT.plumbing.reviewCountLabel,
       showReviews: data.plumbing?.showReviews ?? DEFAULT.plumbing.showReviews,
@@ -300,7 +313,7 @@ export function merge(data: Partial<SiteContent>): SiteContent {
       guarantees: withDefaults(data.electrical?.guarantees, DEFAULT.electrical.guarantees),
       services: withDefaults(data.electrical?.services, DEFAULT.electrical.services),
       benefits: withDefaults(data.electrical?.benefits, DEFAULT.electrical.benefits),
-      reviews: data.electrical?.reviews ?? DEFAULT.electrical.reviews,
+      reviews: sanitizeReviews(data.electrical?.reviews ?? DEFAULT.electrical.reviews),
       overallRating: data.electrical?.overallRating ?? DEFAULT.electrical.overallRating,
       reviewCountLabel: data.electrical?.reviewCountLabel ?? DEFAULT.electrical.reviewCountLabel,
       showReviews: data.electrical?.showReviews ?? DEFAULT.electrical.showReviews,
