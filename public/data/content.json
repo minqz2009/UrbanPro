@@ -174,6 +174,60 @@
         "date": "6 days ago",
         "text": "Had 3 plumbers quote, UrbanPro gave the best price and finished ahead of schedule. Great work on our renovation.",
         "photo": "images/gaga-1777768030451-0ly4.png"
+      },
+      {
+        "id": "rev-1777768228939-q1vv",
+        "name": "Gogo Pro",
+        "initials": "GP",
+        "rating": 5,
+        "date": "1 week ago",
+        "text": "Great experience with Mr. Wang! My toilet was gurgling, and he quickly found and cleared tree roots from the drain. He’s got professional tools, works fast, and even gave me some helpful maintenance tips. Very efficient and reliable service!",
+        "photo": "images/gogo-1777768465983-6skh.png"
+      },
+      {
+        "id": "rev-1777768261222-rxdk",
+        "name": "范心怡",
+        "initials": "XY",
+        "rating": 5,
+        "date": "1 week ago",
+        "text": "I accidentally dropped this Harpic toilet rim block into the toilet and it caused a major clog. The first plumber I hired failed to clear it, but Wang saved the day! He took the toilet apart and got it out quickly. Great skills and very reliable. Definitely the person to call if you have a tough plumbing issue！",
+        "photo": "images/xinyi-1777768465985-o8xk.png"
+      },
+      {
+        "id": "rev-1777768307414-pmxm",
+        "name": "Nina Wang",
+        "initials": "NW",
+        "rating": 5,
+        "date": "1 week ago",
+        "text": "I highly recommend UrbanPro plumbing in Sydney. They are professional, knowledgeable, helpful in solving problems, explaining the causes of issues, and even teaching us how to maintain our own systems. I was also very impressed by their politeness and professionalism.\nThank you guys！",
+        "photo": "images/nina-1777768465985-2tfb.png"
+      },
+      {
+        "id": "rev-1777768312685-tsj5",
+        "name": "L",
+        "initials": "L",
+        "rating": 5,
+        "date": "1 week ago",
+        "text": "Very happy with UrbanPro plumbing! The plumber came out and inspected the drains thoroughly and cleared the one that was blocked. He diagnosed a different issue in the second drain which didn't require clearing, fixed the problem and clearly explained to us what was causing it. As it didn't need clearing he was honest and didn't charge us for another clearing cost!",
+        "photo": "images/l-1777768465986-bf6h.png"
+      },
+      {
+        "id": "rev-1777768363635-cuow",
+        "name": "Siri Chai",
+        "initials": "SC",
+        "rating": 5,
+        "date": "2 weeks ago",
+        "text": "Very quick response and even they finish previous work around 7pm. They still come and fix our issue. Very experienced and Recommended!",
+        "photo": "images/siri-1777768465986-pp17.png"
+      },
+      {
+        "id": "rev-1777768396196-eivu",
+        "name": "Peter Li",
+        "initials": "PL",
+        "rating": 5,
+        "date": "3 weeks ago",
+        "text": "UrbanPro Plumbing fixed our blocked drain. They were easy to deal with, quick to respond, and clear and upfront about pricing. They took the time to carefully resolve the issue and did a great job. Highly recommend them to anyone looking for a reliable plumber.",
+        "photo": "images/peterli-1777768465987-hk1f.png"
       }
     ],
     "overallRating": 5,
