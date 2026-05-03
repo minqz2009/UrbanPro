@@ -39,7 +39,7 @@ const Electrical = () => {
         "provider": {"@type": "LocalBusiness", "name": "UrbanPro", "telephone": settings.phone1, "image": "https://urbanproplumbing.com.au/images/electrical-hero.jpg", "priceRange": "$$"},
         "areaServed": ["Sydney CBD", "Eastern Suburbs", "Inner West", "North Shore", "Northern Beaches", "Southern Sydney", "Western Sydney", "Hills District", "Canterbury-Bankstown", "Bondi", "Vaucluse", "Paddington", "Surry Hills", "Double Bay", "Mosman", "Chatswood", "Parramatta", "Hurstville", "Liverpool", "Penrith", "Randwick", "Coogee", "Maroubra", "Kensington", "Newtown", "Marrickville", "Balmain", "Glebe", "Strathfield", "Burwood", "Ashfield", "North Sydney", "Lane Cove", "St Leonards", "Hornsby", "Manly", "Dee Why", "Cronulla", "Sutherland", "Kogarah", "Blacktown", "Campbelltown", "Castle Hill", "Baulkham Hills", "Bankstown", "Campsie", "Canterbury", "Drummoyne", "Five Dock", "Concord", "Rhodes", "Wentworth Point"],
         "description": "Licensed electrician Sydney — switchboard upgrades, rewiring, lighting design, EV charger installation, fault finding, safety inspections. 24/7 emergency service across all Sydney suburbs.",
-        "aggregateRating": {"@type": "AggregateRating", "ratingValue": String(electrical.overallRating || 4.9), "reviewCount": String(electrical.reviews.length || 1)}
+        ...(electrical.reviews.length > 0 ? {"aggregateRating": {"@type": "AggregateRating", "ratingValue": String(electrical.overallRating || 4.9), "reviewCount": String(electrical.reviews.length)}} : {})
       })}</script>
     </Helmet>
     <motion.div

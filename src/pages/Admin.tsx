@@ -189,6 +189,7 @@ function ProjectsEditor({ projects, onChange, onPhotoQueued, photoPreviews, onGa
 }) {
   const [activeCategory, setActiveCategory] = useState<string>(buildingCategories[0] || 'New Builds');
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
+  useEffect(() => { if (buildingCategories.length > 0 && !buildingCategories.includes(activeCategory)) setActiveCategory(buildingCategories[0]); }, [buildingCategories]);
   const [photoErr, setPhotoErr] = useState<Record<string, string>>({});
   const [dragCat, setDragCat] = useState<string | null>(null);
   const [dragProject, setDragProject] = useState<string | null>(null);
@@ -1070,12 +1071,12 @@ export default function Admin() {
       snapshotRef.current = JSON.stringify(merged);
       sessionStorage.setItem('urbanpro_snapshot', snapshotRef.current);
     } catch (e: any) {
-      setLoadError('Could not load site content: ' + e.message);
+      setLoadError('Could not load site content: ' + (e instanceof Error ? e.message : String(e)));
     }
   };
 
   const handleLogin = async (tok: string) => { setToken(tok); setAuthed(true); await loadContent(tok); };
-  const handleLogout = () => { clearToken(); setToken(''); setAuthed(false); setContent(null); };
+  const handleLogout = () => { clearToken(); sessionStorage.removeItem('urbanpro_snapshot'); setToken(''); setAuthed(false); setContent(null); };
   const queuePhoto = (id: string, file: File, preview: string) => { setPendingPhotos(p => ({ ...p, [id]: file })); setPhotoPreviews(p => ({ ...p, [id]: preview })); };
   const queueGallery = (key: string, file: File, preview: string) => { setPendingGallery(g => ({ ...g, [key]: file })); setPhotoPreviews(p => ({ ...p, [key]: preview })); };
 
@@ -1217,7 +1218,7 @@ export default function Admin() {
     if (Object.keys(pendingGallery).length > 0) tabs.add('building');
 
     return { dirtyTabs: tabs, dirtyBuildingCategories: cats, dirtySections: sections, dirtyFields: fields };
-  }, [content, pendingPhotos, pendingGallery]);
+  }, [content, pendingPhotos, pendingGallery, pendingDeletes]);
 
   // Warn before leaving if there are unsaved changes (uses ref to avoid re-registering on every keystroke)
   const hasUnsavedRef = useRef(false);
@@ -1334,7 +1335,7 @@ export default function Admin() {
         setPendingDeletes(new Set());
         setSaveMsg({ type: 'error', text: 'Someone else made changes while you were editing. Content has been reloaded with the latest version — your unsaved edits were discarded. Please re-apply your changes.' });
       } else {
-        setSaveMsg({ type: 'error', text: 'Save failed: ' + e.message + '. Please contact Daniel Chen for technical support if this persists.' });
+        setSaveMsg({ type: 'error', text: 'Save failed: ' + (e instanceof Error ? e.message : String(e)) + '. Please contact Daniel Chen for technical support if this persists.' });
       }
     } finally {
       setSaving(false);

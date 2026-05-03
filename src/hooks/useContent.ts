@@ -360,7 +360,8 @@ export function useContent() {
         setContent(merged);
         setLoading(false);
       })
-      .catch(() => {
+      .catch((err) => {
+        console.error('Failed to load site content:', err);
         setLoading(false);
       });
   }, []);

@@ -304,11 +304,11 @@ export function readFileAsBase64(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => {
-      const result = reader.result as string;
-      // Strip the data URL prefix (e.g. "data:image/jpeg;base64,")
+      const result = reader.result;
+      if (typeof result !== 'string') { reject(new Error('Failed to read file as base64')); return; }
       resolve(result.split(',')[1]);
     };
-    reader.onerror = reject;
+    reader.onerror = () => reject(new Error('Failed to read file'));
     reader.readAsDataURL(file);
   });
 }

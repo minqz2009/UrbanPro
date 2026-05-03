@@ -43,7 +43,7 @@ const Plumbing = () => {
         "areaServed": ["Sydney CBD", "Eastern Suburbs", "Inner West", "North Shore", "Northern Beaches", "Southern Sydney", "Western Sydney", "Hills District", "Canterbury-Bankstown", "Bondi", "Vaucluse", "Paddington", "Surry Hills", "Double Bay", "Mosman", "Chatswood", "Parramatta", "Hurstville", "Liverpool", "Penrith", "Randwick", "Coogee", "Maroubra", "Kensington", "Newtown", "Marrickville", "Balmain", "Glebe", "Strathfield", "Burwood", "Ashfield", "North Sydney", "Lane Cove", "St Leonards", "Hornsby", "Manly", "Dee Why", "Cronulla", "Sutherland", "Kogarah", "Blacktown", "Campbelltown", "Castle Hill", "Baulkham Hills", "Bankstown", "Campsie", "Canterbury", "Drummoyne", "Five Dock", "Concord", "Rhodes", "Wentworth Point"],
         "description": "24/7 emergency plumber Sydney — blocked drains, hot water systems, gas fitting, burst pipe repair, leak detection. No call-out fee, $250 fixed drain cleaning. Serving all Sydney suburbs.",
         "offers": {"@type": "Offer", "price": "250", "priceCurrency": "AUD", "description": "Fixed $250 drain cleaning Sydney"},
-        "aggregateRating": {"@type": "AggregateRating", "ratingValue": String(plumbing.overallRating || 4.9), "reviewCount": String(plumbing.reviews.length || 1)}
+        ...(plumbing.reviews.length > 0 ? {"aggregateRating": {"@type": "AggregateRating", "ratingValue": String(plumbing.overallRating || 4.9), "reviewCount": String(plumbing.reviews.length)}} : {})
       })}</script>
     </Helmet>
     <motion.div

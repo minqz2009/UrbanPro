@@ -38,7 +38,7 @@ function ProjectModal({ project, onClose, galleryFont }: { project: BuildingProj
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [idx, currentPhotos.length, showFloorPlan]);
+  }, [idx, currentPhotos.length, showFloorPlan, showBefore, onClose]);
 
   // floor plan images
   const fpCurrent = showFloorBefore && project.floorPlanBefore ? project.floorPlanBefore : project.floorPlanAfter;
@@ -241,15 +241,19 @@ const CaseItem = ({ project, setSelectedProject }: { project: BuildingProject, i
           style={{ height: '100%', cursor: 'pointer', overflow: 'hidden' }} 
           onClick={() => setSelectedProject(project)}
         >
-          <motion.img 
+          {project.image ? (
+          <motion.img
             initial={{ filter: 'grayscale(100%)' }}
             whileInView={{ filter: 'grayscale(0%)' }}
             viewport={{ once: true }}
             transition={{ duration: 1.8, ease: "easeOut" }}
-            src={project.image} 
-            alt={project.title} 
+            src={project.image}
+            alt={project.title}
             style={{ width: '100%', height: 'auto', maxHeight: '70vh', objectFit: 'cover' }}
           />
+          ) : (
+          <div style={{ width: '100%', height: '50vh', backgroundColor: '#1e293b', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#475569', fontSize: '0.9rem' }}>No cover image</div>
+          )}
         </motion.div>
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginTop: '2rem', flexWrap: 'wrap', gap: '2rem' }}>
