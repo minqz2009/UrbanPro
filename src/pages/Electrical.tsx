@@ -343,21 +343,21 @@ const Electrical = () => {
             </div>
             <h2 style={{ fontSize: 'var(--font-size-h2)', fontWeight: 800, color: 'var(--color-text)', margin: 0 }}>Google Reviews</h2>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1.25rem', marginBottom: '1rem' }}>
+          {(() => {
+            const avg = electrical.reviews.length > 0 ? electrical.reviews.reduce((s, rv) => s + (typeof rv.rating === 'number' ? rv.rating : 0), 0) / electrical.reviews.length : 0;
+            const rating = typeof electrical.overallRating === 'number' && electrical.overallRating > 0 ? electrical.overallRating : avg;
+            const rounded = Math.round(rating);
+            return (<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1.25rem', marginBottom: '1rem' }}>
             <span style={{ fontSize: '3.5rem', fontWeight: 900, color: 'white', lineHeight: 1 }}>
-              {electrical.overallRating ? electrical.overallRating.toFixed(1) : (electrical.reviews.reduce((s, r) => s + r.rating, 0) / electrical.reviews.length).toFixed(1)}
+              {rating > 0 ? rating.toFixed(1) : '—'}
             </span>
             <div>
               <div style={{ display: 'flex', gap: '0.25rem', marginBottom: '0.4rem' }}>
-                {[1,2,3,4,5].map(i => {
-                  const rating = electrical.overallRating || (electrical.reviews.reduce((s, r) => s + r.rating, 0) / electrical.reviews.length);
-                  const fill = i <= Math.round(rating) ? '#FBBC05' : 'none';
-                  return <Star key={i} size={22} fill={fill} color={i <= Math.round(rating) ? '#FBBC05' : '#475569'} />;
-                })}
+                {[1,2,3,4,5].map(i => <Star key={i} size={22} fill={i <= rounded ? '#FBBC05' : 'none'} color={i <= rounded ? '#FBBC05' : '#475569'} />)}
               </div>
               <div style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>{electrical.reviewCountLabel || 'Top-rated by our customers'}</div>
             </div>
-          </div>
+          </div>); })()}
           <div style={{ width: '80px', height: '4px', backgroundColor: 'var(--color-electrical)', margin: '1.5rem auto 0' }} />
         </div>
 

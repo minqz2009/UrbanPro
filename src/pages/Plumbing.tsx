@@ -367,21 +367,21 @@ const Plumbing = () => {
               Google Reviews
             </motion.h2>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1.25rem', marginBottom: '1rem' }}>
+          {(() => {
+            const avg = plumbing.reviews.length > 0 ? plumbing.reviews.reduce((s, rv) => s + (typeof rv.rating === 'number' ? rv.rating : 0), 0) / plumbing.reviews.length : 0;
+            const rating = typeof plumbing.overallRating === 'number' && plumbing.overallRating > 0 ? plumbing.overallRating : avg;
+            const rounded = Math.round(rating);
+            return (<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1.25rem', marginBottom: '1rem' }}>
             <span style={{ fontSize: '3.5rem', fontWeight: 900, color: 'white', lineHeight: 1 }}>
-              {plumbing.overallRating ? plumbing.overallRating.toFixed(1) : (plumbing.reviews.reduce((s, r) => s + r.rating, 0) / plumbing.reviews.length).toFixed(1)}
+              {rating > 0 ? rating.toFixed(1) : '—'}
             </span>
             <div>
               <div style={{ display: 'flex', gap: '0.25rem', marginBottom: '0.4rem' }}>
-                {[1,2,3,4,5].map(i => {
-                  const rating = plumbing.overallRating || (plumbing.reviews.reduce((s, r) => s + r.rating, 0) / plumbing.reviews.length);
-                  const fill = i <= Math.round(rating) ? '#FBBC05' : 'none';
-                  return <Star key={i} size={22} fill={fill} color={i <= Math.round(rating) ? '#FBBC05' : '#475569'} />;
-                })}
+                {[1,2,3,4,5].map(i => <Star key={i} size={22} fill={i <= rounded ? '#FBBC05' : 'none'} color={i <= rounded ? '#FBBC05' : '#475569'} />)}
               </div>
               <div style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>{plumbing.reviewCountLabel || 'Top-rated by our customers'}</div>
             </div>
-          </div>
+          </div>); })()}
           <div style={{ width: '80px', height: '4px', backgroundColor: 'var(--color-plumbing)', margin: '1.5rem auto 0' }} />
         </div>
 
