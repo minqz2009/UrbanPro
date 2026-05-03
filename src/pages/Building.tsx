@@ -397,7 +397,7 @@ const Building = () => {
               margin: 0,
               textTransform: 'uppercase'
             }}>
-              <span style={{ color: 'white', display: 'block' }}>Spaces of</span>
+              <span style={{ color: 'white', display: 'block' }}>{content.building.heroLine1}</span>
             </h1>
           </motion.div>
           <motion.div
@@ -417,7 +417,7 @@ const Building = () => {
               marginLeft: '10vw',
               display: 'block'
             }}>
-              Distinction
+              {content.building.heroLine2}
             </span>
           </motion.div>
 
@@ -428,7 +428,7 @@ const Building = () => {
             style={{ marginLeft: '10vw', maxWidth: '600px' }}
           >
             <p style={{ fontSize: 'var(--font-size-body)', color: 'rgba(255,255,255,0.9)', lineHeight: 1.6 }}>
-              We don't just build walls. We construct lifestyles. From full-scale New Home Builds, to masterly executed Renovations, and precise Small Projects (carpentry, ceilings, specialized fixes). We handle everything end-to-end.
+              {content.building.heroSubtitle}
             </p>
           </motion.div>
         </div>

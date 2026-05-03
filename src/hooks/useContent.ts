@@ -78,6 +78,9 @@ export interface ElectricalContent extends PagePhones {
 }
 
 export interface BuildingContent extends PagePhones {
+  heroLine1: string;
+  heroLine2: string;
+  heroSubtitle: string;
   contactHeading: string;
   contactSubtitle: string;
 }
@@ -234,6 +237,9 @@ const DEFAULT: SiteContent = {
     phone1Name: DEFAULT_SETTINGS.phone1Name,
     phone2: DEFAULT_SETTINGS.phone2,
     phone2Name: DEFAULT_SETTINGS.phone2Name,
+    heroLine1: 'Spaces of',
+    heroLine2: 'Distinction',
+    heroSubtitle: "We don't just build walls. We construct lifestyles. From full-scale New Home Builds, to masterly executed Renovations, and precise Small Projects (carpentry, ceilings, specialized fixes). We handle everything end-to-end.",
     contactHeading: 'Ready to Build?',
     contactSubtitle: "Transform your vision into reality with Sydney's most trusted architects and builders.",
   },
@@ -304,6 +310,9 @@ export function merge(data: Partial<SiteContent>): SiteContent {
       ...DEFAULT.building,
       ...pagePhoneDefaults,
       ...(data.building || {}),
+      heroLine1: data.building?.heroLine1 ?? DEFAULT.building.heroLine1,
+      heroLine2: data.building?.heroLine2 ?? DEFAULT.building.heroLine2,
+      heroSubtitle: data.building?.heroSubtitle ?? DEFAULT.building.heroSubtitle,
     },
     team: data.team ?? DEFAULT.team,
     buildingProjects: (data.buildingProjects ?? DEFAULT.buildingProjects).map(p => ({

@@ -176,7 +176,7 @@ function GalleryManager({ projectId, photos, previews, onPhotoQueued, onRemoveEx
 
 // ─── Projects Editor ──────────────────────────────────────────────────────────
 
-function ProjectsEditor({ projects, onChange, onPhotoQueued, photoPreviews, onGalleryQueued, onRemoveGalleryExisting, onRemoveGalleryPending, pendingGalleryKeys, dirtyCategories, buildingCategories, onCategoriesChange, onClearPending }: {
+function ProjectsEditor({ projects, onChange, onPhotoQueued, photoPreviews, onGalleryQueued, onRemoveGalleryExisting, onRemoveGalleryPending, pendingGalleryKeys, dirtyCategories, buildingCategories, onCategoriesChange, onClearPending, sectionDirty }: {
   projects: BuildingProject[]; onChange: (p: BuildingProject[]) => void;
   onPhotoQueued: (id: string, file: File, preview: string) => void; photoPreviews: Record<string, string>;
   onGalleryQueued: (key: string, file: File, preview: string) => void;
@@ -185,6 +185,7 @@ function ProjectsEditor({ projects, onChange, onPhotoQueued, photoPreviews, onGa
   dirtyCategories: Set<string>;
   buildingCategories: string[]; onCategoriesChange: (cats: string[]) => void;
   onClearPending: (id: string) => void;
+  sectionDirty?: boolean;
 }) {
   const [activeCategory, setActiveCategory] = useState<string>(buildingCategories[0] || 'New Builds');
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
@@ -242,6 +243,7 @@ function ProjectsEditor({ projects, onChange, onPhotoQueued, photoPreviews, onGa
 
   return (
     <div>
+      <SectionHeading dirty={sectionDirty}>Projects / Exhibition</SectionHeading>
       <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '1.5rem', lineHeight: 1.6 }}>Manage the exhibition gallery on the Building page. Each project can have a cover photo, multiple gallery photos, and an optional 360° panorama link.</p>
       <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
         {buildingCategories.map(cat => (
@@ -752,6 +754,33 @@ function ElectricalEditor({ content, onChange, onPhotoQueued, photoPreviews, onC
   );
 }
 
+// ─── Building Hero Editor ─────────────────────────────────────────────────────
+
+function BuildingHeroEditor({ content, onChange, dirtySections, dirtyFields }: { content: SiteContent; onChange: (c: SiteContent) => void; dirtySections?: Set<string>; dirtyFields?: Set<string> }) {
+  const b = content.building;
+  const ds = (name: string) => dirtySections?.has(name) || false;
+  const df = (name: string) => dirtyFields?.has(name) || false;
+  const setField = (field: keyof typeof b, value: any) => onChange({ ...content, building: { ...b, [field]: value } });
+  return (
+    <div>
+      <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '1.5rem', lineHeight: 1.6 }}>Edit the hero section shown at the top of the Building & Renovation page.</p>
+      <SectionHeading dirty={ds('Hero Section')}>Hero Section</SectionHeading>
+      <Field label="Heading Line 1" dirty={df('heroLine1')}>
+        <input style={S.input} value={b.heroLine1} maxLength={40} onChange={e => setField('heroLine1', e.target.value)} placeholder="e.g. Spaces of" />
+        <CharCount value={b.heroLine1} max={40} />
+      </Field>
+      <Field label="Heading Line 2" dirty={df('heroLine2')}>
+        <input style={S.input} value={b.heroLine2} maxLength={40} onChange={e => setField('heroLine2', e.target.value)} placeholder="e.g. Distinction" />
+        <CharCount value={b.heroLine2} max={40} />
+      </Field>
+      <Field label="Hero Description" dirty={df('heroSubtitle')}>
+        <textarea style={S.textarea} value={b.heroSubtitle} maxLength={220} onChange={e => setField('heroSubtitle', e.target.value)} rows={3} />
+        <CharCount value={b.heroSubtitle} max={220} />
+      </Field>
+    </div>
+  );
+}
+
 // ─── Building Contact Editor ──────────────────────────────────────────────────
 
 function BuildingContactEditor({ content, onChange, dirtySections, dirtyFields }: { content: SiteContent; onChange: (c: SiteContent) => void; dirtySections?: Set<string>; dirtyFields?: Set<string> }) {
@@ -1152,8 +1181,9 @@ export default function Admin() {
     if (JSON.stringify(content.building) !== JSON.stringify(snap.building)) {
       tabs.add('building');
       sections.building = sections.building || new Set();
-      sections.building.add('Contact Section');
-      fields.building = changedFields('building', ['contactHeading','contactSubtitle','phone1','phone1Name','phone2','phone2Name']);
+      if (fieldsChanged('building', ['heroLine1','heroLine2','heroSubtitle'])) sections.building.add('Hero Section');
+      if (fieldsChanged('building', ['contactHeading','contactSubtitle','phone1','phone1Name','phone2','phone2Name'])) sections.building.add('Contact Section');
+      fields.building = changedFields('building', ['heroLine1','heroLine2','heroSubtitle','contactHeading','contactSubtitle','phone1','phone1Name','phone2','phone2Name']);
     }
     if (JSON.stringify(content.buildingProjects) !== JSON.stringify(snap.buildingProjects)) {
       tabs.add('building');
@@ -1402,6 +1432,7 @@ export default function Admin() {
           {activeTab === 'electrical' && <ElectricalEditor content={content} onChange={setContent} onPhotoQueued={queuePhoto} photoPreviews={photoPreviews} onClearPending={clearPendingPhoto} dirtySections={dirtySections.electrical} dirtyFields={dirtyFields.electrical} />}
           {activeTab === 'about' && <AboutEditor content={content} onChange={setContent} onPhotoQueued={queuePhoto} photoPreviews={photoPreviews} dirtySections={dirtySections.about} dirtyFields={dirtyFields.about} />}
           {activeTab === 'building' && (<>
+            <BuildingHeroEditor content={content} onChange={setContent} dirtySections={dirtySections.building} dirtyFields={dirtyFields.building} />
             <ProjectsEditor
               projects={content.buildingProjects}
               onChange={buildingProjects => setContent(c => c ? { ...c, buildingProjects } : c)}
@@ -1415,6 +1446,7 @@ export default function Admin() {
               buildingCategories={content.buildingCategories}
               onCategoriesChange={cats => setContent(c => c ? { ...c, buildingCategories: cats } : c)}
               onClearPending={clearPendingPhoto}
+              sectionDirty={dirtySections.building?.has('Projects') || false}
             />
             <BuildingContactEditor content={content} onChange={setContent} dirtySections={dirtySections.building} dirtyFields={dirtyFields.building} />
           </>)}
