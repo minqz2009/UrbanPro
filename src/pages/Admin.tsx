@@ -59,8 +59,8 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
   return <div style={{ marginBottom: '1.25rem' }}><label style={S.label}>{label}</label>{children}</div>;
 }
 
-function SectionHeading({ children }: { children: React.ReactNode }) {
-  return <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#60a5fa', marginBottom: '1.25rem', paddingBottom: '0.75rem', borderBottom: '1px solid #1e3a5f' }}>{children}</h3>;
+function SectionHeading({ dirty, children }: { dirty?: boolean; children: React.ReactNode }) {
+  return <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#60a5fa', marginBottom: '1.25rem', paddingBottom: '0.75rem', borderBottom: '1px solid #1e3a5f' }}>{dirty && <span style={{ color: '#f59e0b', marginRight: '0.35rem', fontSize: '0.7rem' }}>●</span>}{children}</h3>;
 }
 
 // ─── Photo Uploader (single) ──────────────────────────────────────────────────
@@ -388,9 +388,9 @@ function IconPicker({ value, onChange }: { value: string; onChange: (name: strin
 
 // ─── Config Item List Editor ──────────────────────────────────────────────────
 
-function ConfigItemListEditor({ items, onChange, label, titleMax, subtitleMax, showSubtitle = true, addLabel = 'Add Item' }: {
+function ConfigItemListEditor({ items, onChange, label, titleMax, subtitleMax, showSubtitle = true, addLabel = 'Add Item', sectionDirty }: {
   items: ConfigItem[]; onChange: (items: ConfigItem[]) => void;
-  label: string; titleMax: number; subtitleMax: number; showSubtitle?: boolean; addLabel?: string;
+  label: string; titleMax: number; subtitleMax: number; showSubtitle?: boolean; addLabel?: string; sectionDirty?: boolean;
 }) {
   const [dragId, setDragId] = useState<string | null>(null);
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
@@ -420,7 +420,7 @@ function ConfigItemListEditor({ items, onChange, label, titleMax, subtitleMax, s
 
   return (
     <div style={{ marginTop: '2.5rem' }}>
-      <SectionHeading>{label}</SectionHeading>
+      <SectionHeading dirty={sectionDirty}>{label}</SectionHeading>
       <p style={{ color: '#475569', fontSize: '0.78rem', marginTop: '-0.75rem', marginBottom: '1rem' }}>Drag cards to reorder. Click the chevron to edit icon, title, and subtitle.</p>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(190px, 1fr))', gap: '0.65rem' }}>
         {items.map(item => {
@@ -478,7 +478,7 @@ function ConfigItemListEditor({ items, onChange, label, titleMax, subtitleMax, s
 
 // ─── Reviews Editor ───────────────────────────────────────────────────────────
 
-function ReviewsEditor({ reviews, onChange, mapsUrl, onMapsUrlChange, overallRating, onOverallRatingChange, reviewCountLabel, onReviewCountLabelChange, showReviews, onShowReviewsChange, onPhotoQueued, photoPreviews, onClearPending }: {
+function ReviewsEditor({ reviews, onChange, mapsUrl, onMapsUrlChange, overallRating, onOverallRatingChange, reviewCountLabel, onReviewCountLabelChange, showReviews, onShowReviewsChange, onPhotoQueued, photoPreviews, onClearPending, sectionDirty }: {
   reviews: ReviewItem[]; onChange: (r: ReviewItem[]) => void;
   mapsUrl: string; onMapsUrlChange: (s: string) => void;
   overallRating: number; onOverallRatingChange: (v: number) => void;
@@ -487,6 +487,7 @@ function ReviewsEditor({ reviews, onChange, mapsUrl, onMapsUrlChange, overallRat
   onPhotoQueued: (id: string, file: File, preview: string) => void;
   photoPreviews: Record<string, string>;
   onClearPending: (id: string) => void;
+  sectionDirty?: boolean;
 }) {
   const [dragId, setDragId] = useState<string | null>(null);
   const [photoErr, setPhotoErr] = useState<Record<string, string>>({});
@@ -515,7 +516,7 @@ function ReviewsEditor({ reviews, onChange, mapsUrl, onMapsUrlChange, overallRat
 
   return (
     <div style={{ marginTop: '2.5rem' }}>
-      <SectionHeading>Google Reviews</SectionHeading>
+      <SectionHeading dirty={sectionDirty}>Google Reviews</SectionHeading>
       <p style={{ color: '#94a3b8', fontSize: '0.85rem', marginTop: '-0.75rem', marginBottom: '1rem' }}>Paste real reviews from your Google Business profile here. They'll appear in the marquee on this page. Drag the grip handle to reorder. If the section is toggled off, it won't appear on the site at all.</p>
       <div style={{ ...S.card, padding: '1rem', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
         <div>
@@ -604,13 +605,14 @@ function ReviewsEditor({ reviews, onChange, mapsUrl, onMapsUrlChange, overallRat
 
 // ─── Settings Editor ──────────────────────────────────────────────────────────
 
-function SettingsEditor({ content, onChange }: { content: SiteContent; onChange: (c: SiteContent) => void }) {
+function SettingsEditor({ content, onChange, dirtySections }: { content: SiteContent; onChange: (c: SiteContent) => void; dirtySections?: Set<string> }) {
   const s = content.settings;
+  const ds = (name: string) => dirtySections?.has(name) || false;
   const set = (field: keyof typeof s, value: string) => onChange({ ...content, settings: { ...s, [field]: value } });
   return (
     <div>
       <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '1.5rem', lineHeight: 1.6 }}>Business contact details shown in the website footer (the very bottom of every page). Phone numbers here are also the defaults for per-page contact buttons — each page can override them with different numbers.</p>
-      <SectionHeading>Contact Information</SectionHeading>
+      <SectionHeading dirty={ds('Contact Information')}>Contact Information</SectionHeading>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
         <Field label="Phone 1 — Number">
           <input style={S.input} value={s.phone1} onChange={e => set('phone1', e.target.value)} placeholder="+61412242997" />
@@ -630,7 +632,7 @@ function SettingsEditor({ content, onChange }: { content: SiteContent; onChange:
       <Field label="Email Address">
         <input style={S.input} type="email" value={s.email} onChange={e => set('email', e.target.value)} placeholder="service@example.com.au" />
       </Field>
-      <SectionHeading>Business Details</SectionHeading>
+      <SectionHeading dirty={ds('Business Details')}>Business Details</SectionHeading>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
         <Field label="ABN">
           <input style={S.input} value={s.abn} onChange={e => set('abn', e.target.value)} placeholder="48 694 251 888" />
@@ -645,18 +647,19 @@ function SettingsEditor({ content, onChange }: { content: SiteContent; onChange:
 
 // ─── Home Editor ──────────────────────────────────────────────────────────────
 
-function HomeEditor({ content, onChange }: { content: SiteContent; onChange: (c: SiteContent) => void }) {
+function HomeEditor({ content, onChange, dirtySections }: { content: SiteContent; onChange: (c: SiteContent) => void; dirtySections?: Set<string> }) {
   const h = content.home;
+  const ds = (name: string) => dirtySections?.has(name) || false;
   const set = (field: keyof typeof h, value: string) => onChange({ ...content, home: { ...h, [field]: value } });
   return (
     <div>
       <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '1.5rem', lineHeight: 1.6 }}>Edit the text shown on the Home page hero and services section.</p>
-      <SectionHeading>Hero Section</SectionHeading>
+      <SectionHeading dirty={ds('Hero Section')}>Hero Section</SectionHeading>
       <Field label="Hero Subtitle">
         <textarea style={S.textarea} value={h.heroSubtitle} maxLength={180} onChange={e => set('heroSubtitle', e.target.value)} rows={3} />
         <CharCount value={h.heroSubtitle} max={180} />
       </Field>
-      <SectionHeading>Services Section</SectionHeading>
+      <SectionHeading dirty={ds('Services Section')}>Services Section</SectionHeading>
       <Field label="Section Heading">
         <input style={S.input} value={h.servicesHeading} maxLength={40} onChange={e => set('servicesHeading', e.target.value)} />
         <CharCount value={h.servicesHeading} max={40} />
@@ -667,13 +670,14 @@ function HomeEditor({ content, onChange }: { content: SiteContent; onChange: (c:
 
 // ─── Plumbing Editor ──────────────────────────────────────────────────────────
 
-function PlumbingEditor({ content, onChange, onPhotoQueued, photoPreviews, onClearPending }: { content: SiteContent; onChange: (c: SiteContent) => void; onPhotoQueued: (id: string, file: File, preview: string) => void; photoPreviews: Record<string, string>; onClearPending: (id: string) => void }) {
+function PlumbingEditor({ content, onChange, onPhotoQueued, photoPreviews, onClearPending, dirtySections }: { content: SiteContent; onChange: (c: SiteContent) => void; onPhotoQueued: (id: string, file: File, preview: string) => void; photoPreviews: Record<string, string>; onClearPending: (id: string) => void; dirtySections?: Set<string> }) {
   const p = content.plumbing;
+  const ds = (name: string) => dirtySections?.has(name) || false;
   const setField = (field: keyof typeof p, value: any) => onChange({ ...content, plumbing: { ...p, [field]: value } });
   return (
     <div>
       <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '1.5rem', lineHeight: 1.6 }}>Edit everything shown on the Plumbing page — hero, contact buttons, guarantees, services, benefits, and Google reviews.</p>
-      <SectionHeading>Hero Section</SectionHeading>
+      <SectionHeading dirty={ds('Hero')}>Hero Section</SectionHeading>
       <Field label="Main Heading">
         <input style={S.input} value={p.heroHeading} maxLength={60} onChange={e => setField('heroHeading', e.target.value)} />
         <CharCount value={p.heroHeading} max={60} />
@@ -682,7 +686,7 @@ function PlumbingEditor({ content, onChange, onPhotoQueued, photoPreviews, onCle
         <textarea style={S.textarea} value={p.heroSubtitle} maxLength={220} onChange={e => setField('heroSubtitle', e.target.value)} rows={3} />
         <CharCount value={p.heroSubtitle} max={220} />
       </Field>
-      <SectionHeading>Contact Buttons</SectionHeading>
+      <SectionHeading dirty={ds('Contact Buttons')}>Contact Buttons</SectionHeading>
       <p style={{ color: '#475569', fontSize: '0.8rem', marginBottom: '1rem', marginTop: '-0.75rem' }}>Leave a number empty to hide that call button on this page. These override the global phone settings; if blank, the global numbers are used.</p>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
         <Field label="Button 1 — Number (optional)"><input style={S.input} value={p.phone1} onChange={e => setField('phone1', e.target.value)} placeholder="+61412242997 (or leave blank)" /></Field>
@@ -696,23 +700,24 @@ function PlumbingEditor({ content, onChange, onPhotoQueued, photoPreviews, onCle
           <CharCount value={p.phone2Name} max={30} />
         </Field>
       </div>
-      <ConfigItemListEditor items={p.guarantees} onChange={v => setField('guarantees', v)} label="Guarantees" titleMax={28} subtitleMax={36} addLabel="Add Guarantee" />
-      <ConfigItemListEditor items={p.services} onChange={v => setField('services', v)} label="Services" titleMax={30} subtitleMax={40} showSubtitle={false} addLabel="Add Service" />
-      <ConfigItemListEditor items={p.benefits} onChange={v => setField('benefits', v)} label="Benefits" titleMax={50} subtitleMax={40} showSubtitle={false} addLabel="Add Benefit" />
-      <ReviewsEditor reviews={p.reviews} onChange={v => setField('reviews', v)} mapsUrl={p.mapsUrl} onMapsUrlChange={v => setField('mapsUrl', v)} overallRating={p.overallRating} onOverallRatingChange={v => setField('overallRating', v)} reviewCountLabel={p.reviewCountLabel} onReviewCountLabelChange={v => setField('reviewCountLabel', v)} showReviews={p.showReviews} onShowReviewsChange={v => setField('showReviews', v)} onPhotoQueued={onPhotoQueued} photoPreviews={photoPreviews} onClearPending={onClearPending} />
+      <ConfigItemListEditor items={p.guarantees} onChange={v => setField('guarantees', v)} label="Guarantees" titleMax={28} subtitleMax={36} addLabel="Add Guarantee" sectionDirty={ds('Guarantees')} />
+      <ConfigItemListEditor items={p.services} onChange={v => setField('services', v)} label="Services" titleMax={30} subtitleMax={40} showSubtitle={false} addLabel="Add Service" sectionDirty={ds('Services')} />
+      <ConfigItemListEditor items={p.benefits} onChange={v => setField('benefits', v)} label="Benefits" titleMax={50} subtitleMax={40} showSubtitle={false} addLabel="Add Benefit" sectionDirty={ds('Benefits')} />
+      <ReviewsEditor reviews={p.reviews} onChange={v => setField('reviews', v)} mapsUrl={p.mapsUrl} onMapsUrlChange={v => setField('mapsUrl', v)} overallRating={p.overallRating} onOverallRatingChange={v => setField('overallRating', v)} reviewCountLabel={p.reviewCountLabel} onReviewCountLabelChange={v => setField('reviewCountLabel', v)} showReviews={p.showReviews} onShowReviewsChange={v => setField('showReviews', v)} onPhotoQueued={onPhotoQueued} photoPreviews={photoPreviews} onClearPending={onClearPending} sectionDirty={ds('Google Reviews')} />
     </div>
   );
 }
 
 // ─── Electrical Editor ────────────────────────────────────────────────────────
 
-function ElectricalEditor({ content, onChange, onPhotoQueued, photoPreviews, onClearPending }: { content: SiteContent; onChange: (c: SiteContent) => void; onPhotoQueued: (id: string, file: File, preview: string) => void; photoPreviews: Record<string, string>; onClearPending: (id: string) => void }) {
+function ElectricalEditor({ content, onChange, onPhotoQueued, photoPreviews, onClearPending, dirtySections }: { content: SiteContent; onChange: (c: SiteContent) => void; onPhotoQueued: (id: string, file: File, preview: string) => void; photoPreviews: Record<string, string>; onClearPending: (id: string) => void; dirtySections?: Set<string> }) {
   const e = content.electrical;
+  const ds = (name: string) => dirtySections?.has(name) || false;
   const setField = (field: keyof typeof e, value: any) => onChange({ ...content, electrical: { ...e, [field]: value } });
   return (
     <div>
       <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '1.5rem', lineHeight: 1.6 }}>Edit everything shown on the Electrical page — hero, contact buttons, guarantees, services, benefits, and Google reviews.</p>
-      <SectionHeading>Hero Section</SectionHeading>
+      <SectionHeading dirty={ds('Hero')}>Hero Section</SectionHeading>
       <Field label="Main Heading">
         <input style={S.input} value={e.heroHeading} maxLength={60} onChange={e2 => setField('heroHeading', e2.target.value)} />
         <CharCount value={e.heroHeading} max={60} />
@@ -721,7 +726,7 @@ function ElectricalEditor({ content, onChange, onPhotoQueued, photoPreviews, onC
         <textarea style={S.textarea} value={e.heroSubtitle} maxLength={220} onChange={e2 => setField('heroSubtitle', e2.target.value)} rows={3} />
         <CharCount value={e.heroSubtitle} max={220} />
       </Field>
-      <SectionHeading>Contact Buttons</SectionHeading>
+      <SectionHeading dirty={ds('Contact Buttons')}>Contact Buttons</SectionHeading>
       <p style={{ color: '#475569', fontSize: '0.8rem', marginBottom: '1rem', marginTop: '-0.75rem' }}>Leave a number empty to hide that call button on this page. These override the global phone settings; if blank, the global numbers are used.</p>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
         <Field label="Button 1 — Number (optional)"><input style={S.input} value={e.phone1} onChange={e2 => setField('phone1', e2.target.value)} placeholder="+61412242997 (or leave blank)" /></Field>
@@ -735,22 +740,23 @@ function ElectricalEditor({ content, onChange, onPhotoQueued, photoPreviews, onC
           <CharCount value={e.phone2Name} max={30} />
         </Field>
       </div>
-      <ConfigItemListEditor items={e.guarantees} onChange={v => setField('guarantees', v)} label="Guarantees" titleMax={28} subtitleMax={36} addLabel="Add Guarantee" />
-      <ConfigItemListEditor items={e.services} onChange={v => setField('services', v)} label="Services" titleMax={30} subtitleMax={40} showSubtitle={false} addLabel="Add Service" />
-      <ConfigItemListEditor items={e.benefits} onChange={v => setField('benefits', v)} label="Benefits" titleMax={50} subtitleMax={40} showSubtitle={false} addLabel="Add Benefit" />
-      <ReviewsEditor reviews={e.reviews} onChange={v => setField('reviews', v)} mapsUrl={e.mapsUrl} onMapsUrlChange={v => setField('mapsUrl', v)} overallRating={e.overallRating} onOverallRatingChange={v => setField('overallRating', v)} reviewCountLabel={e.reviewCountLabel} onReviewCountLabelChange={v => setField('reviewCountLabel', v)} showReviews={e.showReviews} onShowReviewsChange={v => setField('showReviews', v)} onPhotoQueued={onPhotoQueued} photoPreviews={photoPreviews} onClearPending={onClearPending} />
+      <ConfigItemListEditor items={e.guarantees} onChange={v => setField('guarantees', v)} label="Guarantees" titleMax={28} subtitleMax={36} addLabel="Add Guarantee" sectionDirty={ds('Guarantees')} />
+      <ConfigItemListEditor items={e.services} onChange={v => setField('services', v)} label="Services" titleMax={30} subtitleMax={40} showSubtitle={false} addLabel="Add Service" sectionDirty={ds('Services')} />
+      <ConfigItemListEditor items={e.benefits} onChange={v => setField('benefits', v)} label="Benefits" titleMax={50} subtitleMax={40} showSubtitle={false} addLabel="Add Benefit" sectionDirty={ds('Benefits')} />
+      <ReviewsEditor reviews={e.reviews} onChange={v => setField('reviews', v)} mapsUrl={e.mapsUrl} onMapsUrlChange={v => setField('mapsUrl', v)} overallRating={e.overallRating} onOverallRatingChange={v => setField('overallRating', v)} reviewCountLabel={e.reviewCountLabel} onReviewCountLabelChange={v => setField('reviewCountLabel', v)} showReviews={e.showReviews} onShowReviewsChange={v => setField('showReviews', v)} onPhotoQueued={onPhotoQueued} photoPreviews={photoPreviews} onClearPending={onClearPending} sectionDirty={ds('Google Reviews')} />
     </div>
   );
 }
 
 // ─── Building Contact Editor ──────────────────────────────────────────────────
 
-function BuildingContactEditor({ content, onChange }: { content: SiteContent; onChange: (c: SiteContent) => void }) {
+function BuildingContactEditor({ content, onChange, dirtySections }: { content: SiteContent; onChange: (c: SiteContent) => void; dirtySections?: Set<string> }) {
   const b = content.building;
+  const ds = (name: string) => dirtySections?.has(name) || false;
   const setField = (field: keyof typeof b, value: any) => onChange({ ...content, building: { ...b, [field]: value } });
   return (
     <div style={{ marginTop: '2.5rem', paddingTop: '2rem', borderTop: '1px solid #1e3a5f' }}>
-      <SectionHeading>Building Page — Contact Section</SectionHeading>
+      <SectionHeading dirty={ds('Contact Section')}>Building Page — Contact Section</SectionHeading>
       <p style={{ color: '#475569', fontSize: '0.85rem', marginBottom: '1rem' }}>Configure the heading, subtitle, and contact buttons that appear at the bottom of the Building page.</p>
       <Field label="Section Heading">
         <input style={S.input} value={b.contactHeading} maxLength={40} onChange={e => setField('contactHeading', e.target.value)} />
@@ -859,11 +865,13 @@ function TeamMemberCards({ members, onChange, onPhotoQueued, photoPreviews }: {
   );
 }
 
-function AboutEditor({ content, onChange, onPhotoQueued, photoPreviews }: {
+function AboutEditor({ content, onChange, onPhotoQueued, photoPreviews, dirtySections }: {
   content: SiteContent; onChange: (c: SiteContent) => void;
   onPhotoQueued: (id: string, file: File, preview: string) => void; photoPreviews: Record<string, string>;
+  dirtySections?: Set<string>;
 }) {
   const a = content.about;
+  const ds = (name: string) => dirtySections?.has(name) || false;
   const set = (field: keyof typeof a, value: any) => onChange({ ...content, about: { ...a, [field]: value } });
   const setStat = (idx: number, field: 'value' | 'label', val: string) => {
     const stats = a.stats.map((s, i) => i === idx ? { ...s, [field]: val } : s);
@@ -872,7 +880,7 @@ function AboutEditor({ content, onChange, onPhotoQueued, photoPreviews }: {
   return (
     <div>
       <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '1.5rem', lineHeight: 1.6 }}>Edit the story, contact buttons, stats, team heading, and team members shown on the About page.</p>
-      <SectionHeading>Our Story Section</SectionHeading>
+      <SectionHeading dirty={ds('Our Story')}>Our Story Section</SectionHeading>
       <Field label="Section Heading">
         <input style={S.input} value={a.storyHeading} maxLength={60} onChange={e => set('storyHeading', e.target.value)} />
         <CharCount value={a.storyHeading} max={60} />
@@ -885,7 +893,7 @@ function AboutEditor({ content, onChange, onPhotoQueued, photoPreviews }: {
         <textarea style={S.textarea} value={a.storyPara2} maxLength={300} onChange={e => set('storyPara2', e.target.value)} rows={4} />
         <CharCount value={a.storyPara2} max={300} />
       </Field>
-      <SectionHeading>Contact Buttons</SectionHeading>
+      <SectionHeading dirty={ds('Contact Buttons')}>Contact Buttons</SectionHeading>
       <p style={{ color: '#475569', fontSize: '0.8rem', marginBottom: '1rem', marginTop: '-0.75rem' }}>These override the global phone settings for this page only.</p>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
         <Field label="Button 1 — Number"><input style={S.input} value={a.phone1} onChange={e => set('phone1', e.target.value)} placeholder="+61412242997" /></Field>
@@ -899,7 +907,7 @@ function AboutEditor({ content, onChange, onPhotoQueued, photoPreviews }: {
           <CharCount value={a.phone2Name} max={30} />
         </Field>
       </div>
-      <SectionHeading>Stats</SectionHeading>
+      <SectionHeading dirty={ds('Stats')}>Stats</SectionHeading>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
         {a.stats.map((stat, idx) => (
           <div key={idx} style={{ ...S.card, marginBottom: 0 }}>
@@ -913,7 +921,7 @@ function AboutEditor({ content, onChange, onPhotoQueued, photoPreviews }: {
         ))}
       </div>
       <div style={{ height: '1.25rem' }} />
-      <SectionHeading>Team Section Header</SectionHeading>
+      <SectionHeading dirty={ds('Team Header')}>Team Section Header</SectionHeading>
       <Field label="Section Heading">
         <input style={S.input} value={a.teamHeading} maxLength={40} onChange={e => set('teamHeading', e.target.value)} />
         <CharCount value={a.teamHeading} max={40} />
@@ -923,7 +931,7 @@ function AboutEditor({ content, onChange, onPhotoQueued, photoPreviews }: {
         <CharCount value={a.teamSubheading} max={100} />
       </Field>
       <div style={{ height: '1.25rem' }} />
-      <SectionHeading>Team Members</SectionHeading>
+      <SectionHeading dirty={ds('Team Members')}>Team Members</SectionHeading>
       <TeamMemberCards
         members={content.team}
         onChange={team => onChange({ ...content, team })}
@@ -1055,24 +1063,82 @@ export default function Admin() {
   };
   const pendingGalleryKeys = (projectId: string, prefix = 'gallery') => Object.keys(pendingGallery).filter(k => k.startsWith(projectId + '-' + prefix + '-'));
 
-  const { dirtyTabs, dirtyBuildingCategories } = useMemo(() => {
+  const { dirtyTabs, dirtyBuildingCategories, dirtySections } = useMemo(() => {
     const tabs = new Set<NavTab>();
     const cats = new Set<string>();
-    if (!content || !snapshotRef.current) return { dirtyTabs: tabs, dirtyBuildingCategories: cats };
+    const sections: Record<string, Set<string>> = {};
+    if (!content || !snapshotRef.current) return { dirtyTabs: tabs, dirtyBuildingCategories: cats, dirtySections: sections };
     const snap = JSON.parse(snapshotRef.current) as SiteContent;
 
-    if (JSON.stringify(content.settings) !== JSON.stringify(snap.settings)) tabs.add('settings');
-    if (JSON.stringify(content.home) !== JSON.stringify(snap.home)) tabs.add('home');
-    if (JSON.stringify(content.plumbing) !== JSON.stringify(snap.plumbing)) tabs.add('plumbing');
-    if (JSON.stringify(content.electrical) !== JSON.stringify(snap.electrical)) tabs.add('electrical');
-    if (JSON.stringify(content.about) !== JSON.stringify(snap.about)
-        || JSON.stringify(content.team) !== JSON.stringify(snap.team)) tabs.add('about');
+    // Helper: compare a subset of fields between snap and current
+    const fieldsChanged = (tab: string, fields: string[]) => {
+      const s = snap[tab] as Record<string, any> | undefined;
+      const c = content[tab] as Record<string, any> | undefined;
+      if (!s || !c) return false;
+      return fields.some(f => JSON.stringify(c[f]) !== JSON.stringify(s[f]));
+    };
+
+    // Settings sections
+    if (JSON.stringify(content.settings) !== JSON.stringify(snap.settings)) {
+      tabs.add('settings');
+      const ss = new Set<string>();
+      if (fieldsChanged('settings', ['phone1','phone1Name','phone2','phone2Name','email'])) ss.add('Contact Information');
+      if (fieldsChanged('settings', ['abn','licence'])) ss.add('Business Details');
+      sections.settings = ss;
+    }
+    // Home sections
+    if (JSON.stringify(content.home) !== JSON.stringify(snap.home)) {
+      tabs.add('home');
+      const ss = new Set<string>();
+      if (fieldsChanged('home', ['heroSubtitle'])) ss.add('Hero Section');
+      if (fieldsChanged('home', ['servicesHeading'])) ss.add('Services Section');
+      sections.home = ss;
+    }
+    // Plumbing sections
+    if (JSON.stringify(content.plumbing) !== JSON.stringify(snap.plumbing)) {
+      tabs.add('plumbing');
+      const ss = new Set<string>();
+      if (fieldsChanged('plumbing', ['heroHeading','heroSubtitle'])) ss.add('Hero');
+      if (fieldsChanged('plumbing', ['phone1','phone1Name','phone2','phone2Name'])) ss.add('Contact Buttons');
+      if (fieldsChanged('plumbing', ['guarantees'])) ss.add('Guarantees');
+      if (fieldsChanged('plumbing', ['services'])) ss.add('Services');
+      if (fieldsChanged('plumbing', ['benefits'])) ss.add('Benefits');
+      if (fieldsChanged('plumbing', ['reviews','overallRating','reviewCountLabel','showReviews','mapsUrl'])) ss.add('Google Reviews');
+      sections.plumbing = ss;
+    }
+    // Electrical sections
+    if (JSON.stringify(content.electrical) !== JSON.stringify(snap.electrical)) {
+      tabs.add('electrical');
+      const ss = new Set<string>();
+      if (fieldsChanged('electrical', ['heroHeading','heroSubtitle'])) ss.add('Hero');
+      if (fieldsChanged('electrical', ['phone1','phone1Name','phone2','phone2Name'])) ss.add('Contact Buttons');
+      if (fieldsChanged('electrical', ['guarantees'])) ss.add('Guarantees');
+      if (fieldsChanged('electrical', ['services'])) ss.add('Services');
+      if (fieldsChanged('electrical', ['benefits'])) ss.add('Benefits');
+      if (fieldsChanged('electrical', ['reviews','overallRating','reviewCountLabel','showReviews','mapsUrl'])) ss.add('Google Reviews');
+      sections.electrical = ss;
+    }
+    // About sections
+    if (JSON.stringify(content.about) !== JSON.stringify(snap.about) || JSON.stringify(content.team) !== JSON.stringify(snap.team)) {
+      tabs.add('about');
+      const ss = new Set<string>();
+      if (fieldsChanged('about', ['storyHeading','storyPara1','storyPara2'])) ss.add('Our Story');
+      if (fieldsChanged('about', ['phone1','phone1Name','phone2','phone2Name'])) ss.add('Contact Buttons');
+      if (fieldsChanged('about', ['stats'])) ss.add('Stats');
+      if (fieldsChanged('about', ['teamHeading','teamSubheading'])) ss.add('Team Header');
+      if (JSON.stringify(content.team) !== JSON.stringify(snap.team)) ss.add('Team Members');
+      sections.about = ss;
+    }
 
     if (JSON.stringify(content.building) !== JSON.stringify(snap.building)) {
       tabs.add('building');
+      sections.building = sections.building || new Set();
+      sections.building.add('Contact Section');
     }
     if (JSON.stringify(content.buildingProjects) !== JSON.stringify(snap.buildingProjects)) {
       tabs.add('building');
+      sections.building = sections.building || new Set();
+      sections.building.add('Projects');
       const snapByCat = new Map<string, Set<string>>();
       for (const p of snap.buildingProjects) {
         if (!snapByCat.has(p.category)) snapByCat.set(p.category, new Set());
@@ -1093,11 +1159,12 @@ export default function Admin() {
       if (content.team.some(m => m.id === id)) tabs.add('about');
       if (content.buildingProjects.some(p => p.id === id)) tabs.add('building');
       if (id.startsWith('fp-after-') || id.startsWith('fp-before-')) tabs.add('building');
-      if (content.plumbing.reviews.some(r => r.id === id) || content.electrical.reviews.some(r => r.id === id)) { tabs.add('plumbing'); tabs.add('electrical'); }
+      if (content.plumbing.reviews.some(r => r.id === id)) { tabs.add('plumbing'); sections.plumbing = sections.plumbing || new Set(); sections.plumbing.add('Google Reviews'); }
+      if (content.electrical.reviews.some(r => r.id === id)) { tabs.add('electrical'); sections.electrical = sections.electrical || new Set(); sections.electrical.add('Google Reviews'); }
     }
     if (Object.keys(pendingGallery).length > 0) tabs.add('building');
 
-    return { dirtyTabs: tabs, dirtyBuildingCategories: cats };
+    return { dirtyTabs: tabs, dirtyBuildingCategories: cats, dirtySections: sections };
   }, [content, pendingPhotos, pendingGallery]);
 
   // Warn before leaving if there are unsaved changes (uses ref to avoid re-registering on every keystroke)
@@ -1133,8 +1200,8 @@ export default function Admin() {
           const pid = id.slice('fp-before-'.length);
           updated.buildingProjects = updated.buildingProjects.map(p => p.id === pid ? { ...p, floorPlanBefore: imagePath } : p);
         } else if (updated.plumbing.reviews.some(r => r.id === id) || updated.electrical.reviews.some(r => r.id === id)) {
-          updated.plumbing.reviews = updated.plumbing.reviews.map(r => r.id === id ? { ...r, photo: imagePath } : r);
-          updated.electrical.reviews = updated.electrical.reviews.map(r => r.id === id ? { ...r, photo: imagePath } : r);
+          if (updated.plumbing.reviews.some(r => r.id === id)) updated.plumbing.reviews = updated.plumbing.reviews.map(r => r.id === id ? { ...r, photo: imagePath } : r);
+          if (updated.electrical.reviews.some(r => r.id === id)) updated.electrical.reviews = updated.electrical.reviews.map(r => r.id === id ? { ...r, photo: imagePath } : r);
         } else {
           updated.team = updated.team.map(m => m.id === id ? { ...m, photo: imagePath } : m);
           updated.buildingProjects = updated.buildingProjects.map(p => p.id === id ? { ...p, image: imagePath } : p);
@@ -1309,11 +1376,11 @@ export default function Admin() {
 
       {content && (
         <div style={{ maxWidth: '860px', margin: '0 auto', padding: '2rem 1.25rem' }}>
-          {activeTab === 'settings' && <SettingsEditor content={content} onChange={setContent} />}
-          {activeTab === 'home' && <HomeEditor content={content} onChange={setContent} />}
-          {activeTab === 'plumbing' && <PlumbingEditor content={content} onChange={setContent} onPhotoQueued={queuePhoto} photoPreviews={photoPreviews} onClearPending={clearPendingPhoto} />}
-          {activeTab === 'electrical' && <ElectricalEditor content={content} onChange={setContent} onPhotoQueued={queuePhoto} photoPreviews={photoPreviews} onClearPending={clearPendingPhoto} />}
-          {activeTab === 'about' && <AboutEditor content={content} onChange={setContent} onPhotoQueued={queuePhoto} photoPreviews={photoPreviews} />}
+          {activeTab === 'settings' && <SettingsEditor content={content} onChange={setContent} dirtySections={dirtySections.settings} />}
+          {activeTab === 'home' && <HomeEditor content={content} onChange={setContent} dirtySections={dirtySections.home} />}
+          {activeTab === 'plumbing' && <PlumbingEditor content={content} onChange={setContent} onPhotoQueued={queuePhoto} photoPreviews={photoPreviews} onClearPending={clearPendingPhoto} dirtySections={dirtySections.plumbing} />}
+          {activeTab === 'electrical' && <ElectricalEditor content={content} onChange={setContent} onPhotoQueued={queuePhoto} photoPreviews={photoPreviews} onClearPending={clearPendingPhoto} dirtySections={dirtySections.electrical} />}
+          {activeTab === 'about' && <AboutEditor content={content} onChange={setContent} onPhotoQueued={queuePhoto} photoPreviews={photoPreviews} dirtySections={dirtySections.about} />}
           {activeTab === 'building' && (<>
             <ProjectsEditor
               projects={content.buildingProjects}
@@ -1329,7 +1396,7 @@ export default function Admin() {
               onCategoriesChange={cats => setContent(c => c ? { ...c, buildingCategories: cats } : c)}
               onClearPending={clearPendingPhoto}
             />
-            <BuildingContactEditor content={content} onChange={setContent} />
+            <BuildingContactEditor content={content} onChange={setContent} dirtySections={dirtySections.building} />
           </>)}
         </div>
       )}

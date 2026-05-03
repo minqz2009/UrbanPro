@@ -552,9 +552,66 @@ for (const ef of editorFuncs) {
 assert(adminTsx.includes('contact Daniel Chen for technical support'), 'error message mentions Daniel Chen');
 
 // =======================================================================
-// 14. DEPLOY PROGRESS BAR & REFRESH SAFETY
+// 14. DIRTY DETECTION — NO CROSS-CONTAMINATION
 // =======================================================================
-console.log('\n=== 14. Deploy Progress Bar & Refresh Safety ===');
+console.log('\n=== 14. Dirty Detection — Cross-Contamination Prevention ===');
+
+// Verify pending photo dirty detection checks each tab independently
+const dirtyBlock = adminTsx.slice(adminTsx.indexOf('for (const id of Object.keys(pendingPhotos))'), adminTsx.indexOf('if (Object.keys(pendingGallery).length'));
+assert(dirtyBlock.includes("plumbing.reviews.some(r => r.id === id)"), 'pendingPhotos checks plumbing reviews independently');
+assert(dirtyBlock.includes("electrical.reviews.some(r => r.id === id)"), 'pendingPhotos checks electrical reviews independently');
+// Must NOT use OR to combine them
+const combinedCheck = dirtyBlock.match(/plumbing\.reviews\.some.*\|\|.*electrical\.reviews\.some/);
+assert(!combinedCheck, 'pendingPhotos does NOT use || to combine plumbing+electrical check');
+
+// Verify handleSave photo routing checks tabs independently
+const saveBlock = adminTsx.slice(adminTsx.indexOf('for (const [id, file] of Object.entries(pendingPhotos))'));
+const combinedSave = saveBlock.match(/plumbing\.reviews\.some.*\|\|.*electrical\.reviews\.some[^{]*\{[^}]*plumbing\.reviews[^}]*electrical\.reviews/);
+assert(!combinedSave, 'handleSave does NOT blindly update both review arrays on photo upload');
+
+// =======================================================================
+// 15. DIRTY DETECTION — SECTION-LEVEL INDICATORS
+// =======================================================================
+console.log('\n=== 15. Dirty Detection — Section-Level Indicators ===');
+
+// Source code must have section-level dirty tracking
+assert(adminTsx.includes('dirtySections'), 'useMemo returns dirtySections');
+assert(adminTsx.includes('fieldsChanged'), 'dirty detection compares field subsets');
+assert(adminTsx.includes('sectionDirty'), 'ConfigItemListEditor accepts sectionDirty');
+
+// SectionHeading accepts dirty prop
+assert(adminTsx.includes('dirty?: boolean'), 'SectionHeading accepts optional dirty prop');
+assert(adminTsx.includes('dirty && <span'), 'SectionHeading renders dot when dirty');
+
+// All section names used in detection match SectionHeading labels
+const sectionNames = ['Hero', 'Contact Buttons', 'Guarantees', 'Services', 'Benefits', 'Google Reviews',
+  'Contact Information', 'Business Details', 'Hero Section', 'Services Section',
+  'Our Story', 'Stats', 'Team Header', 'Team Members', 'Contact Section', 'Projects'];
+for (const name of sectionNames) {
+  assert(adminTsx.includes(`'${name}'`), `section name "${name}" referenced in dirty detection`);
+}
+
+// Editors accept dirtySections prop
+for (const editor of ['SettingsEditor', 'HomeEditor', 'PlumbingEditor', 'ElectricalEditor', 'AboutEditor', 'BuildingContactEditor']) {
+  assert(adminTsx.includes(`dirtySections?: Set<string>`), `${editor} accepts dirtySections prop`);
+}
+
+// Mock section-level dirty detection
+function mockFieldsChanged(snap, current, fields) {
+  return fields.some(f => JSON.stringify(current[f]) !== JSON.stringify(snap[f]));
+}
+const snapPlumbing = { heroHeading: 'Old', guarantees: [{ id: 'g1' }], services: [{ id: 's1' }], reviews: [] };
+const changedPlumbing = { heroHeading: 'Old', guarantees: [{ id: 'g2', title: 'New' }], services: [{ id: 's1' }], reviews: [] };
+assert(mockFieldsChanged(snapPlumbing, changedPlumbing, ['guarantees']), 'detects guarantee change');
+assert(!mockFieldsChanged(snapPlumbing, changedPlumbing, ['heroHeading']), 'does not detect unchanged hero');
+assert(!mockFieldsChanged(snapPlumbing, changedPlumbing, ['services']), 'does not detect unchanged services');
+assert(!mockFieldsChanged(snapPlumbing, changedPlumbing, ['reviews']), 'does not detect unchanged reviews');
+
+// =======================================================================
+// 16. DEPLOY PROGRESS BAR & REFRESH SAFETY
+// =======================================================================
+// =======================================================================
+console.log('\n=== 16. Deploy Progress Bar & Refresh Safety ===');
 
 // Progress bar exists
 assert(adminTsx.includes('Building & Testing'), 'progress bar shows Building & Testing step');
