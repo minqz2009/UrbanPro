@@ -55,8 +55,8 @@ function CharCount({ value, max }: { value: string; max: number }) {
   return <div style={{ textAlign: 'right', fontSize: '0.7rem', color, marginTop: '0.3rem', fontVariantNumeric: 'tabular-nums' }}>{len} / {max}</div>;
 }
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
-  return <div style={{ marginBottom: '1.25rem' }}><label style={S.label}>{label}</label>{children}</div>;
+function Field({ label, dirty, children }: { label: string; dirty?: boolean; children: React.ReactNode }) {
+  return <div style={{ marginBottom: '1.25rem' }}><label style={S.label}>{dirty && <span style={{ color: '#f59e0b', marginRight: '0.25rem', fontSize: '0.65rem' }}>●</span>}{label}</label>{children}</div>;
 }
 
 function SectionHeading({ dirty, children }: { dirty?: boolean; children: React.ReactNode }) {
@@ -605,39 +605,40 @@ function ReviewsEditor({ reviews, onChange, mapsUrl, onMapsUrlChange, overallRat
 
 // ─── Settings Editor ──────────────────────────────────────────────────────────
 
-function SettingsEditor({ content, onChange, dirtySections }: { content: SiteContent; onChange: (c: SiteContent) => void; dirtySections?: Set<string> }) {
+function SettingsEditor({ content, onChange, dirtySections, dirtyFields }: { content: SiteContent; onChange: (c: SiteContent) => void; dirtySections?: Set<string>; dirtyFields?: Set<string> }) {
   const s = content.settings;
   const ds = (name: string) => dirtySections?.has(name) || false;
+  const df = (name: string) => dirtyFields?.has(name) || false;
   const set = (field: keyof typeof s, value: string) => onChange({ ...content, settings: { ...s, [field]: value } });
   return (
     <div>
       <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '1.5rem', lineHeight: 1.6 }}>Business contact details shown in the website footer (the very bottom of every page). Phone numbers here are also the defaults for per-page contact buttons — each page can override them with different numbers.</p>
       <SectionHeading dirty={ds('Contact Information')}>Contact Information</SectionHeading>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-        <Field label="Phone 1 — Number">
+        <Field label="Phone 1 — Number" dirty={df('phone1')}>
           <input style={S.input} value={s.phone1} onChange={e => set('phone1', e.target.value)} placeholder="+61412242997" />
         </Field>
-        <Field label="Phone 1 — Display Name">
+        <Field label="Phone 1 — Display Name" dirty={df('phone1Name')}>
           <input style={S.input} value={s.phone1Name} maxLength={30} onChange={e => set('phone1Name', e.target.value)} placeholder="John" />
           <CharCount value={s.phone1Name} max={30} />
         </Field>
-        <Field label="Phone 2 — Number">
+        <Field label="Phone 2 — Number" dirty={df('phone2')}>
           <input style={S.input} value={s.phone2} onChange={e => set('phone2', e.target.value)} placeholder="+61426051275" />
         </Field>
-        <Field label="Phone 2 — Display Name">
+        <Field label="Phone 2 — Display Name" dirty={df('phone2Name')}>
           <input style={S.input} value={s.phone2Name} maxLength={30} onChange={e => set('phone2Name', e.target.value)} placeholder="Leo" />
           <CharCount value={s.phone2Name} max={30} />
         </Field>
       </div>
-      <Field label="Email Address">
+      <Field label="Email Address" dirty={df('email')}>
         <input style={S.input} type="email" value={s.email} onChange={e => set('email', e.target.value)} placeholder="service@example.com.au" />
       </Field>
       <SectionHeading dirty={ds('Business Details')}>Business Details</SectionHeading>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-        <Field label="ABN">
+        <Field label="ABN" dirty={df('abn')}>
           <input style={S.input} value={s.abn} onChange={e => set('abn', e.target.value)} placeholder="48 694 251 888" />
         </Field>
-        <Field label="Contractor Licence No.">
+        <Field label="Contractor Licence No." dirty={df('licence')}>
           <input style={S.input} value={s.licence} onChange={e => set('licence', e.target.value)} placeholder="280492C" />
         </Field>
       </div>
@@ -647,20 +648,21 @@ function SettingsEditor({ content, onChange, dirtySections }: { content: SiteCon
 
 // ─── Home Editor ──────────────────────────────────────────────────────────────
 
-function HomeEditor({ content, onChange, dirtySections }: { content: SiteContent; onChange: (c: SiteContent) => void; dirtySections?: Set<string> }) {
+function HomeEditor({ content, onChange, dirtySections, dirtyFields }: { content: SiteContent; onChange: (c: SiteContent) => void; dirtySections?: Set<string>; dirtyFields?: Set<string> }) {
   const h = content.home;
   const ds = (name: string) => dirtySections?.has(name) || false;
+  const df = (name: string) => dirtyFields?.has(name) || false;
   const set = (field: keyof typeof h, value: string) => onChange({ ...content, home: { ...h, [field]: value } });
   return (
     <div>
       <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '1.5rem', lineHeight: 1.6 }}>Edit the text shown on the Home page hero and services section.</p>
       <SectionHeading dirty={ds('Hero Section')}>Hero Section</SectionHeading>
-      <Field label="Hero Subtitle">
+      <Field label="Hero Subtitle" dirty={df('heroSubtitle')}>
         <textarea style={S.textarea} value={h.heroSubtitle} maxLength={180} onChange={e => set('heroSubtitle', e.target.value)} rows={3} />
         <CharCount value={h.heroSubtitle} max={180} />
       </Field>
       <SectionHeading dirty={ds('Services Section')}>Services Section</SectionHeading>
-      <Field label="Section Heading">
+      <Field label="Section Heading" dirty={df('servicesHeading')}>
         <input style={S.input} value={h.servicesHeading} maxLength={40} onChange={e => set('servicesHeading', e.target.value)} />
         <CharCount value={h.servicesHeading} max={40} />
       </Field>
@@ -670,32 +672,33 @@ function HomeEditor({ content, onChange, dirtySections }: { content: SiteContent
 
 // ─── Plumbing Editor ──────────────────────────────────────────────────────────
 
-function PlumbingEditor({ content, onChange, onPhotoQueued, photoPreviews, onClearPending, dirtySections }: { content: SiteContent; onChange: (c: SiteContent) => void; onPhotoQueued: (id: string, file: File, preview: string) => void; photoPreviews: Record<string, string>; onClearPending: (id: string) => void; dirtySections?: Set<string> }) {
+function PlumbingEditor({ content, onChange, onPhotoQueued, photoPreviews, onClearPending, dirtySections, dirtyFields }: { content: SiteContent; onChange: (c: SiteContent) => void; onPhotoQueued: (id: string, file: File, preview: string) => void; photoPreviews: Record<string, string>; onClearPending: (id: string) => void; dirtySections?: Set<string>; dirtyFields?: Set<string> }) {
   const p = content.plumbing;
   const ds = (name: string) => dirtySections?.has(name) || false;
+  const df = (name: string) => dirtyFields?.has(name) || false;
   const setField = (field: keyof typeof p, value: any) => onChange({ ...content, plumbing: { ...p, [field]: value } });
   return (
     <div>
       <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '1.5rem', lineHeight: 1.6 }}>Edit everything shown on the Plumbing page — hero, contact buttons, guarantees, services, benefits, and Google reviews.</p>
       <SectionHeading dirty={ds('Hero')}>Hero Section</SectionHeading>
-      <Field label="Main Heading">
+      <Field label="Main Heading" dirty={df('heroHeading')}>
         <input style={S.input} value={p.heroHeading} maxLength={60} onChange={e => setField('heroHeading', e.target.value)} />
         <CharCount value={p.heroHeading} max={60} />
       </Field>
-      <Field label="Subtitle">
+      <Field label="Subtitle" dirty={df('heroSubtitle')}>
         <textarea style={S.textarea} value={p.heroSubtitle} maxLength={220} onChange={e => setField('heroSubtitle', e.target.value)} rows={3} />
         <CharCount value={p.heroSubtitle} max={220} />
       </Field>
       <SectionHeading dirty={ds('Contact Buttons')}>Contact Buttons</SectionHeading>
       <p style={{ color: '#475569', fontSize: '0.8rem', marginBottom: '1rem', marginTop: '-0.75rem' }}>Leave a number empty to hide that call button on this page. These override the global phone settings; if blank, the global numbers are used.</p>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-        <Field label="Button 1 — Number (optional)"><input style={S.input} value={p.phone1} onChange={e => setField('phone1', e.target.value)} placeholder="+61412242997 (or leave blank)" /></Field>
-        <Field label="Button 1 — Display Name">
+        <Field label="Button 1 — Number (optional)" dirty={df('phone1')}><input style={S.input} value={p.phone1} onChange={e => setField('phone1', e.target.value)} placeholder="+61412242997 (or leave blank)" /></Field>
+        <Field label="Button 1 — Display Name" dirty={df('phone1Name')}>
           <input style={S.input} value={p.phone1Name} maxLength={30} onChange={e => setField('phone1Name', e.target.value)} placeholder="John" />
           <CharCount value={p.phone1Name} max={30} />
         </Field>
-        <Field label="Button 2 — Number (optional)"><input style={S.input} value={p.phone2} onChange={e => setField('phone2', e.target.value)} placeholder="+61426051275 (or leave blank)" /></Field>
-        <Field label="Button 2 — Display Name">
+        <Field label="Button 2 — Number (optional)" dirty={df('phone2')}><input style={S.input} value={p.phone2} onChange={e => setField('phone2', e.target.value)} placeholder="+61426051275 (or leave blank)" /></Field>
+        <Field label="Button 2 — Display Name" dirty={df('phone2Name')}>
           <input style={S.input} value={p.phone2Name} maxLength={30} onChange={e => setField('phone2Name', e.target.value)} placeholder="Leo" />
           <CharCount value={p.phone2Name} max={30} />
         </Field>
@@ -710,32 +713,33 @@ function PlumbingEditor({ content, onChange, onPhotoQueued, photoPreviews, onCle
 
 // ─── Electrical Editor ────────────────────────────────────────────────────────
 
-function ElectricalEditor({ content, onChange, onPhotoQueued, photoPreviews, onClearPending, dirtySections }: { content: SiteContent; onChange: (c: SiteContent) => void; onPhotoQueued: (id: string, file: File, preview: string) => void; photoPreviews: Record<string, string>; onClearPending: (id: string) => void; dirtySections?: Set<string> }) {
+function ElectricalEditor({ content, onChange, onPhotoQueued, photoPreviews, onClearPending, dirtySections, dirtyFields }: { content: SiteContent; onChange: (c: SiteContent) => void; onPhotoQueued: (id: string, file: File, preview: string) => void; photoPreviews: Record<string, string>; onClearPending: (id: string) => void; dirtySections?: Set<string>; dirtyFields?: Set<string> }) {
   const e = content.electrical;
   const ds = (name: string) => dirtySections?.has(name) || false;
+  const df = (name: string) => dirtyFields?.has(name) || false;
   const setField = (field: keyof typeof e, value: any) => onChange({ ...content, electrical: { ...e, [field]: value } });
   return (
     <div>
       <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '1.5rem', lineHeight: 1.6 }}>Edit everything shown on the Electrical page — hero, contact buttons, guarantees, services, benefits, and Google reviews.</p>
       <SectionHeading dirty={ds('Hero')}>Hero Section</SectionHeading>
-      <Field label="Main Heading">
+      <Field label="Main Heading" dirty={df('heroHeading')}>
         <input style={S.input} value={e.heroHeading} maxLength={60} onChange={e2 => setField('heroHeading', e2.target.value)} />
         <CharCount value={e.heroHeading} max={60} />
       </Field>
-      <Field label="Subtitle">
+      <Field label="Subtitle" dirty={df('heroSubtitle')}>
         <textarea style={S.textarea} value={e.heroSubtitle} maxLength={220} onChange={e2 => setField('heroSubtitle', e2.target.value)} rows={3} />
         <CharCount value={e.heroSubtitle} max={220} />
       </Field>
       <SectionHeading dirty={ds('Contact Buttons')}>Contact Buttons</SectionHeading>
       <p style={{ color: '#475569', fontSize: '0.8rem', marginBottom: '1rem', marginTop: '-0.75rem' }}>Leave a number empty to hide that call button on this page. These override the global phone settings; if blank, the global numbers are used.</p>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-        <Field label="Button 1 — Number (optional)"><input style={S.input} value={e.phone1} onChange={e2 => setField('phone1', e2.target.value)} placeholder="+61412242997 (or leave blank)" /></Field>
-        <Field label="Button 1 — Display Name">
+        <Field label="Button 1 — Number (optional)" dirty={df('phone1')}><input style={S.input} value={e.phone1} onChange={e2 => setField('phone1', e2.target.value)} placeholder="+61412242997 (or leave blank)" /></Field>
+        <Field label="Button 1 — Display Name" dirty={df('phone1Name')}>
           <input style={S.input} value={e.phone1Name} maxLength={30} onChange={e2 => setField('phone1Name', e2.target.value)} placeholder="John" />
           <CharCount value={e.phone1Name} max={30} />
         </Field>
-        <Field label="Button 2 — Number (optional)"><input style={S.input} value={e.phone2} onChange={e2 => setField('phone2', e2.target.value)} placeholder="+61426051275 (or leave blank)" /></Field>
-        <Field label="Button 2 — Display Name">
+        <Field label="Button 2 — Number (optional)" dirty={df('phone2')}><input style={S.input} value={e.phone2} onChange={e2 => setField('phone2', e2.target.value)} placeholder="+61426051275 (or leave blank)" /></Field>
+        <Field label="Button 2 — Display Name" dirty={df('phone2Name')}>
           <input style={S.input} value={e.phone2Name} maxLength={30} onChange={e2 => setField('phone2Name', e2.target.value)} placeholder="Leo" />
           <CharCount value={e.phone2Name} max={30} />
         </Field>
@@ -750,31 +754,32 @@ function ElectricalEditor({ content, onChange, onPhotoQueued, photoPreviews, onC
 
 // ─── Building Contact Editor ──────────────────────────────────────────────────
 
-function BuildingContactEditor({ content, onChange, dirtySections }: { content: SiteContent; onChange: (c: SiteContent) => void; dirtySections?: Set<string> }) {
+function BuildingContactEditor({ content, onChange, dirtySections, dirtyFields }: { content: SiteContent; onChange: (c: SiteContent) => void; dirtySections?: Set<string>; dirtyFields?: Set<string> }) {
   const b = content.building;
   const ds = (name: string) => dirtySections?.has(name) || false;
+  const df = (name: string) => dirtyFields?.has(name) || false;
   const setField = (field: keyof typeof b, value: any) => onChange({ ...content, building: { ...b, [field]: value } });
   return (
     <div style={{ marginTop: '2.5rem', paddingTop: '2rem', borderTop: '1px solid #1e3a5f' }}>
       <SectionHeading dirty={ds('Contact Section')}>Building Page — Contact Section</SectionHeading>
       <p style={{ color: '#475569', fontSize: '0.85rem', marginBottom: '1rem' }}>Configure the heading, subtitle, and contact buttons that appear at the bottom of the Building page.</p>
-      <Field label="Section Heading">
+      <Field label="Section Heading" dirty={df('contactHeading')}>
         <input style={S.input} value={b.contactHeading} maxLength={40} onChange={e => setField('contactHeading', e.target.value)} />
         <CharCount value={b.contactHeading} max={40} />
       </Field>
-      <Field label="Section Subtitle">
+      <Field label="Section Subtitle" dirty={df('contactSubtitle')}>
         <textarea style={S.textarea} value={b.contactSubtitle} maxLength={220} onChange={e => setField('contactSubtitle', e.target.value)} rows={2} />
         <CharCount value={b.contactSubtitle} max={220} />
       </Field>
       <p style={{ color: '#475569', fontSize: '0.8rem', marginBottom: '1rem' }}>Leave a number empty to hide that call button. Numbers default to the global settings.</p>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-        <Field label="Button 1 — Number (optional)"><input style={S.input} value={b.phone1} onChange={e => setField('phone1', e.target.value)} placeholder="+61412242997 (or leave blank)" /></Field>
-        <Field label="Button 1 — Display Name">
+        <Field label="Button 1 — Number (optional)" dirty={df('phone1')}><input style={S.input} value={b.phone1} onChange={e => setField('phone1', e.target.value)} placeholder="+61412242997 (or leave blank)" /></Field>
+        <Field label="Button 1 — Display Name" dirty={df('phone1Name')}>
           <input style={S.input} value={b.phone1Name} maxLength={30} onChange={e => setField('phone1Name', e.target.value)} placeholder="John" />
           <CharCount value={b.phone1Name} max={30} />
         </Field>
-        <Field label="Button 2 — Number (optional)"><input style={S.input} value={b.phone2} onChange={e => setField('phone2', e.target.value)} placeholder="+61426051275 (or leave blank)" /></Field>
-        <Field label="Button 2 — Display Name">
+        <Field label="Button 2 — Number (optional)" dirty={df('phone2')}><input style={S.input} value={b.phone2} onChange={e => setField('phone2', e.target.value)} placeholder="+61426051275 (or leave blank)" /></Field>
+        <Field label="Button 2 — Display Name" dirty={df('phone2Name')}>
           <input style={S.input} value={b.phone2Name} maxLength={30} onChange={e => setField('phone2Name', e.target.value)} placeholder="Leo" />
           <CharCount value={b.phone2Name} max={30} />
         </Field>
@@ -865,13 +870,14 @@ function TeamMemberCards({ members, onChange, onPhotoQueued, photoPreviews }: {
   );
 }
 
-function AboutEditor({ content, onChange, onPhotoQueued, photoPreviews, dirtySections }: {
+function AboutEditor({ content, onChange, onPhotoQueued, photoPreviews, dirtySections, dirtyFields }: {
   content: SiteContent; onChange: (c: SiteContent) => void;
   onPhotoQueued: (id: string, file: File, preview: string) => void; photoPreviews: Record<string, string>;
-  dirtySections?: Set<string>;
+  dirtySections?: Set<string>; dirtyFields?: Set<string>;
 }) {
   const a = content.about;
   const ds = (name: string) => dirtySections?.has(name) || false;
+  const df = (name: string) => dirtyFields?.has(name) || false;
   const set = (field: keyof typeof a, value: any) => onChange({ ...content, about: { ...a, [field]: value } });
   const setStat = (idx: number, field: 'value' | 'label', val: string) => {
     const stats = a.stats.map((s, i) => i === idx ? { ...s, [field]: val } : s);
@@ -881,28 +887,28 @@ function AboutEditor({ content, onChange, onPhotoQueued, photoPreviews, dirtySec
     <div>
       <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '1.5rem', lineHeight: 1.6 }}>Edit the story, contact buttons, stats, team heading, and team members shown on the About page.</p>
       <SectionHeading dirty={ds('Our Story')}>Our Story Section</SectionHeading>
-      <Field label="Section Heading">
+      <Field label="Section Heading" dirty={df('storyHeading')}>
         <input style={S.input} value={a.storyHeading} maxLength={60} onChange={e => set('storyHeading', e.target.value)} />
         <CharCount value={a.storyHeading} max={60} />
       </Field>
-      <Field label="First Paragraph">
+      <Field label="First Paragraph" dirty={df('storyPara1')}>
         <textarea style={S.textarea} value={a.storyPara1} maxLength={300} onChange={e => set('storyPara1', e.target.value)} rows={4} />
         <CharCount value={a.storyPara1} max={300} />
       </Field>
-      <Field label="Second Paragraph">
+      <Field label="Second Paragraph" dirty={df('storyPara2')}>
         <textarea style={S.textarea} value={a.storyPara2} maxLength={300} onChange={e => set('storyPara2', e.target.value)} rows={4} />
         <CharCount value={a.storyPara2} max={300} />
       </Field>
       <SectionHeading dirty={ds('Contact Buttons')}>Contact Buttons</SectionHeading>
       <p style={{ color: '#475569', fontSize: '0.8rem', marginBottom: '1rem', marginTop: '-0.75rem' }}>These override the global phone settings for this page only.</p>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-        <Field label="Button 1 — Number"><input style={S.input} value={a.phone1} onChange={e => set('phone1', e.target.value)} placeholder="+61412242997" /></Field>
-        <Field label="Button 1 — Display Name">
+        <Field label="Button 1 — Number" dirty={df('phone1')}><input style={S.input} value={a.phone1} onChange={e => set('phone1', e.target.value)} placeholder="+61412242997" /></Field>
+        <Field label="Button 1 — Display Name" dirty={df('phone1Name')}>
           <input style={S.input} value={a.phone1Name} maxLength={30} onChange={e => set('phone1Name', e.target.value)} placeholder="John" />
           <CharCount value={a.phone1Name} max={30} />
         </Field>
-        <Field label="Button 2 — Number"><input style={S.input} value={a.phone2} onChange={e => set('phone2', e.target.value)} placeholder="+61426051275" /></Field>
-        <Field label="Button 2 — Display Name">
+        <Field label="Button 2 — Number" dirty={df('phone2')}><input style={S.input} value={a.phone2} onChange={e => set('phone2', e.target.value)} placeholder="+61426051275" /></Field>
+        <Field label="Button 2 — Display Name" dirty={df('phone2Name')}>
           <input style={S.input} value={a.phone2Name} maxLength={30} onChange={e => set('phone2Name', e.target.value)} placeholder="Leo" />
           <CharCount value={a.phone2Name} max={30} />
         </Field>
@@ -922,11 +928,11 @@ function AboutEditor({ content, onChange, onPhotoQueued, photoPreviews, dirtySec
       </div>
       <div style={{ height: '1.25rem' }} />
       <SectionHeading dirty={ds('Team Header')}>Team Section Header</SectionHeading>
-      <Field label="Section Heading">
+      <Field label="Section Heading" dirty={df('teamHeading')}>
         <input style={S.input} value={a.teamHeading} maxLength={40} onChange={e => set('teamHeading', e.target.value)} />
         <CharCount value={a.teamHeading} max={40} />
       </Field>
-      <Field label="Section Subheading">
+      <Field label="Section Subheading" dirty={df('teamSubheading')}>
         <input style={S.input} value={a.teamSubheading} maxLength={100} onChange={e => set('teamSubheading', e.target.value)} />
         <CharCount value={a.teamSubheading} max={100} />
       </Field>
@@ -1063,19 +1069,27 @@ export default function Admin() {
   };
   const pendingGalleryKeys = (projectId: string, prefix = 'gallery') => Object.keys(pendingGallery).filter(k => k.startsWith(projectId + '-' + prefix + '-'));
 
-  const { dirtyTabs, dirtyBuildingCategories, dirtySections } = useMemo(() => {
+  const { dirtyTabs, dirtyBuildingCategories, dirtySections, dirtyFields } = useMemo(() => {
     const tabs = new Set<NavTab>();
     const cats = new Set<string>();
     const sections: Record<string, Set<string>> = {};
+    const fields: Record<string, Set<string>> = {}; // field-level dirty tracking
     if (!content || !snapshotRef.current) return { dirtyTabs: tabs, dirtyBuildingCategories: cats, dirtySections: sections };
     const snap = JSON.parse(snapshotRef.current) as SiteContent;
 
     // Helper: compare a subset of fields between snap and current
-    const fieldsChanged = (tab: string, fields: string[]) => {
-      const s = snap[tab] as Record<string, any> | undefined;
-      const c = content[tab] as Record<string, any> | undefined;
+    const fieldsChanged = (tab: string, flds: string[]) => {
+      const s = (snap as any)[tab];
+      const c = (content as any)[tab];
       if (!s || !c) return false;
-      return fields.some(f => JSON.stringify(c[f]) !== JSON.stringify(s[f]));
+      return flds.some((f: string) => JSON.stringify(c[f]) !== JSON.stringify(s[f]));
+    };
+    // Helper: get the set of individual changed fields for a tab
+    const changedFields = (tab: string, flds: string[]) => {
+      const s = (snap as any)[tab];
+      const c = (content as any)[tab];
+      if (!s || !c) return new Set<string>();
+      return new Set(flds.filter((f: string) => JSON.stringify(c[f]) !== JSON.stringify(s[f])));
     };
 
     // Settings sections
@@ -1085,6 +1099,7 @@ export default function Admin() {
       if (fieldsChanged('settings', ['phone1','phone1Name','phone2','phone2Name','email'])) ss.add('Contact Information');
       if (fieldsChanged('settings', ['abn','licence'])) ss.add('Business Details');
       sections.settings = ss;
+      fields.settings = changedFields('settings', ['phone1','phone1Name','phone2','phone2Name','email','abn','licence']);
     }
     // Home sections
     if (JSON.stringify(content.home) !== JSON.stringify(snap.home)) {
@@ -1093,6 +1108,7 @@ export default function Admin() {
       if (fieldsChanged('home', ['heroSubtitle'])) ss.add('Hero Section');
       if (fieldsChanged('home', ['servicesHeading'])) ss.add('Services Section');
       sections.home = ss;
+      fields.home = changedFields('home', ['heroSubtitle','servicesHeading']);
     }
     // Plumbing sections
     if (JSON.stringify(content.plumbing) !== JSON.stringify(snap.plumbing)) {
@@ -1105,6 +1121,7 @@ export default function Admin() {
       if (fieldsChanged('plumbing', ['benefits'])) ss.add('Benefits');
       if (fieldsChanged('plumbing', ['reviews','overallRating','reviewCountLabel','showReviews','mapsUrl'])) ss.add('Google Reviews');
       sections.plumbing = ss;
+      fields.plumbing = changedFields('plumbing', ['heroHeading','heroSubtitle','phone1','phone1Name','phone2','phone2Name']);
     }
     // Electrical sections
     if (JSON.stringify(content.electrical) !== JSON.stringify(snap.electrical)) {
@@ -1117,6 +1134,7 @@ export default function Admin() {
       if (fieldsChanged('electrical', ['benefits'])) ss.add('Benefits');
       if (fieldsChanged('electrical', ['reviews','overallRating','reviewCountLabel','showReviews','mapsUrl'])) ss.add('Google Reviews');
       sections.electrical = ss;
+      fields.electrical = changedFields('electrical', ['heroHeading','heroSubtitle','phone1','phone1Name','phone2','phone2Name']);
     }
     // About sections
     if (JSON.stringify(content.about) !== JSON.stringify(snap.about) || JSON.stringify(content.team) !== JSON.stringify(snap.team)) {
@@ -1128,12 +1146,14 @@ export default function Admin() {
       if (fieldsChanged('about', ['teamHeading','teamSubheading'])) ss.add('Team Header');
       if (JSON.stringify(content.team) !== JSON.stringify(snap.team)) ss.add('Team Members');
       sections.about = ss;
+      fields.about = changedFields('about', ['storyHeading','storyPara1','storyPara2','phone1','phone1Name','phone2','phone2Name','teamHeading','teamSubheading']);
     }
 
     if (JSON.stringify(content.building) !== JSON.stringify(snap.building)) {
       tabs.add('building');
       sections.building = sections.building || new Set();
       sections.building.add('Contact Section');
+      fields.building = changedFields('building', ['contactHeading','contactSubtitle','phone1','phone1Name','phone2','phone2Name']);
     }
     if (JSON.stringify(content.buildingProjects) !== JSON.stringify(snap.buildingProjects)) {
       tabs.add('building');
@@ -1164,7 +1184,7 @@ export default function Admin() {
     }
     if (Object.keys(pendingGallery).length > 0) tabs.add('building');
 
-    return { dirtyTabs: tabs, dirtyBuildingCategories: cats, dirtySections: sections };
+    return { dirtyTabs: tabs, dirtyBuildingCategories: cats, dirtySections: sections, dirtyFields: fields };
   }, [content, pendingPhotos, pendingGallery]);
 
   // Warn before leaving if there are unsaved changes (uses ref to avoid re-registering on every keystroke)
@@ -1376,11 +1396,11 @@ export default function Admin() {
 
       {content && (
         <div style={{ maxWidth: '860px', margin: '0 auto', padding: '2rem 1.25rem' }}>
-          {activeTab === 'settings' && <SettingsEditor content={content} onChange={setContent} dirtySections={dirtySections.settings} />}
-          {activeTab === 'home' && <HomeEditor content={content} onChange={setContent} dirtySections={dirtySections.home} />}
-          {activeTab === 'plumbing' && <PlumbingEditor content={content} onChange={setContent} onPhotoQueued={queuePhoto} photoPreviews={photoPreviews} onClearPending={clearPendingPhoto} dirtySections={dirtySections.plumbing} />}
-          {activeTab === 'electrical' && <ElectricalEditor content={content} onChange={setContent} onPhotoQueued={queuePhoto} photoPreviews={photoPreviews} onClearPending={clearPendingPhoto} dirtySections={dirtySections.electrical} />}
-          {activeTab === 'about' && <AboutEditor content={content} onChange={setContent} onPhotoQueued={queuePhoto} photoPreviews={photoPreviews} dirtySections={dirtySections.about} />}
+          {activeTab === 'settings' && <SettingsEditor content={content} onChange={setContent} dirtySections={dirtySections.settings} dirtyFields={dirtyFields.settings} />}
+          {activeTab === 'home' && <HomeEditor content={content} onChange={setContent} dirtySections={dirtySections.home} dirtyFields={dirtyFields.home} />}
+          {activeTab === 'plumbing' && <PlumbingEditor content={content} onChange={setContent} onPhotoQueued={queuePhoto} photoPreviews={photoPreviews} onClearPending={clearPendingPhoto} dirtySections={dirtySections.plumbing} dirtyFields={dirtyFields.plumbing} />}
+          {activeTab === 'electrical' && <ElectricalEditor content={content} onChange={setContent} onPhotoQueued={queuePhoto} photoPreviews={photoPreviews} onClearPending={clearPendingPhoto} dirtySections={dirtySections.electrical} dirtyFields={dirtyFields.electrical} />}
+          {activeTab === 'about' && <AboutEditor content={content} onChange={setContent} onPhotoQueued={queuePhoto} photoPreviews={photoPreviews} dirtySections={dirtySections.about} dirtyFields={dirtyFields.about} />}
           {activeTab === 'building' && (<>
             <ProjectsEditor
               projects={content.buildingProjects}
@@ -1396,7 +1416,7 @@ export default function Admin() {
               onCategoriesChange={cats => setContent(c => c ? { ...c, buildingCategories: cats } : c)}
               onClearPending={clearPendingPhoto}
             />
-            <BuildingContactEditor content={content} onChange={setContent} dirtySections={dirtySections.building} />
+            <BuildingContactEditor content={content} onChange={setContent} dirtySections={dirtySections.building} dirtyFields={dirtyFields.building} />
           </>)}
         </div>
       )}
