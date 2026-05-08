@@ -481,7 +481,7 @@
     {
       "id": "project-1777565881655",
       "title": "Picnic Point Reno",
-      "location": " 14 Prince St, Picnic Point",
+      "location": "Picnic Point",
       "description": "",
       "image": "images/chatgpt-image-may-1-2026-01-26-49-am-1777566292684.png",
       "photos": [
@@ -503,7 +503,7 @@
     {
       "id": "project-1777565943927",
       "title": "West Ryde Reno",
-      "location": "1078 Victoria road, West Ryde",
+      "location": "West Ryde",
       "description": "",
       "image": "images/chatgpt-image-may-1-2026-02-11-28-am-1777566296887.png",
       "photos": [
@@ -524,7 +524,7 @@
     {
       "id": "project-1777566104115",
       "title": "Kingsgrove Reno",
-      "location": "92 Caroline St, Kingsgrove",
+      "location": "Kingsgrove",
       "description": "",
       "image": "images/chatgpt-image-may-1-2026-01-57-52-am-1777566300519.png",
       "photos": [
