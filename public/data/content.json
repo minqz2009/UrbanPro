@@ -233,7 +233,12 @@
     "overallRating": 5,
     "reviewCountLabel": "Top-rated Google reviews",
     "showReviews": true,
-    "mapsUrl": "https://maps.app.goo.gl/TJg8MmRCiWJUcv2k7"
+    "mapsUrl": "https://maps.app.goo.gl/TJg8MmRCiWJUcv2k7",
+    "commandCenter": {
+      "liveLabel": "LIVE",
+      "title": "Command Center",
+      "subtitle": "Sydney Region Techs Online"
+    }
   },
   "electrical": {
     "phone1": "+61412242997",
@@ -358,7 +363,12 @@
     "overallRating": 4.9,
     "reviewCountLabel": "120+ Google reviews",
     "showReviews": false,
-    "mapsUrl": "https://www.google.com/maps/place/UrbanPro+Plumbing+Sydney/@-33.8461026,150.3081854,10z/data=!4m15!1m8!3m7!1s0xaa99133edb90a697:0xe93f25ae63342f5d!2sUrbanPro+Plumbing+Sydney!8m2!3d-33.8482439!4d150.9319747!10e1!16s%2Fg%2F11n4td_svt"
+    "mapsUrl": "https://www.google.com/maps/place/UrbanPro+Plumbing+Sydney/@-33.8461026,150.3081854,10z/data=!4m15!1m8!3m7!1s0xaa99133edb90a697:0xe93f25ae63342f5d!2sUrbanPro+Plumbing+Sydney!8m2!3d-33.8482439!4d150.9319747!10e1!16s%2Fg%2F11n4td_svt",
+    "commandCenter": {
+      "liveLabel": "LIVE",
+      "title": "Command Center",
+      "subtitle": "Sydney Region Techs Online"
+    }
   },
   "building": {
     "phone1": "+61412242997",

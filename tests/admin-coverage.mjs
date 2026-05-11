@@ -586,7 +586,7 @@ assert(adminTsx.includes('dirty && <span'), 'SectionHeading renders dot when dir
 // All section names used in detection match SectionHeading labels
 const sectionNames = ['Hero', 'Contact Buttons', 'Guarantees', 'Services', 'Benefits', 'Google Reviews',
   'Contact Information', 'Business Details', 'Hero Section', 'Services Section',
-  'Our Story', 'Stats', 'Team Header', 'Team Members', 'Contact Section', 'Projects'];
+  'Our Story', 'Stats', 'Team Header', 'Team Members', 'Contact Section', 'Projects', 'Command Center'];
 for (const name of sectionNames) {
   assert(adminTsx.includes(`'${name}'`), `section name "${name}" referenced in dirty detection`);
 }

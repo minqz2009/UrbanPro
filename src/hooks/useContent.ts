@@ -51,6 +51,12 @@ export interface ReviewItem {
   photo: string;
 }
 
+export interface CommandCenter {
+  liveLabel: string;
+  title: string;
+  subtitle: string;
+}
+
 export interface PlumbingContent extends PagePhones {
   heroHeading: string;
   heroSubtitle: string;
@@ -62,6 +68,7 @@ export interface PlumbingContent extends PagePhones {
   overallRating: number;
   reviewCountLabel: string;
   showReviews: boolean;
+  commandCenter: CommandCenter;
 }
 
 export interface ElectricalContent extends PagePhones {
@@ -75,6 +82,7 @@ export interface ElectricalContent extends PagePhones {
   overallRating: number;
   reviewCountLabel: string;
   showReviews: boolean;
+  commandCenter: CommandCenter;
 }
 
 export interface BuildingContent extends PagePhones {
@@ -215,6 +223,7 @@ const DEFAULT: SiteContent = {
     reviewCountLabel: '150+ Google reviews',
     showReviews: true,
     mapsUrl: DEFAULT_MAPS_URL,
+    commandCenter: { liveLabel: 'LIVE', title: 'Command Center', subtitle: 'Sydney Region Techs Online' },
   },
   electrical: {
     phone1: DEFAULT_SETTINGS.phone1,
@@ -231,6 +240,7 @@ const DEFAULT: SiteContent = {
     reviewCountLabel: '120+ Google reviews',
     showReviews: true,
     mapsUrl: DEFAULT_MAPS_URL,
+    commandCenter: { liveLabel: 'LIVE', title: 'Command Center', subtitle: 'Sydney Region Techs Online' },
   },
   building: {
     phone1: DEFAULT_SETTINGS.phone1,
@@ -305,6 +315,7 @@ export function merge(data: Partial<SiteContent>): SiteContent {
       reviewCountLabel: data.plumbing?.reviewCountLabel ?? DEFAULT.plumbing.reviewCountLabel,
       showReviews: data.plumbing?.showReviews ?? DEFAULT.plumbing.showReviews,
       mapsUrl: data.plumbing?.mapsUrl ?? DEFAULT.plumbing.mapsUrl,
+      commandCenter: { ...DEFAULT.plumbing.commandCenter, ...(data.plumbing?.commandCenter || {}) },
     },
     electrical: {
       ...DEFAULT.electrical,
@@ -318,6 +329,7 @@ export function merge(data: Partial<SiteContent>): SiteContent {
       reviewCountLabel: data.electrical?.reviewCountLabel ?? DEFAULT.electrical.reviewCountLabel,
       showReviews: data.electrical?.showReviews ?? DEFAULT.electrical.showReviews,
       mapsUrl: data.electrical?.mapsUrl ?? DEFAULT.electrical.mapsUrl,
+      commandCenter: { ...DEFAULT.electrical.commandCenter, ...(data.electrical?.commandCenter || {}) },
     },
     building: {
       ...DEFAULT.building,

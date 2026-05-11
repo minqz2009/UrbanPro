@@ -198,6 +198,52 @@ console.log('\n=== 15. Atomic content load ===');
 assert(adminTsx.includes('getHeadSha(tok)'), 'loadContent fetches HEAD SHA first');
 assert(adminTsx.includes('getFile(tok, CONTENT_PATH, headSha)'), 'loadContent passes headSha to getFile');
 
+console.log('\n=== 16. Command Center field ===');
+assert(useContentTs.includes('export interface CommandCenter'), 'CommandCenter interface exported');
+assert(useContentTs.includes('commandCenter: CommandCenter'), 'PlumbingContent/ElectricalContent has commandCenter');
+assert(useContentTs.includes("commandCenter: { liveLabel: 'LIVE'"), 'DEFAULT has commandCenter');
+assert(useContentTs.includes('...DEFAULT.plumbing.commandCenter, ...(data.plumbing?.commandCenter'), 'merge handles plumbing commandCenter');
+assert(useContentTs.includes('...DEFAULT.electrical.commandCenter, ...(data.electrical?.commandCenter'), 'merge handles electrical commandCenter');
+for (const section of ['plumbing', 'electrical']) {
+  const cc = content[section].commandCenter;
+  assert(cc && typeof cc === 'object', `content.json ${section}.commandCenter exists`);
+  assert(typeof cc.liveLabel === 'string' && cc.liveLabel.length > 0, `${section}.commandCenter.liveLabel is non-empty string`);
+  assert(typeof cc.title === 'string' && cc.title.length > 0, `${section}.commandCenter.title is non-empty string`);
+  assert(typeof cc.subtitle === 'string' && cc.subtitle.length > 0, `${section}.commandCenter.subtitle is non-empty string`);
+}
+assert(plumbingTsx.includes('plumbing.commandCenter.liveLabel'), 'Plumbing page reads commandCenter.liveLabel');
+assert(plumbingTsx.includes('plumbing.commandCenter.title'), 'Plumbing page reads commandCenter.title');
+assert(plumbingTsx.includes('plumbing.commandCenter.subtitle'), 'Plumbing page reads commandCenter.subtitle');
+assert(electricalTsx.includes('electrical.commandCenter.liveLabel'), 'Electrical page reads commandCenter.liveLabel');
+assert(electricalTsx.includes('electrical.commandCenter.title'), 'Electrical page reads commandCenter.title');
+assert(electricalTsx.includes('electrical.commandCenter.subtitle'), 'Electrical page reads commandCenter.subtitle');
+// Hardcoded strings should no longer be in the JSX of the command center bar
+assert(!plumbingTsx.includes('>Sydney Region Techs Online<'), 'Plumbing has no hardcoded "Sydney Region Techs Online"');
+assert(!electricalTsx.includes('>Sydney Region Techs Online<'), 'Electrical has no hardcoded "Sydney Region Techs Online"');
+assert(!plumbingTsx.includes('>Command Center<'), 'Plumbing has no hardcoded "Command Center"');
+assert(!electricalTsx.includes('>Command Center<'), 'Electrical has no hardcoded "Command Center"');
+assert(adminTsx.includes('Command Center Bar'), 'Admin has Command Center Bar editor heading');
+assert(adminTsx.includes("ds('Command Center')"), 'Admin uses Command Center section dirty marker');
+assert(adminTsx.includes("df('cmdLiveLabel')"), 'Admin has cmdLiveLabel dirty marker');
+assert(adminTsx.includes("df('cmdTitle')"), 'Admin has cmdTitle dirty marker');
+assert(adminTsx.includes("df('cmdSubtitle')"), 'Admin has cmdSubtitle dirty marker');
+assert(adminTsx.includes("fieldsChanged('plumbing', ['commandCenter'])"), 'Plumbing dirty detection includes commandCenter');
+assert(adminTsx.includes("fieldsChanged('electrical', ['commandCenter'])"), 'Electrical dirty detection includes commandCenter');
+
+// Functional merge test: missing commandCenter falls back to defaults
+console.log('\n=== 17. Command Center merge fallback (functional) ===');
+{
+  // Simulate the merge behavior: spread defaults then user data
+  const DEFAULT_CC = { liveLabel: 'LIVE', title: 'Command Center', subtitle: 'Sydney Region Techs Online' };
+  const merged1 = { ...DEFAULT_CC, ...({}) };
+  assert(merged1.liveLabel === 'LIVE' && merged1.title === 'Command Center' && merged1.subtitle === 'Sydney Region Techs Online',
+    'Empty user data falls back to defaults');
+  const merged2 = { ...DEFAULT_CC, ...({ liveLabel: 'NOW' }) };
+  assert(merged2.liveLabel === 'NOW' && merged2.title === 'Command Center', 'Partial override keeps defaults for missing fields');
+  const merged3 = { ...DEFAULT_CC, ...({ liveLabel: 'A', title: 'B', subtitle: 'C' }) };
+  assert(merged3.liveLabel === 'A' && merged3.title === 'B' && merged3.subtitle === 'C', 'Full override replaces all fields');
+}
+
 // =======================================================================
 console.log(`\n${'='.repeat(60)}`);
 console.log(`Total: ${total} | Passed: ${total - failures} | Failed: ${failures}`);

@@ -220,11 +220,11 @@ const Electrical = () => {
               </div>
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.15rem' }}>
-                  <span style={{ backgroundColor: 'var(--color-electrical)', color: 'var(--color-bg)', padding: '0.15rem 0.5rem', fontSize: '0.6rem', fontWeight: 900, borderRadius: '2px' }}>LIVE</span>
-                  <span style={{ fontSize: '0.85rem', fontWeight: 900, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'white' }}>Command Center</span>
+                  <span style={{ backgroundColor: 'var(--color-electrical)', color: 'var(--color-bg)', padding: '0.15rem 0.5rem', fontSize: '0.6rem', fontWeight: 900, borderRadius: '2px' }}>{electrical.commandCenter.liveLabel}</span>
+                  <span style={{ fontSize: '0.85rem', fontWeight: 900, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'white' }}>{electrical.commandCenter.title}</span>
                 </div>
                 <span style={{ fontSize: '0.7rem', fontWeight: 600, textTransform: 'uppercase', color: 'var(--color-electrical)', letterSpacing: '0.15em' }}>
-                  Sydney Region Techs Online
+                  {electrical.commandCenter.subtitle}
                 </span>
               </div>
             </div>

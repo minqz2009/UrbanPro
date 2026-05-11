@@ -706,6 +706,22 @@ function PlumbingEditor({ content, onChange, onPhotoQueued, photoPreviews, onCle
           <CharCount value={p.phone2Name} max={30} />
         </Field>
       </div>
+      <SectionHeading dirty={ds('Command Center')}>Command Center Bar</SectionHeading>
+      <p style={{ color: '#475569', fontSize: '0.8rem', marginBottom: '1rem', marginTop: '-0.75rem' }}>The live status bar shown directly below the hero section.</p>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 2fr', gap: '1rem' }}>
+        <Field label="Live Badge" dirty={df('cmdLiveLabel')}>
+          <input style={S.input} value={p.commandCenter.liveLabel} maxLength={10} onChange={e => setField('commandCenter', { ...p.commandCenter, liveLabel: e.target.value })} placeholder="LIVE" />
+          <CharCount value={p.commandCenter.liveLabel} max={10} />
+        </Field>
+        <Field label="Title" dirty={df('cmdTitle')}>
+          <input style={S.input} value={p.commandCenter.title} maxLength={30} onChange={e => setField('commandCenter', { ...p.commandCenter, title: e.target.value })} placeholder="Command Center" />
+          <CharCount value={p.commandCenter.title} max={30} />
+        </Field>
+        <Field label="Subtitle" dirty={df('cmdSubtitle')}>
+          <input style={S.input} value={p.commandCenter.subtitle} maxLength={50} onChange={e => setField('commandCenter', { ...p.commandCenter, subtitle: e.target.value })} placeholder="Sydney Region Techs Online" />
+          <CharCount value={p.commandCenter.subtitle} max={50} />
+        </Field>
+      </div>
       <ConfigItemListEditor items={p.guarantees} onChange={v => setField('guarantees', v)} label="Guarantees" titleMax={28} subtitleMax={36} addLabel="Add Guarantee" sectionDirty={ds('Guarantees')} />
       <ConfigItemListEditor items={p.services} onChange={v => setField('services', v)} label="Services" titleMax={30} subtitleMax={40} showSubtitle={false} addLabel="Add Service" sectionDirty={ds('Services')} />
       <ConfigItemListEditor items={p.benefits} onChange={v => setField('benefits', v)} label="Benefits" titleMax={50} subtitleMax={40} showSubtitle={false} addLabel="Add Benefit" sectionDirty={ds('Benefits')} />
@@ -745,6 +761,22 @@ function ElectricalEditor({ content, onChange, onPhotoQueued, photoPreviews, onC
         <Field label="Button 2 — Display Name" dirty={df('phone2Name')}>
           <input style={S.input} value={e.phone2Name} maxLength={30} onChange={e2 => setField('phone2Name', e2.target.value)} placeholder="Leo" />
           <CharCount value={e.phone2Name} max={30} />
+        </Field>
+      </div>
+      <SectionHeading dirty={ds('Command Center')}>Command Center Bar</SectionHeading>
+      <p style={{ color: '#475569', fontSize: '0.8rem', marginBottom: '1rem', marginTop: '-0.75rem' }}>The live status bar shown directly below the hero section.</p>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 2fr', gap: '1rem' }}>
+        <Field label="Live Badge" dirty={df('cmdLiveLabel')}>
+          <input style={S.input} value={e.commandCenter.liveLabel} maxLength={10} onChange={e2 => setField('commandCenter', { ...e.commandCenter, liveLabel: e2.target.value })} placeholder="LIVE" />
+          <CharCount value={e.commandCenter.liveLabel} max={10} />
+        </Field>
+        <Field label="Title" dirty={df('cmdTitle')}>
+          <input style={S.input} value={e.commandCenter.title} maxLength={30} onChange={e2 => setField('commandCenter', { ...e.commandCenter, title: e2.target.value })} placeholder="Command Center" />
+          <CharCount value={e.commandCenter.title} max={30} />
+        </Field>
+        <Field label="Subtitle" dirty={df('cmdSubtitle')}>
+          <input style={S.input} value={e.commandCenter.subtitle} maxLength={50} onChange={e2 => setField('commandCenter', { ...e.commandCenter, subtitle: e2.target.value })} placeholder="Sydney Region Techs Online" />
+          <CharCount value={e.commandCenter.subtitle} max={50} />
         </Field>
       </div>
       <ConfigItemListEditor items={e.guarantees} onChange={v => setField('guarantees', v)} label="Guarantees" titleMax={28} subtitleMax={36} addLabel="Add Guarantee" sectionDirty={ds('Guarantees')} />
@@ -1152,8 +1184,15 @@ export default function Admin() {
       if (fieldsChanged('plumbing', ['services'])) ss.add('Services');
       if (fieldsChanged('plumbing', ['benefits'])) ss.add('Benefits');
       if (fieldsChanged('plumbing', ['reviews','overallRating','reviewCountLabel','showReviews','mapsUrl'])) ss.add('Google Reviews');
+      if (fieldsChanged('plumbing', ['commandCenter'])) ss.add('Command Center');
       sections.plumbing = ss;
-      fields.plumbing = changedFields('plumbing', ['heroHeading','heroSubtitle','phone1','phone1Name','phone2','phone2Name']);
+      const pf = changedFields('plumbing', ['heroHeading','heroSubtitle','phone1','phone1Name','phone2','phone2Name']);
+      const sCC = (snap.plumbing?.commandCenter || {}) as any;
+      const cCC = (content.plumbing?.commandCenter || {}) as any;
+      if (sCC.liveLabel !== cCC.liveLabel) pf.add('cmdLiveLabel');
+      if (sCC.title !== cCC.title) pf.add('cmdTitle');
+      if (sCC.subtitle !== cCC.subtitle) pf.add('cmdSubtitle');
+      fields.plumbing = pf;
     }
     // Electrical sections
     if (JSON.stringify(content.electrical) !== JSON.stringify(snap.electrical)) {
@@ -1165,8 +1204,15 @@ export default function Admin() {
       if (fieldsChanged('electrical', ['services'])) ss.add('Services');
       if (fieldsChanged('electrical', ['benefits'])) ss.add('Benefits');
       if (fieldsChanged('electrical', ['reviews','overallRating','reviewCountLabel','showReviews','mapsUrl'])) ss.add('Google Reviews');
+      if (fieldsChanged('electrical', ['commandCenter'])) ss.add('Command Center');
       sections.electrical = ss;
-      fields.electrical = changedFields('electrical', ['heroHeading','heroSubtitle','phone1','phone1Name','phone2','phone2Name']);
+      const ef = changedFields('electrical', ['heroHeading','heroSubtitle','phone1','phone1Name','phone2','phone2Name']);
+      const sCC = (snap.electrical?.commandCenter || {}) as any;
+      const cCC = (content.electrical?.commandCenter || {}) as any;
+      if (sCC.liveLabel !== cCC.liveLabel) ef.add('cmdLiveLabel');
+      if (sCC.title !== cCC.title) ef.add('cmdTitle');
+      if (sCC.subtitle !== cCC.subtitle) ef.add('cmdSubtitle');
+      fields.electrical = ef;
     }
     // About sections
     if (JSON.stringify(content.about) !== JSON.stringify(snap.about) || JSON.stringify(content.team) !== JSON.stringify(snap.team)) {
