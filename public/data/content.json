@@ -237,7 +237,7 @@
     "commandCenter": {
       "liveLabel": "LIVE",
       "title": "Command Center",
-      "subtitle": "Sydney Region Techs Online"
+      "subtitle": "Sydney, Melbourne Region Techs Online"
     }
   },
   "electrical": {
@@ -367,7 +367,7 @@
     "commandCenter": {
       "liveLabel": "LIVE",
       "title": "Command Center",
-      "subtitle": "Sydney Region Techs Online"
+      "subtitle": "Sydney, Melbourne Region Techs Online"
     }
   },
   "building": {
