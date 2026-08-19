@@ -25,6 +25,40 @@ function saveToken(t: string) { sessionStorage.setItem(SESSION_KEY, t); }
 function loadToken() { return sessionStorage.getItem(SESSION_KEY) || ''; }
 function clearToken() { sessionStorage.removeItem(SESSION_KEY); }
 
+// ─── Credentials auth (username + password gate) ──────────────────────────────
+
+const CREDS_SESSION_KEY = 'urbanpro_creds_ok';
+const RATE_LIMIT_KEY = 'urbanpro_rate_limit';
+const CREDS_SALT = 'urbanpro-xK9mP7qR3vL5-2024';
+const CREDS_HASH = 'a743b25d13ebd42894d4204163e37c8dfedf4f086145afb1fff140b295f9a6db';
+const EXPECTED_USER = 'minqz';
+const MAX_ATTEMPTS = 5;
+const LOCKOUT_MS = 15 * 60 * 1000;
+const SESSION_EXPIRY_MS = 8 * 60 * 60 * 1000;
+
+function loadCredsPassed(): boolean {
+  try {
+    const raw = sessionStorage.getItem(CREDS_SESSION_KEY);
+    if (!raw) return false;
+    const parsed = JSON.parse(raw) as { expiry: number };
+    return Date.now() < parsed.expiry;
+  } catch { return false; }
+}
+function saveCredsPassed() { sessionStorage.setItem(CREDS_SESSION_KEY, JSON.stringify({ expiry: Date.now() + SESSION_EXPIRY_MS })); }
+function clearCreds() { sessionStorage.removeItem(CREDS_SESSION_KEY); }
+
+interface RateLimitState { count: number; lockedUntil: number; }
+function loadRateLimit(): RateLimitState {
+  try { return JSON.parse(localStorage.getItem(RATE_LIMIT_KEY) || '{"count":0,"lockedUntil":0}') as RateLimitState; } catch { return { count: 0, lockedUntil: 0 }; }
+}
+function saveRateLimit(s: RateLimitState) { localStorage.setItem(RATE_LIMIT_KEY, JSON.stringify(s)); }
+
+async function hashCredentials(username: string, password: string): Promise<string> {
+  const text = `${CREDS_SALT}|${username}|${password}`;
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
 function validatePhoto(file: File): string | null {
   if (!ALLOWED_TYPES.includes(file.type)) return `Unsupported format. Use JPG, PNG, WEBP, or AVIF.`;
   if (file.size > MAX_MB * 1024 * 1024) return `Too large (${(file.size / 1024 / 1024).toFixed(1)} MB). Max is ${MAX_MB} MB.`;
@@ -1010,9 +1044,101 @@ function AboutEditor({ content, onChange, onPhotoQueued, photoPreviews, dirtySec
   );
 }
 
+// ─── Credentials Screen ───────────────────────────────────────────────────────
+
+function CredentialsScreen({ onPass }: { onPass: () => void }) {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPw, setShowPw] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [lockoutLeft, setLockoutLeft] = useState(() => {
+    const rl = loadRateLimit();
+    return rl.lockedUntil > Date.now() ? Math.ceil((rl.lockedUntil - Date.now()) / 1000) : 0;
+  });
+
+  useEffect(() => {
+    if (lockoutLeft <= 0) return;
+    const id = setInterval(() => {
+      const remaining = Math.ceil((loadRateLimit().lockedUntil - Date.now()) / 1000);
+      if (remaining <= 0) { setLockoutLeft(0); clearInterval(id); } else setLockoutLeft(remaining);
+    }, 1000);
+    return () => clearInterval(id);
+  }, [lockoutLeft]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const rl = loadRateLimit();
+    if (rl.lockedUntil > Date.now()) return;
+    if (!username.trim() || !password.trim()) return;
+    setLoading(true); setError('');
+    const hash = await hashCredentials(username.trim(), password);
+    setLoading(false);
+    if (username.trim() === EXPECTED_USER && hash === CREDS_HASH) {
+      saveRateLimit({ count: 0, lockedUntil: 0 });
+      saveCredsPassed();
+      onPass();
+    } else {
+      const count = rl.count + 1;
+      const lockedUntil = count >= MAX_ATTEMPTS ? Date.now() + LOCKOUT_MS : 0;
+      saveRateLimit({ count, lockedUntil });
+      if (count >= MAX_ATTEMPTS) {
+        const left = Math.ceil(LOCKOUT_MS / 1000);
+        setLockoutLeft(left);
+        setError(`Too many failed attempts. Account locked for ${Math.floor(LOCKOUT_MS / 60000)} minutes.`);
+      } else {
+        setError(`Invalid credentials. ${MAX_ATTEMPTS - count} attempt${MAX_ATTEMPTS - count !== 1 ? 's' : ''} remaining.`);
+      }
+    }
+  };
+
+  const minutes = Math.floor(lockoutLeft / 60);
+  const secs = lockoutLeft % 60;
+
+  return (
+    <div style={{ ...S.page, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
+      <div style={{ width: '100%', maxWidth: '420px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+          <div style={{ fontSize: '1.8rem', fontWeight: 800, marginBottom: '0.5rem' }}><span style={{ color: '#60a5fa' }}>URBAN</span><span style={{ color: '#94a3b8' }}>PRO</span></div>
+          <h1 style={{ fontSize: '1.4rem', fontWeight: 700, color: 'white', margin: '0 0 0.5rem' }}>Admin Portal</h1>
+          <p style={{ color: '#64748b', fontSize: '0.9rem' }}>Sign in to manage your website content</p>
+        </div>
+        {lockoutLeft > 0 ? (
+          <div style={{ backgroundColor: '#450a0a', border: '1px solid #7f1d1d', borderRadius: '8px', padding: '1.5rem', textAlign: 'center', color: '#fca5a5' }}>
+            <div style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '0.5rem' }}>Account Locked</div>
+            <div style={{ fontSize: '2rem', fontWeight: 800, fontVariantNumeric: 'tabular-nums', color: '#f87171' }}>{String(minutes).padStart(2, '0')}:{String(secs).padStart(2, '0')}</div>
+            <div style={{ fontSize: '0.85rem', marginTop: '0.75rem', color: '#ef4444' }}>Too many failed attempts. Please wait before trying again.</div>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+            <div>
+              <label style={S.label}>Username</label>
+              <input type="text" autoComplete="username" value={username} onChange={e => setUsername(e.target.value)} placeholder="Enter username" style={S.input} />
+            </div>
+            <div>
+              <label style={S.label}>Password</label>
+              <div style={{ position: 'relative' }}>
+                <input type={showPw ? 'text' : 'password'} autoComplete="current-password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Enter password" style={{ ...S.input, paddingRight: '3rem' }} />
+                <button type="button" onClick={() => setShowPw(s => !s)} style={{ position: 'absolute', right: '0.75rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: '#475569', cursor: 'pointer', display: 'flex' }}>
+                  {showPw ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+            </div>
+            {error && <div style={{ backgroundColor: '#450a0a', border: '1px solid #7f1d1d', borderRadius: '6px', padding: '0.75rem 1rem', color: '#fca5a5', fontSize: '0.875rem' }}>{error}</div>}
+            <button type="submit" disabled={loading || !username.trim() || !password.trim()}
+              style={{ ...S.btnPrimary, justifyContent: 'center', padding: '0.9rem', opacity: (loading || !username.trim() || !password.trim()) ? 0.5 : 1 }}>
+              {loading ? 'Verifying...' : 'Sign In'}
+            </button>
+          </form>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ─── Login Screen ─────────────────────────────────────────────────────────────
 
-function LoginScreen({ onLogin }: { onLogin: (tok: string) => void }) {
+function LoginScreen({ onLogin, onBack }: { onLogin: (tok: string) => void; onBack: () => void }) {
   const [token, setToken] = useState('');
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -1034,8 +1160,8 @@ function LoginScreen({ onLogin }: { onLogin: (tok: string) => void }) {
       <div style={{ width: '100%', maxWidth: '480px' }}>
         <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
           <div style={{ fontSize: '1.8rem', fontWeight: 800, marginBottom: '0.5rem' }}><span style={{ color: '#60a5fa' }}>URBAN</span><span style={{ color: '#94a3b8' }}>PRO</span></div>
-          <h1 style={{ fontSize: '1.4rem', fontWeight: 700, color: 'white', margin: '0 0 0.5rem' }}>Admin Portal</h1>
-          <p style={{ color: '#64748b', fontSize: '0.9rem' }}>Enter your access token to continue</p>
+          <h1 style={{ fontSize: '1.4rem', fontWeight: 700, color: 'white', margin: '0 0 0.5rem' }}>GitHub Access Token</h1>
+          <p style={{ color: '#64748b', fontSize: '0.9rem' }}>Enter your GitHub personal access token to enable saving changes</p>
         </div>
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
           <div>
@@ -1049,8 +1175,9 @@ function LoginScreen({ onLogin }: { onLogin: (tok: string) => void }) {
           </div>
           {error && <div style={{ backgroundColor: '#450a0a', border: '1px solid #7f1d1d', borderRadius: '6px', padding: '0.75rem 1rem', color: '#fca5a5', fontSize: '0.875rem' }}>{error}</div>}
           <button type="submit" disabled={loading || !token.trim()} style={{ ...S.btnPrimary, justifyContent: 'center', padding: '0.9rem', opacity: (!token.trim() || loading) ? 0.5 : 1 }}>
-            {loading ? 'Checking...' : 'Sign In'}
+            {loading ? 'Checking...' : 'Connect'}
           </button>
+          <button type="button" onClick={onBack} style={{ ...S.btnGhost, justifyContent: 'center', padding: '0.75rem' }}>Back</button>
         </form>
       </div>
     </div>
@@ -1069,6 +1196,7 @@ const NAV_TABS: { id: NavTab; label: string }[] = [
 ];
 
 export default function Admin() {
+  const [credsPassed, setCredsPassed] = useState(loadCredsPassed);
   const [token, setToken] = useState(loadToken);
   const [authed, setAuthed] = useState(!!loadToken());
   const [content, setContent] = useState<SiteContent | null>(null);
@@ -1108,7 +1236,7 @@ export default function Admin() {
   };
 
   const handleLogin = async (tok: string) => { setToken(tok); setAuthed(true); await loadContent(tok); };
-  const handleLogout = () => { clearToken(); sessionStorage.removeItem('urbanpro_snapshot'); setToken(''); setAuthed(false); setContent(null); };
+  const handleLogout = () => { clearToken(); clearCreds(); sessionStorage.removeItem('urbanpro_snapshot'); setToken(''); setAuthed(false); setCredsPassed(false); setContent(null); };
   const queuePhoto = (id: string, file: File, preview: string) => { setPendingPhotos(p => ({ ...p, [id]: file })); setPhotoPreviews(p => ({ ...p, [id]: preview })); };
   const queueGallery = (key: string, file: File, preview: string) => { setPendingGallery(g => ({ ...g, [key]: file })); setPhotoPreviews(p => ({ ...p, [key]: preview })); };
 
@@ -1392,7 +1520,8 @@ export default function Admin() {
     }
   };
 
-  if (!authed) return <LoginScreen onLogin={handleLogin} />;
+  if (!credsPassed) return <CredentialsScreen onPass={() => setCredsPassed(true)} />;
+  if (!authed) return <LoginScreen onLogin={handleLogin} onBack={() => { clearCreds(); setCredsPassed(false); }} />;
   const hasPending = Object.keys(pendingPhotos).length + Object.keys(pendingGallery).length;
   const hasAnyChanges = dirtyTabs.size > 0;
   const isSaving = saving || deploying;
